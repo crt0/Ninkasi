@@ -19,7 +19,8 @@ sub process_dir {
 
     $destination ||= $self->blib();
     my $files_to_copy = $self->rscan_dir( $type_subdir,
-                                          sub { -f && !m{/#} && !m{~$} } );
+                                          sub { -f && !m{/\.svn/} && !m{/#}
+                                                   && !m{~$} } );
     foreach my $file (@$files_to_copy) {
         $self->copy_if_modified( $file, $destination )
             or next;
