@@ -18,7 +18,6 @@
 <tbody>
 [% row = 0 %]
 [% WHILE ( judge = fetch_judge() ) %]
-[% row = row + 1 %]
 <tr[% IF row % 2 %] class="even"[% END %]>
   <td>
     <a href="/view/judge/[% judge.judge_id %]">
@@ -38,6 +37,7 @@
   <td>[% constraint_list.$constraint %]</td>
   [% END %]
 </tr>
+[% row = row + 1 %]
 [% END %]
 </tbody>
 </table>
