@@ -21,14 +21,16 @@
 [% row = row + 1 %]
 <tr[% IF row % 2 %] class="even"[% END %]>
   <td>
-    <a href="/view/judge/[% judge.judge_id %]">[% judge.last_name %],
-    [% judge.first_name %]</a>
+    <a href="/view/judge/[% judge.judge_id %]">
+      [% judge.last_name | html_entity %],
+      [% judge.first_name | html_entity %]
+    </a>
   </td>
   <td>[% rank_name.${judge.rank} %]</td>
   [% FOREACH flight IN [ 'flight1', 'flight2', 'flight3' ] %]
   <td>[% IF judge.$flight %]Y[% ELSE %]N[% END %]</td>
   [% END %]
-  <td>[% judge.competitions_judged %]</td>
+  <td>[% judge.competitions_judged | html_entity %]</td>
   <td>[% IF judge.pro_brewer %]Y[% ELSE %]N[% END %]</td>
   [% constraint_list = judge.fetch_constraint_lists() %]
   [% FOREACH constraint IN [ 'entry', 'prefer not', 'whatever',
