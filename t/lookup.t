@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 use Apache::TestConfig;
 use Ninkasi::Table;
@@ -122,7 +122,7 @@ $mech->submit_form_ok( {
         first_name          => 'Angelina',
         flight1             => 1,
         flight3             => 1,
-        last_name           => 'Kiefer',
+        last_name           => '|<iefer',
         phone_day           => '948-691-4519',
         phone_evening       => '948-643-3621',
         rank                => 50,
@@ -158,8 +158,8 @@ $mech->submit_form_ok( {
     }
 } );
 
-# my $lookup_url = "$url_base/cgi-bin/judge-lookup";
-# $mech->get_ok($lookup_url);
+my $lookup_url = "$url_base/cgi-bin/view/judge/";
+$mech->get_ok($lookup_url);
 
 # $mech->content_like(<<'EOF');
 # <td><a href="judge-lookup/judge/">Korty, Andrew</a></td>
