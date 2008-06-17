@@ -1,0 +1,190 @@
+body {
+    font-family: Verdana, sans-serif;
+    text-align: center;
+}
+
+#menu {
+    background-color: #ffc;
+    clear: both;
+    margin: auto;
+    padding: 2px;
+    width: 85%;
+}
+
+#menu:after {
+    clear: both;
+    content: ".";
+    display: block;
+    line-height: 1px;
+    font-size: 1px;
+}
+
+.menu_item {
+    float: left;
+    text-align: center;
+    width: 19%;
+}
+
+.menu_item a {
+    text-decoration: none;
+}
+
+.error {
+    color: #f00;
+    font-size: larger;
+    font-weight: bold;
+}
+
+#deadline {
+    color: #c00;
+    font-style: italic;
+    font-weight: bold;
+    text-align: center;
+}
+
+.form_instructions {
+    font-size: smaller;
+    text-align: center;
+}
+
+#masthead_bottom {
+    clear: both;
+}
+
+#body_text {
+    margin: 0 5%;
+    text-align: left;
+}
+
+#cup_left {
+    float: left;
+    margin-bottom: 10px;
+    text-align: center;
+    width: 23%;
+}
+
+#title {
+    float: left;
+    font-family: Cooper Black, serif;
+    font-size: 18pt;
+    padding: 10pt;
+    text-align: center;
+    width: 50%;
+}
+
+#title a {
+    color: #000;
+    text-decoration: none;
+}
+
+#title_wrap {
+    white-space: pre;
+}
+
+#cup_right {
+    float: left;
+    text-align: center;
+    width: 23%;
+}
+
+#announcement_box {
+    margin: 20px auto;
+    padding: 0px;
+    width: 600px;
+}
+
+.announcement {
+    border: 1px dashed black;
+    font-family: Cooper Black, sans-serif;
+    font-size: 130%;
+    margin: 0px auto;
+    padding: 15px;
+    text-align: center;
+}
+
+.indent {
+    margin-left: 3%;
+}
+
+.time {
+    text-align: right;
+}
+
+caption {
+    margin-top: 1%;
+    text-align: left;
+    text-decoration: underline;
+}
+
+#invite_body {
+}
+
+#top_ten {
+    background-color: #ffc;
+    float: right;
+    margin: 2%;
+    padding: 0 2% 2% 2%;
+    width: 30%;
+}
+
+#top_ten li {
+    margin-bottom: 2%;
+}
+
+.address {
+    margin-left: 5%;
+    white-space: pre;
+}
+
+h1 {
+    font-size: 130%;
+    font-weight: normal;
+}
+h2 {
+    font-size: 120%;
+    font-weight: normal;
+}
+h3 {
+    font-size: 110%;
+    font-weight: normal;
+}
+
+table.view {
+    border: 1px solid #666;
+}
+
+table.view tr td {
+    font-size: 8pt;
+    padding: 3px 8px;
+    background: #fff;
+}
+
+table.view thead td {
+    color: #fff;
+    background-color: #c9c;
+    font-weight: bold;
+    border-bottom: 1px solid #999;
+}
+
+table.view tbody td {
+    border-left: 1px solid #999;
+}
+
+table.view tbody tr.even td {
+    background: #eee;
+}
+
+table.view tbody tr.selected td {
+    background: #39c;
+    color: #ffffff;
+    font-weight: bold;
+    border-left: 1px solid #36c;
+    border-bottom: 1px solid #69c;
+}
+
+table.view tbody tr.ruled td {
+    color: #000;
+    background-color: #ccf; 
+    font-weight: bold;
+    border-color: #39f;
+}

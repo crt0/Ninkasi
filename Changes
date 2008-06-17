@@ -1,0 +1,6 @@
+Revision history for Perl extension Ninkasi.
+
+0.01  Tue Apr 29 18:45:14 2008
+	- original version; created by h2xs 1.23 with options
+		-APXc -n Ninkasi
+

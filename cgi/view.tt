@@ -1,0 +1,122 @@
+#!/usr/bin/perl -T
+
+use strict;
+use warnings;
+
+use lib '[% install_base %]/lib/perl5';
+
+use File::Spec;
+use Taint::Util;
+
+BEGIN {
+    if ( exists $ENV{NINKASI_TEST_SERVER_ROOT} ) {
+        my $blib = File::Spec->catfile($ENV{NINKASI_TEST_SERVER_ROOT},
+                                       File::Spec->updir(), 'blib');
+        untaint $blib;
+        require lib;
+        lib->import( File::Spec->catfile($blib, 'lib' ),
+                     File::Spec->catfile($blib, 'arch') );
+    }
+}
+
+use CGI ();
+use Ninkasi::Constraint;
+use Ninkasi::Judge;
+use Ninkasi::JudgeSignup;
+use Ninkasi::Template;
+use Smart::Comments;
+
+my %PROCESS = (
+    judge => \&view_judge,
+    style => \&view_style,
+);
+
+sub fetch_constraint_lists {
+    my ($judge_id) = @_;
+
+    my $constraint = Ninkasi::Constraint->new();
+    my ($sth, $result) = $constraint->bind_hash( {
+        bind_values => [$judge_id],
+        columns     => [qw/category type/],
+        order       => 'category',
+        where       => 'judge = ?',
+    } );
+
+    my %constraint = ();
+    my %not_found  = ();
+    @not_found{ 1 .. $#Ninkasi::JudgeSignup::CATEGORIES } = ();
+    while ( $sth->fetch() ) {
+        push @{ $constraint{ $result->{type} } }, $result->{category};
+        delete $not_found{ $result->{category} };
+    }
+
+    @{ $constraint{whatever} }
+        = sort { $a <=> $b } keys %not_found, @{ $constraint{whatever} || [] };
+
+    return { map { $_ => join ', ', map { qq{<a href="/view/style/$_">$_</a>} }
+                                        @{ $constraint{$_} || [] } }
+                 keys %constraint };
+}
+
+sub view_all_judges {
+    my $judge = Ninkasi::Judge->new();
+
+    my @judge_columns = qw/judge_id first_name last_name rank flight1
+                           flight2 flight3 competitions_judged
+                           pro_brewer/;
+
+    my ($sth, $result) = $judge->bind_hash( {
+        columns => \@judge_columns,
+        order   => 'last_name',
+    } );
+
+    my $template_object = Ninkasi::Template->new();
+    my %rank_name = ( map { $_->{number} => $_->{name} }
+                          @Ninkasi::Judge::RANKS );
+    $template_object->process( 'view_judges.html', {
+        fetch_judge => sub {
+            return $sth->fetch() && {
+                %$result,
+                fetch_constraint_lists
+                    => sub { fetch_constraint_lists $result->{judge_id} },
+            };
+        },
+        rank_name => \%rank_name,
+    } ) or warn $template_object->error();
+}
+
+sub view_judge {
+    my ($id) = @_;
+
+    return view_all_judges() if !$id;
+
+
+}
+
+sub view_style {
+    my ($category) = @_;
+
+    my @judge_columns = qw/judge_id first_name last_name rank flight1
+                           flight2 flight3 competitions_judged
+                           pro_brewer/;
+    my @constraint_columns = qw/category judge type/;
+
+    my $judge = Ninkasi::Judge->new();
+    my ($sth, $result) = $judge->bind_hash( {
+        bind_values => [$category, 'entry'],
+        columns     => [@judge_columns, @constraint_columns],
+        join        => [qw/Ninkasi::Constraint Ninkasi::Judge/],
+        order       => 'type DESC, rank DESC, competitions_judged DESC',
+        where       => "category = ? AND type != ? AND judge = judge_id",
+    } );
+}
+
+MAIN: {
+    my $cgi_object = CGI->new();
+
+    my ($discard, $type, @arguments) = split '/', $cgi_object->path_info();
+    $type ||= 'judge';
+
+    print $cgi_object->header();
+    $PROCESS{$type}->(@arguments);
+}

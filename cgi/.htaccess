@@ -1,0 +1,9 @@
+<Files "view">
+    Allow from   localhost
+    AuthName     "Brewers Cup"
+    AuthType     Basic
+    AuthUserFile /home/httpd/vhosts/brewerscup.org/share/ninkasi/htpasswd
+    Order        Allow,Deny
+    Require user ajk anita
+    Satisfy      any
+</Files>

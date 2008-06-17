@@ -1,0 +1,42 @@
+[% PROCESS "header.html" -%]
+<table cellspacing="0" class="view">
+<thead>
+<tr>
+  <td>Name</td>
+  <td>Rank</td>
+  <td>Fri. PM?</td>
+  <td>Sat. AM?</td>
+  <td>Sat. PM?</td>
+  <td>Comps Judged</td>
+  <td>Pro Brewer?</td>
+  <td>Entries</td>
+  <td>Prefers Not</td>
+  <td>Whatever</td>
+  <td>Prefers</td>
+</tr>
+</thead>
+<tbody>
+[% row = 0 %]
+[% WHILE ( judge = fetch_judge() ) %]
+[% row = row + 1 %]
+<tr[% IF row % 2 %] class="even"[% END %]>
+  <td>
+    <a href="/view/judge/[% judge.judge_id %]">[% judge.last_name %],
+    [% judge.first_name %]</a>
+  </td>
+  <td>[% rank_name.${judge.rank} %]</td>
+  [% FOREACH flight IN [ 'flight1', 'flight2', 'flight3' ] %]
+  <td>[% IF judge.$flight %]Y[% ELSE %]N[% END %]</td>
+  [% END %]
+  <td>[% judge.competitions_judged %]</td>
+  <td>[% IF judge.pro_brewer %]Y[% ELSE %]N[% END %]</td>
+  [% constraint_list = judge.fetch_constraint_lists() %]
+  [% FOREACH constraint IN [ 'entry', 'prefer not', 'whatever',
+                             'prefer' ] %]
+  <td>[% constraint_list.$constraint %]</td>
+  [% END %]
+</tr>
+[% END %]
+</tbody>
+</table>
+[% PROCESS "footer.html" -%]

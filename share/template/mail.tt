@@ -1,0 +1,27 @@
+[% BLOCK heading %][% content %][% END ~%]
+
+[% BLOCK paragraph -%]
+[% content %]
+[%- END ~%]
+
+[% BLOCK list -%]
+[% content -%]
+[% END ~%]
+
+[% BLOCK list_item %] - [% content %][% END ~%]
+
+[% MACRO link(href, text) BLOCK -%]
+[% text %] <[% href %]>
+[%- END ~%]
+
+[% BLOCK footer %]
+-- 
+Brewers Cup
+Indiana State Fair
+brewerscup@indianastatefair.com
+[% END ~%]
+
+From:    "Brewers Cup" <brewerscup@indianastatefair.com>
+Subject: [% title %]
+To:      "[% form.first_name %] [% form.last_name %]" <[% form.email1 %]>
+

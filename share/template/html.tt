@@ -1,0 +1,25 @@
+[% BLOCK heading %]<h2>[% content %]</h2>[% END ~%]
+
+[% BLOCK paragraph -%]
+<p>[% content %]</p>
+[%- END ~%]
+
+[% BLOCK list -%]
+<ul>
+[% content -%]
+</ul>
+[% END ~%]
+
+[% BLOCK list_item %]<li>[% content %]</li>[% END ~%]
+
+[% MACRO link(href, text) BLOCK -%]
+<a href="[% href %]">[% text %]</a>
+[%- END ~%]
+
+[% BLOCK footer %]
+</div>
+[% PROCESS "footer.html" -%]
+[% END ~%]
+
+[% PROCESS "header.html" ~%]
+<div id="body_text">

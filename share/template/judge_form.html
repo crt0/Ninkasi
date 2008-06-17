@@ -1,0 +1,368 @@
+[% DEFAULT
+    form.bjcp_id             = 'none'
+    form.competitions_judged = 0
+-%]
+[% flight_name = [
+       'none',
+       'Friday evening',
+       'Saturday morning',
+       'Saturday afternoon',
+   ]
+~%]
+
+[% MACRO mark_field(name) BLOCK -%]
+[% IF error_field.$name -%]
+<span class="field_marker">* </span>
+[% END -%]
+[% END ~%]
+
+[% MACRO text_field(name, size) BLOCK -%]
+[% mark_field("$name") -%]
+<input type="text" name="[% name %]" size="[% size %]"
+       value="[% form.$name %]">
+[% END ~%]
+
+[% PROCESS "header.html" -%]
+<div id="body_text">
+<table border="0" width="100%" id="table9" cellspacing="0" cellpadding="0">
+  <tr>
+    <td>
+      <h2>Indiana State Fair Brewers Cup Competition 2008 Judge Signup Form</h2>
+    </td>
+    <td>
+      <table border="1" width="100%" id="table10">
+	<tr>
+	  <td align="center" width="20">S</td>
+	  <td align="center" width="20">M</td>
+	  <td align="center" width="20">T</td>
+	  <td align="center" width="20">W</td>
+	  <td align="center" width="20">T</td>
+	  <td align="center" width="20">F</td>
+	  <td align="center" width="20">S</td>
+	</tr>
+	<tr>
+	  <td colspan="3">
+	    <p align="center">JULY 2008</td>
+	  <td align="right">
+	    <table border="0" width="100%" id="table11" cellspacing="0" cellpadding="0">
+	      <tr>
+		<td>
+		  <p align="right">9</td>
+	      </tr>
+	      <tr>
+		<td>&nbsp;</td>
+	      </tr>
+	    </table>
+	  </td>
+	  <td align="right">
+	    <table border="0" width="100%" id="table12" cellspacing="0" cellpadding="0">
+	      <tr>
+		<td>
+		  <p align="right">10</td>
+	      </tr>
+	      <tr>
+		<td>&nbsp;</td>
+	      </tr>
+	    </table>
+	  </td>
+	  <td align="right">
+	    <table border="0" width="100%" id="table13" cellspacing="0" cellpadding="0">
+	      <tr>
+		<td>
+		  <p align="right">11</td>
+	      </tr>
+	      <tr>
+		<td bgcolor="#00FF00">&nbsp;</td>
+	      </tr>
+	    </table>
+	  </td>
+	  <td align="right">
+	    <table border="0" width="100%" id="table14" cellspacing="0" cellpadding="0">
+	      <tr>
+		<td bgcolor="#00FF00">
+		  <p align="right">12</td>
+	      </tr>
+	      <tr>
+		<td bgcolor="#00FF00">&nbsp;</td>
+	      </tr>
+	    </table>
+	  </td>
+	</tr>
+      </table>
+    </td>
+  </tr>
+</table>
+[% IF system_error || user_errors -%]
+<div class="error">
+[% IF system_error -%]
+  The judge signup system is experiencing technical difficulties.  The
+  site maintainer has been notified and is working to correct the
+  problem.  Your information has NOT been recorded; please try
+  resubmitting this form later.  Sorry for the inconvenience.  The
+  error was: [% system_error %]
+[% ELSE -%]
+  We're having trouble understanding your form submission.  Please
+  correct the following and try again.  If you feel you submitted the
+  form correctly, please <a href="mailto:public@ajk.name">notify the
+  site maintainer</a>.
+  <ul>
+  [% FOREACH error_message IN user_errors -%]
+  <li>[% error_message %]</li>
+  [% END -%]
+  </ul>
+[% END -%]
+</div>
+[% END -%]
+<div id="deadline">Online judge registration will be closed on or around July 5, 2008.</div>
+<div class="form_instructions">
+  All fields are required (in order for importing info smoothly into our database).
+</div>
+<form action="/cgi-bin/judge-signup" method="post">
+  <table border="0" style="border-collapse: collapse" width="95%" id="table1">
+    <tr>
+      <td align="right">First Name:</td>
+      <td>
+        [% text_field('first_name', 24) %]
+      </td>
+    </tr>
+    <tr>
+      <td align="right">Last Name:</td>
+      <td>
+        [% text_field('last_name', 24) %]
+      </td>
+    </tr>
+    <tr>
+      <td align="right">Address:</td>
+      <td>
+        [% text_field('address', 52) %]
+      </td>
+    </tr>
+    <tr>
+      <td align="right">City:</td>
+      <td> 
+        [% text_field('city', 28) %]
+      </td>
+    </tr>
+    <tr>
+      <td align="right">State:</td>
+      <td>
+        [% mark_field('state') %]
+        <select name="state" size="1">
+	  <option value=""></option>
+            [% FOREACH state IN [ 'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE',
+                                  'DC', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA',
+                                  'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN',
+                                  'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM',
+                                  'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI',
+                                  'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA',
+                                  'WV', 'WI', 'WY', '--' ] -%]
+            <option
+[% IF state == form.state -%]
+               selected="selected"
+[% END -%]
+               value="[% state %]">
+  [% state %]
+            </option>
+[% END -%]
+	  </select>
+      </td>
+    </tr>
+    <tr>
+      <td align="right">Zip:</td>
+      <td>
+        [% text_field('zip', 10) %]
+      </td>
+    </tr>
+    <tr>
+      <td align="right">Phone&nbsp;(day):</td>
+      <td>
+        [% text_field('phone_day', 19) %]
+      </td>
+    </tr>
+    <tr>
+      <td align="right">
+        Phone&nbsp;(evening):
+      </td>
+      <td> 
+        [% text_field('phone_evening', 19) %]
+      </td>
+    </tr>
+    <tr>
+      <td align="right">Email:</td>
+      <td>
+        [% text_field('email1', 25) %]
+      </td>
+    </tr>
+    <tr>
+      <td align="right">Email again:</td>
+      <td>
+        [% text_field('email2', 25) %]
+      </td>
+    </tr>
+  </table>
+  <div class="form_instructions">
+    We must be able to reach you and ask for a confirmation at the
+    email address you provide.  Please make sure it has no error.
+  </div>
+  <table>
+    <tr>
+      <td align="right" width="40%">BJCP rank or experience level:</td>
+      <td>
+	<select size="1" name="rank">
+          [% FOREACH rank IN ranks -%]
+          <option
+             [% IF form.rank == rank.number -%]
+             selected="selected"
+             [% END -%]
+             value="[% rank.number %]">
+            [% rank.description %]
+          </option>
+          [% END -%]
+	</select>
+      </td>
+    </tr>
+    <tr>
+      <td align="right">BJCP ID:</td>
+      <td>
+        [% text_field('bjcp_id', 6) %]
+      </td>
+    </tr>
+    <tr>
+      <td align="right">
+        <strong>Please select all</strong> the sessions you are able
+	to judge:
+      </td>
+      <td>
+        [% FOREACH flight IN [ 1, 2, 3 ] %]
+        [% flight_param = "flight$flight" %]
+        <div>
+          [% mark_field("$flight_param") %]
+          <input
+             [% IF form.$flight_param %]
+             checked="checked"
+             [% END %]
+             name="flight[% flight %]"
+             type="checkbox"
+             value="1">
+          [% flight_name.$flight %]
+        </div>
+        [% END %]
+      </td>
+    </tr>
+    <tr>
+      <td align="right">
+        Number of BJCP competitions you have judged:
+      </td>
+      <td>
+        [% text_field('competitions_judged', 4) %]
+      </td>
+    </tr>
+    <tr>
+      <td align="right">Select if you a professional brewer:</td>
+      <td>
+        <input type="checkbox" name="pro_brewer"
+               value="[% form.pro_brewer %]">
+      </td>
+    </tr>
+  </table>
+  <div class="form_instructions">
+    (If are a pro brewer and you are entering, the entries will be Pro
+    Division entries.)
+  </div>
+<hr size=4 width="90%">
+<h3>Categories</h3>
+  <p>
+    These are the <a href="http://www.bjcp.org/">BJCP</a> categories
+    accepted for this competition.  We will try to make judging
+    assignments based on your stated preferences, but cannot guarantee
+    any particular assignment.  Choose <em>prefer</em> for those
+    categories for which you are qualified and enjoy
+    judging, <em>prefer not</em> for categories for which you lack
+    experince or dislike judging, or <em>whatever</em> if you are
+    able/willing to judge a category although it might not be your
+    preferred category.  If you are entering in a category, mark
+    the <em>entry</em> column for that category; you will not be
+    assigned to a flight containing that category in your division
+    (professional/homebrew division).
+  </p>
+  <table border=2 cellpadding="3" style="border-collapse: collapse" cellspacing="0">
+    <tr>
+      <th align=left>Description</th>
+      <th>prefer</th>
+      <th>prefer not</th>
+      <th>entry</th>
+      <th>whatever</th>
+    </tr>
+    [% FOREACH category IN categories -%]
+    [% field_name = category.field_name -%]
+    <tr>
+      <td bgcolor="#FFFFCC">
+        [% category.number %]. [% category.name %] 
+      </td>
+      [% FOREACH value IN ['prefer', 'prefer not', 'entry'] -%]
+      <td align="center" bgcolor="#FFFFCC">
+        <input
+           [% IF form.$field_name == "$value" -%]
+           checked="checked"
+           [% END -%]
+           name="[% field_name %]"
+           type="radio"
+           value="[% value %]">
+      </td>
+      [% END -%]
+      <td align="center" bgcolor="#FFFFCC">
+        <input
+           [% IF !form.$field_name || form.$field_name == 'whatever' -%]
+           checked="checked"
+           [% END -%]
+           name="[% field_name %]"
+           type="radio"
+           value="whatever">
+      </td>
+    </tr>
+    [% END -%]
+    <tr>
+      <th align=left>Description</th>
+      <th>prefer</th>
+      <th>prefer not</th>
+      <th>entry</th>
+      <th>whatever</th>
+    </tr>
+  </table>
+  <hr size=4 width="90%">
+  <center>
+    <table border="0" style="border-collapse: collapse" width="95%">
+      <tr>
+	<td>
+          <input name="submit" type="submit"
+                 value="Click Once to Submit Form"
+                 style="font-size: 18pt; font-weight: bold">
+        </td>
+	<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+	<td>
+          After submitting you should (must) see the <strong>Thank
+	  you</strong> page to be certain that your information was
+	  sent.  Print that page for your records.
+        </td>
+      </tr>
+    </table>
+  </center>
+</form>
+<p>
+Contact Judge
+Coordinator <a href="mailto:dallaben@sbcglobal.net">David Allaben</a>
+if you have questions about judging or volunteering.  If there is a
+web form problem, then write <a href="mailto:public@ajk.name">Andrew
+Korty</a>.  See the 
+<a href="http://www.brewerscup.org/">Brewers Cup web site</a> for more
+information about the competition.
+</p>
+<p>
+<i>Thanks to Linda Swihart for the previous version of this form.
+Thanks also to the BUZZ club of Champaign-Urbana for their form on
+which Linda's was derived.
+<a href="https://netfiles.uiuc.edu/ro/www/BoneyardUnionofZymurgicalZealots/brewoff.html">
+Their competition</a> is a really great time, make it if you can!</i>
+</p>
+</div>
+[% PROCESS "footer.html" -%]

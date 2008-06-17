@@ -1,0 +1,23 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use Template;
+
+MAIN: {
+    my $template = Template->new( {
+        INCLUDE_PATH => '.',
+    } );
+    $template->process('confirmation.tt', {
+        form => {
+            first_name => 'Andrew',
+            last_name  => 'Korty',
+            email1     => 'ninkasi@ajk.name',
+            flight1 => 1,
+            flight2 => 1,
+        },
+        title => 'Brewers Cup Judge Volunteer Confirmation',
+        type => $ARGV[0],
+    }) or die $template->error();
+}

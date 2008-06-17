@@ -1,0 +1,79 @@
+# -*- cperl -*-
+
+package Ninkasi::Config;
+
+use strict;
+use warnings;
+
+use Readonly;
+
+use base qw/AppConfig Class::Singleton/;
+
+Readonly our %USER_DEFAULT => (
+    constant_contact_m   => '1011161075203',
+    constant_contact_p   => 'oi',
+    constant_contact_url => 'http://ui.constantcontact.com/roving/d.jsp',
+    maintainer_address   => 'ninkasi@ajk.name',
+);
+
+sub new { shift->instance(@_) }
+
+sub _new_instance {
+    my ($class) = @_;
+
+    # use a test config if we're running under "./Build test"
+    my ($config_file, $default_database_file, $default_log_file,
+        $default_template_path);
+    if ( $ENV{NINKASI_TEST_SERVER_ROOT} ) {
+        $config_file = File::Spec->catfile( $ENV{NINKASI_TEST_SERVER_ROOT},
+                                            qw/conf ninkasi.conf/ );
+        $default_database_file = File::Spec->catfile(
+            $ENV{NINKASI_TEST_SERVER_ROOT}, 'database'
+        );
+        $default_log_file = File::Spec->catfile(
+            $ENV{NINKASI_TEST_SERVER_ROOT}, 'log'
+        );
+        $default_template_path = File::Spec->catfile(
+            $ENV{NINKASI_TEST_SERVER_ROOT}, File::Spec->updir(),
+            qw/blib share template/
+        );
+    }
+
+    # otherwise install in etc/ and share/
+    else {
+        $config_file = File::Spec->catfile('[% install_base %]',
+                                           '[% install_base_relpath.etc %]',
+                                           qw/ninkasi.conf/);
+        $default_database_file
+            = File::Spec->catfile('[% install_base %]',
+                                  '[% install_base_relpath.share %]',
+                                  qw/database/);
+        $default_log_file = File::Spec->catfile('[% install_base %]',
+                                                qw/var ninkasi log/);
+        $default_template_path
+            = File::Spec->catfile('[% install_base %]',
+                                  '[% install_base_relpath.share %]',
+                                  qw/template/);
+    }
+
+    my $self = $class->SUPER::new();
+
+    # set defaults
+    my %DEFAULT = (
+        database_file => $default_database_file,
+        log_file      => $default_log_file,
+        template_path => $default_template_path,
+        testing       => !!$ENV{NINKASI_TEST_SERVER_ROOT},
+        %USER_DEFAULT
+    );
+    $self->define( map { $_ => { DEFAULT => $DEFAULT{$_} } } keys %DEFAULT );
+
+    # read in config file
+    if (-r $config_file) {
+        $self->file($config_file);
+    }
+
+    return bless $self, $class;
+}
+
+1;
