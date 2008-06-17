@@ -1,5 +1,5 @@
 [% PROCESS "${type}.tt" -%]
-[% WRAPPER heading %]Thank you, [% form.first_name %]![% END %]
+[% WRAPPER heading %]Thank you, [% form.first_name | html_entity %]![% END %]
 [% WRAPPER paragraph %]
 You've agreed to judge the following flight(s) at the Indiana State Fair
 Brewers Cup:
