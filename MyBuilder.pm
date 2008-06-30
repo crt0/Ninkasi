@@ -28,7 +28,6 @@ sub process_dir {
 }
 
 sub process_css_files   { shift->process_dir( 'css'   ) }
-sub process_etc_files   { shift->process_dir( 'etc'   ) }
 sub process_share_files { shift->process_dir( 'share' ) }
 
 # find files to process with the Template Toolkit
