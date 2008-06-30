@@ -350,31 +350,36 @@ ok $constraint;
     }
 );
 
+my $prefer     = $Ninkasi::Constraint::NUMBER{ prefer       };
+my $whatever   = $Ninkasi::Constraint::NUMBER{ whatever     };
+my $prefer_not = $Ninkasi::Constraint::NUMBER{ 'prefer not' };
+my $entry      = $Ninkasi::Constraint::NUMBER{ entry        };
+
 my %expected_constraint = (
-     1 => 'whatever'   ,
-     2 => 'prefer'     ,
-     3 => 'whatever'   ,
-     4 => 'whatever'   ,
-     5 => 'whatever'   ,
-     6 => 'whatever'   ,
-     7 => 'whatever'   ,
-     8 => 'entry'      ,
-     9 => 'whatever'   ,
-    10 => 'entry'      ,
-    11 => 'whatever'   ,
-    12 => 'whatever'   ,
-    13 => 'whatever'   ,
-    14 => 'whatever'   ,
-    15 => 'entry'      ,
-    16 => 'whatever'   ,
-    17 => 'whatever'   ,
-    18 => 'whatever'   ,
-    19 => 'whatever'   ,
-    20 => 'prefer not' ,
-    21 => 'entry'      ,
-    22 => 'whatever'   ,
-    23 => 'whatever'   ,
-    24 => 'prefer'     ,
+     1 => $whatever   ,
+     2 => $prefer     ,
+     3 => $whatever   ,
+     4 => $whatever   ,
+     5 => $whatever   ,
+     6 => $whatever   ,
+     7 => $whatever   ,
+     8 => $entry      ,
+     9 => $whatever   ,
+    10 => $entry      ,
+    11 => $whatever   ,
+    12 => $whatever   ,
+    13 => $whatever   ,
+    14 => $whatever   ,
+    15 => $entry      ,
+    16 => $whatever   ,
+    17 => $whatever   ,
+    18 => $whatever   ,
+    19 => $whatever   ,
+    20 => $prefer_not ,
+    21 => $entry      ,
+    22 => $whatever   ,
+    23 => $whatever   ,
+    24 => $prefer     ,
 );
 
 my $rows_fetched = 0;

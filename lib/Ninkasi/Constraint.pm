@@ -12,8 +12,33 @@ CREATE TABLE "constraint" (
     constraint_id TEXT PRIMARY KEY,
     category      INTEGER,
     judge         INTEGER,
-    type          TEXT
+    type          INTEGER
 )
 EOF
+
+our @CONSTRAINTS = (
+    {
+        name   => 'entry',
+        number => 10,
+    },
+    {
+        name   => 'prefer not',
+        number => 20,
+    },
+    {
+        name   => 'whatever',
+        number => 30,
+    },
+    {
+        name   => 'prefer',
+        number => 40,
+    },
+);
+
+our (%NAME, %NUMBER);
+foreach my $constraint (@CONSTRAINTS) {
+    $NAME  { $constraint->{number} } = $constraint->{name  };
+    $NUMBER{ $constraint->{name  } } = $constraint->{number};
+}
 
 1;

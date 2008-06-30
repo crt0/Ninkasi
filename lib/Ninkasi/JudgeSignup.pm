@@ -181,32 +181,56 @@ sub mail_confirmation {
     return;
 }
 
+# store the data submitted by the judge form in the database
 sub store {
     my ($column) = @_;
 
+    # log the submission in a flat file for safekeeping
     log_request $column;
 
+    # validate the input
     $column = validate $column;
 
+    # create judge & constraint objects
     my $judge_table = Ninkasi::Judge->new();
     my $constraint_table = Ninkasi::Constraint->new();
+
+    # get a database handle
     my $dbh = Ninkasi::Table->Database_Handle();
+
+    # disable autocommit to perform this operation as one transaction
     $dbh->{AutoCommit} = 0;
+
+    # create a judge row
     my $judge_id = $judge_table->add( {
         %$column,
         email => $column->{email1},
         when_created => time(),
     } );
+
+    # walk through the categories and create a row for each constraint
     foreach my $category (@CATEGORIES) {
+
+        # skip if no constraint was specified
         next if !exists $column->{ $category->{field_name} };
+
+        # skip if we don't know the constraint type
+        my $type_name = $column->{ $category->{field_name} };
+        next if !exists $Ninkasi::Constraint::NUMBER{$type_name};
+
+        # create a row for the constraint
         $constraint_table->add({
             category => $category->{number},
             judge    => $judge_id,
-            type     => $column->{ $category->{field_name} },
+            type     => $Ninkasi::Constraint::NUMBER{$type_name},
         });
     }
+
+    # commit this transaction & re-enable autocommit
     $dbh->commit();
     $dbh->{AutoCommit} = 1;
+
+    return;
 }
 
 1;
