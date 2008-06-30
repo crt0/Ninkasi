@@ -20,6 +20,7 @@ BEGIN {
 }
 
 use CGI ();
+use Ninkasi::Config;
 use Ninkasi::Constraint;
 use Ninkasi::Judge;
 use Ninkasi::JudgeSignup;
@@ -31,9 +32,11 @@ my %PROCESS = (
     style => \&view_style,
 );
 
+# generate a comma-separated list of hyperlinked constraints
 sub fetch_constraint_lists {
     my ($judge_id) = @_;
 
+    # fetch constraints for the specified judge
     my $constraint = Ninkasi::Constraint->new();
     my ($sth, $result) = $constraint->bind_hash( {
         bind_values => [$judge_id],
@@ -42,37 +45,55 @@ sub fetch_constraint_lists {
         where       => 'judge = ?',
     } );
 
+    # intialize a hash to store the constraint lists (indexed by type name)
     my %constraint = ();
+
+    # build an index of missing rows (we'll remove the categories we find)
     my %not_found  = ();
     @not_found{ 1 .. $#Ninkasi::JudgeSignup::CATEGORIES } = ();
+
+    # walk the rows, building constraint lists
     while ( $sth->fetch() ) {
-        push @{ $constraint{ $result->{type} } }, $result->{category};
+
+        # add this category to the appropriate constraint list
+        push @{ $constraint{ $Ninkasi::Constraint::NAME{ $result->{type} } } },
+             $result->{category};
+
+        # we found a constraint for this category, so delete it from %not_found
         delete $not_found{ $result->{category} };
     }
 
+    # add any missing rows to the 'whatever' list
     @{ $constraint{whatever} }
         = sort { $a <=> $b } keys %not_found, @{ $constraint{whatever} || [] };
 
+    # return a hash of comma-separated, hyperlinked constraint lists
     return { map { $_ => join ', ', map { qq{<a href="/view/style/$_">$_</a>} }
                                         @{ $constraint{$_} || [] } }
                  keys %constraint };
 }
 
+# display big table of all judges
 sub view_all_judges {
-    my $judge = Ninkasi::Judge->new();
 
+    # columns to display
     my @judge_columns = qw/judge_id first_name last_name rank flight1
                            flight2 flight3 competitions_judged
                            pro_brewer/;
 
+    # select whole table & order by last name
+    my $judge = Ninkasi::Judge->new();
     my ($sth, $result) = $judge->bind_hash( {
         columns => \@judge_columns,
         order   => 'last_name',
     } );
 
-    my $template_object = Ninkasi::Template->new();
+    # create a rank number -> name mapping
     my %rank_name = ( map { $_->{number} => $_->{name} }
                           @Ninkasi::Judge::RANKS );
+
+    # process the template, passing it a function to fetch judge data
+    my $template_object = Ninkasi::Template->new();
     $template_object->process( 'view_judges.html', {
         fetch_judge => sub {
             return $sth->fetch() && {
@@ -83,6 +104,8 @@ sub view_all_judges {
         },
         rank_name => \%rank_name,
     } ) or warn $template_object->error();
+
+    return;
 }
 
 sub view_judge {
@@ -114,9 +137,23 @@ sub view_style {
 MAIN: {
     my $cgi_object = CGI->new();
 
+    # transmit CGI header
+    print $cgi_object->header();
+
+    # if app is disabled, display error card and exit
+    my $config = Ninkasi::Config->new();
+    if ( $config->disabled() ) {
+        my $template_object = Ninkasi::Template->new();
+        $template_object->process('disabled.html') or warn $template_object->error();
+        exit;
+    }
+
+    # parse path_info to determine judge vs. style view (default: judge)
     my ($discard, $type, @arguments) = split '/', $cgi_object->path_info();
     $type ||= 'judge';
 
-    print $cgi_object->header();
+    # build & display selected view
     $PROCESS{$type}->(@arguments);
+
+    exit;
 }
