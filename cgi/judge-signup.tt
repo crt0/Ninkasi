@@ -19,15 +19,14 @@ BEGIN {
     }
 }
 
-use CGI ();
+use Ninkasi::CGI;
 use Ninkasi::Config;
 use Ninkasi::Judge;
 use Ninkasi::JudgeSignup;
 use Ninkasi::Template;
-use Smart::Comments;
 
 MAIN: {
-    my $cgi_object = CGI->new();
+    my $cgi_object = Ninkasi::CGI->new();
     my $cgi_param = $cgi_object->Vars();
 
     my $template_name = 'judge_form.html';
@@ -75,7 +74,6 @@ MAIN: {
     }
 
     my $template_object = Ninkasi::Template->new();
-    print $cgi_object->header();
     $template_object->process($template_name, \%template_variable)
         or warn $template_object->error();
 }
