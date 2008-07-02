@@ -11,7 +11,7 @@ __PACKAGE__->Create_Sql(<<'EOF');
 CREATE TABLE "constraint" (
     constraint_id TEXT PRIMARY KEY,
     category      INTEGER,
-    judge         INTEGER,
+    judge         TEXT,
     type          INTEGER
 )
 EOF
