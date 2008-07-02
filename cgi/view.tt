@@ -87,10 +87,6 @@ sub view_all_judges {
         order   => 'last_name',
     } );
 
-    # create a rank number -> name mapping
-    my %rank_name = ( map { $_->{number} => $_->{name} }
-                          @Ninkasi::Judge::RANKS );
-
     # process the template, passing it a function to fetch judge data
     my $template_object = Ninkasi::Template->new();
     $template_object->process( 'view_judges.html', {
@@ -101,7 +97,7 @@ sub view_all_judges {
                     => sub { fetch_constraint_lists $result->{judge_id} },
             };
         },
-        rank_name => \%rank_name,
+        rank_name => \%Ninkasi::Judge::NAME,
     } ) or warn $template_object->error();
 
     return;

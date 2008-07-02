@@ -76,4 +76,10 @@ our @RANKS = (
     },
 );
 
+our (%NAME, %NUMBER);
+foreach my $rank (@RANKS) {
+    $NAME  { $rank->{number} } = $rank->{name  };
+    $NUMBER{ $rank->{name  } } = $rank->{number};
+}
+
 1;
