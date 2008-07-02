@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 81;
+use Test::More tests => 129;
 
 use Apache::TestConfig;
 use Ninkasi::Constraint;
@@ -344,7 +344,7 @@ my $constraint = Ninkasi::Constraint->new();
 ok $constraint;
 ($sth, $result) = $constraint->bind_hash(
     {
-        columns     => [ qw/category type/ ],
+        columns     => [ qw/category constraint_id judge type/ ],
         where       => 'judge = ?',
         bind_values => [ $judge_id ],
     }
@@ -385,6 +385,8 @@ my %expected_constraint = (
 my $rows_fetched = 0;
 while ( $sth->fetch() ) {
     is $result->{type}, $expected_constraint{ $result->{category} };
+    is $result->{judge}, $judge_id;
+    ok $result->{constraint_id};
     ++$rows_fetched;
 }
 
