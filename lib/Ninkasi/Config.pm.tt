@@ -5,6 +5,7 @@ package Ninkasi::Config;
 use strict;
 use warnings;
 
+use File::Spec;
 use Readonly;
 
 use base qw/AppConfig Class::Singleton/;
