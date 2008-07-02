@@ -67,7 +67,7 @@ sub bind_hash {
     # format table list
     my $table_list = exists $argument->{join}
                    ? '(' . join(', ', $table,
-                                      map { q{'"} . $_->Table_Name() . q{"'} }
+                                      map { "'" . $_->Table_Name() . "'" }
                                           @{ $argument->{join} })
                          . ')'
                    : "'$table'"
