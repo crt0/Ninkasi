@@ -1,4 +1,7 @@
 [% PROCESS "header.html" -%]
+[% IF category -%]
+<p>Category [% category.number %]. [% category.name %]</p>
+[% END -%]
 <table cellspacing="0" class="view">
 <thead>
 <tr>
@@ -9,40 +12,48 @@
   <td>Sat. PM?</td>
   <td>Comps Judged</td>
   <td>Pro Brewer?</td>
+[% IF category -%]
+  <td>Preference</td>
+[% ELSE %]
   <td>Entries</td>
   <td>Prefers Not</td>
   <td>Whatever</td>
   <td>Prefers</td>
+[% END -%]
 </tr>
 </thead>
 <tbody>
-[% row = 0 %]
-[% WHILE ( judge = fetch_judge() ) %]
+[% row = 0 -%]
+[% WHILE ( judge = fetch_judge() ) -%]
 <tr[% IF row % 2 %] class="even"[% END %]>
   <td>
-    <a href="/view/judge/[% judge.judge_id %]">
+    <a href="/cgi-bin/view/judge/[% judge.judge_id %]">
       [% judge.last_name | html_entity %],
       [% judge.first_name | html_entity %]
     </a>
   </td>
   <td>[% rank_name.${judge.rank} %]</td>
-  [% FOREACH flight IN [ 'flight1', 'flight2', 'flight3' ] %]
+  [% FOREACH flight IN [ 'flight1', 'flight2', 'flight3' ] -%]
   <td>[% IF judge.$flight %]Y[% ELSE %]N[% END %]</td>
-  [% END %]
+  [% END -%]
   <td>[% judge.competitions_judged | html_entity %]</td>
   <td>[% IF judge.pro_brewer %]Y[% ELSE %]N[% END %]</td>
+  [% IF category -%]
+  <td>[% constraint_name.${judge.type} %]</td>
+  [% ELSE -%]
   [% constraint_list = judge.fetch_constraint_lists() %]
   [% FOREACH constraint IN [ 'entry', 'prefer not', 'whatever',
-                             'prefer' ] %]
+                             'prefer' ] -%]
   <td>[% constraint_list.$constraint %]</td>
-  [% END %]
+  [% END -%]
+  [% END -%]
 </tr>
-[% row = row + 1 %]
-[% END %]
+[% row = row + 1 -%]
+[% END -%]
 </tbody>
 </table>
 <p>
   [% row %] [% IF row == 1 %]judge is[% ELSE %]judges are[% END %]
-  registered.
+  [% IF category %]available for this style[% ELSE %]registered[% END %].
 </p>
 [% PROCESS "footer.html" -%]

@@ -67,9 +67,13 @@ sub fetch_constraint_lists {
         = sort { $a <=> $b } keys %not_found, @{ $constraint{whatever} || [] };
 
     # return a hash of comma-separated, hyperlinked constraint lists
-    return { map { $_ => join ', ', map { qq{<a href="/view/style/$_">$_</a>} }
-                                        @{ $constraint{$_} || [] } }
-                 keys %constraint };
+    return {
+        map {
+            $_ => join ', ', map {
+                      qq{<a href="/cgi-bin/view/style/$_">$_</a>}
+                  } @{ $constraint{$_} || [] }
+        } keys %constraint
+    };
 }
 
 # display big table of all judges
@@ -112,7 +116,10 @@ sub view_judge {
 }
 
 sub view_style {
-    my ($category) = @_;
+    my ($category_number) = @_;
+
+    my $category = $Ninkasi::JudgeSignup::CATEGORIES[$category_number - 1];
+    my $entry    = $Ninkasi::Constraint::NUMBER{entry};
 
     my @judge_columns = qw/judge_id first_name last_name rank flight1
                            flight2 flight3 competitions_judged
@@ -121,12 +128,23 @@ sub view_style {
 
     my $judge = Ninkasi::Judge->new();
     my ($sth, $result) = $judge->bind_hash( {
-        bind_values => [$category, 'entry'],
+        bind_values => [$category_number, $entry],
         columns     => [@judge_columns, @constraint_columns],
-        join        => [qw/Ninkasi::Constraint Ninkasi::Judge/],
+        join        => [qw/Ninkasi::Constraint/],
         order       => 'type DESC, rank DESC, competitions_judged DESC',
         where       => "category = ? AND type != ? AND judge = judge_id",
     } );
+
+    # process the template, passing it a function to fetch judge data
+    my $template_object = Ninkasi::Template->new();
+    $template_object->process( 'view_judges.html', {
+        category        => $category,
+        constraint_name => \%Ninkasi::Constraint::NAME,
+        fetch_judge     => sub { $sth->fetch() && $result },
+        rank_name       => \%Ninkasi::Judge::NAME,
+    } ) or warn $template_object->error();
+
+    return;
 }
 
 MAIN: {
