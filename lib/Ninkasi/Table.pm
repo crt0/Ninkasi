@@ -33,8 +33,9 @@ sub new {
 sub add {
     my ($self, $column) = @_;
 
-    # generate UUID
-    $column->{judge_id} ||= Data::UUID->new()->create_b64();
+    # store UUID in primary key (table name with '_id' appended)
+    my $primary_key = $self->Table_Name() . '_id';
+    $column->{$primary_key} ||= Data::UUID->new()->create_b64();
 
     my $table_name = $self->Table_Name();
     my @column_names = $self->columns_to_update($column);
