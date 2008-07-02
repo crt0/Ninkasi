@@ -78,11 +78,11 @@ SELECT $column_list FROM $table_list
 EOF
 
     if ( exists $argument->{where} ) {
-        $sql .= "WHERE $argument->{where}";
+        $sql .= " WHERE $argument->{where}";
     }
 
     if ( exists $argument->{order} ) {
-        $sql .= "ORDER BY $argument->{order}";
+        $sql .= " ORDER BY $argument->{order}";
     }
 
     my $sth = $self->Database_Handle()->prepare($sql);
