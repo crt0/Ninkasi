@@ -70,6 +70,7 @@ $mech->submit_form_ok( {
         last_name           => 'Mayers',
         phone_day           => '964-722-0584',
         phone_evening       => '964-710-1677',
+        pro_brewer          => 1,
         rank                => 10,
         state               => 'CA',
         zip                 => '93007',
@@ -210,5 +211,5 @@ $mech->content_like(qr{<a\ href="/cgi-bin/view/judge/[A-Za-z0-9=]{24}">\s+
                        <td>Y</td>\s+
                        <td>Y</td>\s+
                        <td>2</td>\s+
-                       <td>N</td>\s+
+                       <td>Y</td>\s+
                        <td>whatever</td>}msx);

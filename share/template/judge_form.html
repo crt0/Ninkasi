@@ -260,8 +260,13 @@
     <tr>
       <td align="right">Select if you a professional brewer:</td>
       <td>
-        <input type="checkbox" name="pro_brewer"
-               value="[% form.pro_brewer %]">
+        <input
+           [% IF form.pro_brewer %]
+           checked="checked"
+           [% END %]
+           name="pro_brewer"
+           type="checkbox"
+           value="1">
       </td>
     </tr>
   </table>
