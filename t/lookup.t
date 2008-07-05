@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 14;
+use Test::More tests => 18;
 
 use Apache::TestConfig;
 use Ninkasi::Table;
@@ -163,8 +163,7 @@ my $lookup_url = "$url_base/cgi-bin/view/judge/";
 $mech->get_ok($lookup_url);
 
 $mech->content_like(qr{<a\ href="/cgi-bin/view/judge/[A-Za-z0-9=]{24}">\s+
-                       |&lt;iefer,\s+
-                       Angelina\s+
+                       |&lt;iefer,\ Angelina\s+
                        </a>\s+
                        </td>\s+
                        <td>Certified</td>\s+
@@ -202,8 +201,7 @@ $lookup_url = "$url_base/cgi-bin/view/style/8";
 $mech->get_ok($lookup_url);
 
 $mech->content_like(qr{<a\ href="/cgi-bin/view/judge/[A-Za-z0-9=]{24}">\s+
-                       Mayers,\s+
-                       Liam\s+
+                       Mayers,\ Liam\s+
                        </a>\s+
                        </td>\s+
                        <td>Novice</td>\s+
@@ -213,3 +211,22 @@ $mech->content_like(qr{<a\ href="/cgi-bin/view/judge/[A-Za-z0-9=]{24}">\s+
                        <td>2</td>\s+
                        <td>Y</td>\s+
                        <td>whatever</td>}msx);
+
+$mech->follow_link_ok( { text_regex => qr/CSV/ } );
+
+$mech->content_is(<<EOF);
+"Name","Rank","Fri. PM?","Sat. AM?","Sat. PM?","Comps Judged","Pro Brewer?","Preference"
+"Mayers, Liam","Novice","Y","Y","Y","2","Y","whatever"
+EOF
+
+$lookup_url = "$url_base/cgi-bin/view/style/1?format=csv";
+$mech->get_ok($lookup_url);
+
+$mech->content_is(<<EOF);
+"Name","Rank","Fri. PM?","Sat. AM?","Sat. PM?","Comps Judged","Pro Brewer?","Preference"
+"Underhill, Leann","Certified","Y","N","Y","10","N","whatever"
+"Reynoso, Greggory","Certified","Y","N","Y","10","N","whatever"
+"|&lt;iefer, Angelina","Certified","Y","N","Y","10","N","whatever"
+"Carrera, Lyndsey","Certified","Y","N","Y","10","N","whatever"
+"Mayers, Liam","Novice","Y","Y","Y","2","Y","whatever"
+EOF

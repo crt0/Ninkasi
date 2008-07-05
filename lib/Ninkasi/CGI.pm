@@ -7,10 +7,12 @@ use CGI ();
 use Ninkasi::Config;
 
 sub new {
+    my $class = shift;
+
     my $cgi_object = CGI->new();
 
     # transmit CGI header
-    print $cgi_object->header();
+    print $cgi_object->header(@_);
 
     # if app is disabled, display error card and exit
     my $config = Ninkasi::Config->new();

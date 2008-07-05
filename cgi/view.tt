@@ -93,7 +93,7 @@ sub view_all_judges {
 
     # process the template, passing it a function to fetch judge data
     my $template_object = Ninkasi::Template->new();
-    $template_object->process( 'view_judges.html', {
+    $template_object->process( 'view_judges.tt', {
         fetch_judge => sub {
             return $sth->fetch() && {
                 %$result,
@@ -102,21 +102,32 @@ sub view_all_judges {
             };
         },
         rank_name => \%Ninkasi::Judge::NAME,
+        type      => 'html',
     } ) or warn $template_object->error();
 
     return;
 }
 
 sub view_judge {
-    my ($id) = @_;
+    my ($format, $id) = @_;
 
     return view_all_judges() if !$id;
+}
 
+sub escape_quotes {
+    my ($text) = @_;
+    $text =~ s/"/""/g;
+    return $text;
+}
 
+sub remove_trailing_comma {
+    my ($text) = @_;
+    $text =~ s/,$//;
+    return $text;
 }
 
 sub view_style {
-    my ($category_number) = @_;
+    my ($format, $category_number) = @_;
 
     my $category = $Ninkasi::JudgeSignup::CATEGORIES[$category_number - 1];
     my $entry    = $Ninkasi::Constraint::NUMBER{entry};
@@ -137,25 +148,34 @@ sub view_style {
 
     # process the template, passing it a function to fetch judge data
     my $template_object = Ninkasi::Template->new();
-    $template_object->process( 'view_judges.html', {
-        category        => $category,
-        constraint_name => \%Ninkasi::Constraint::NAME,
-        fetch_judge     => sub { $sth->fetch() && $result },
-        rank_name       => \%Ninkasi::Judge::NAME,
+    $template_object->process( 'view_judges.tt', {
+        category              => $category,
+        constraint_name       => \%Ninkasi::Constraint::NAME,
+        escape_quotes         => sub { \&escape_quotes },
+        fetch_judge           => sub { $sth->fetch() && $result },
+        rank_name             => \%Ninkasi::Judge::NAME,
+        remove_trailing_comma => sub { \&remove_trailing_comma },
+        type                  => $format,
     } ) or warn $template_object->error();
 
     return;
 }
 
 MAIN: {
-    my $cgi_object = Ninkasi::CGI->new();
+    my $cgi_object = CGI->new();
 
     # parse path_info to determine judge vs. style view (default: judge)
-    my ($discard, $type, @arguments) = split '/', $cgi_object->path_info();
-    $type ||= 'judge';
+    my ($discard, $type, @arguments)
+        = split '/', $cgi_object->path_info();
+    $type   ||= 'judge';
+
+    my $format = $cgi_object->param('format') || 'html';
+
+    # print CGI header
+    print $cgi_object->header($format eq 'html' ? 'text/html' : 'text/plain');
 
     # build & display selected view
-    $PROCESS{$type}->(@arguments);
+    $PROCESS{$type}->($format, @arguments);
 
     exit;
 }

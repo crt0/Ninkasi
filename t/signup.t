@@ -109,8 +109,7 @@ Brewers Cup:
 <p>
 Please refer to <a href="http://brewerscup.org/">the Brewers Cup web site</a>
 for up-to-the-minute information on the competition.  Thanks!
-</p>
-</div>
+</p></div>
 </body>
 </html>
 EOF

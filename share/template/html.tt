@@ -16,10 +16,64 @@
 <a href="[% href %]">[% text %]</a>
 [%- END ~%]
 
-[% BLOCK footer %]
-</div>
-[% PROCESS "footer.html" -%]
+[% BLOCK even_row %]
+<tr class="even">
+[% content -%]
+</tr>
 [% END ~%]
 
-[% PROCESS "header.html" ~%]
+[% BLOCK odd_row %]
+<tr class="odd">
+[% content -%]
+</tr>
+[% END ~%]
+
+[% BLOCK column -%]
+<td>[% content -%]</td>
+[% END ~%]
+
+[% BLOCK judge -%]
+[% WRAPPER column %]
+<a href="/cgi-bin/view/judge/[% judge.judge_id %]">
+[% content %]
+</a>
+[% END -%]
+[% END ~%]
+
+[% BLOCK table -%]
+[% IF category -%]
+<p>
+Category [% category.number %]. [% category.name %]
+[<a href="/cgi-bin/view/style/[% category.number %]?format=csv">CSV</a>]
+</p>
+[% END -%]
+<table cellspacing="0" class="view">
+[% content -%]
+</table>
+<p>
+  [% row %] [% IF row == 1 %]judge is[% ELSE %]judges are[% END %]
+  [% IF category %]available for this style[% ELSE %]registered[% END %].
+</p>
+[% END ~%]
+
+[% BLOCK body_text -%]
 <div id="body_text">
+[% content -%]
+</div>
+[% END ~%]
+
+[% BLOCK thead -%]
+<thead>
+[%- content -%]
+</thead>
+[% END ~%]
+
+[% BLOCK tbody -%]
+<tbody>
+[%- content -%]
+</tbody>
+[% END ~%]
+
+[% BLOCK header %][% PROCESS "header.html" %][% END ~%]
+
+[% BLOCK footer %][% PROCESS "footer.html" %][% END ~%]

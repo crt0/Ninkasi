@@ -14,14 +14,19 @@
 [% text %] <[% href %]>
 [%- END ~%]
 
-[% BLOCK footer %]
+[% BLOCK body_text -%]
+From:    "Brewers Cup" <brewerscup@indianastatefair.com>
+Subject: [% title %]
+To:      "[% form.first_name %] [% form.last_name %]" <[% form.email1 %]>
+
+[% content -%]
+
 -- 
 Brewers Cup
 Indiana State Fair
 brewerscup@indianastatefair.com
 [% END ~%]
 
-From:    "Brewers Cup" <brewerscup@indianastatefair.com>
-Subject: [% title %]
-To:      "[% form.first_name %] [% form.last_name %]" <[% form.email1 %]>
+[% BLOCK header %][% END ~%]
 
+[% BLOCK footer %][% END ~%]
