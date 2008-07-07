@@ -10,11 +10,12 @@ use Readonly;
 
 use base qw/AppConfig Class::Singleton/;
 
+use AppConfig qw/:argcount/;
+
 Readonly our %USER_DEFAULT => (
     constant_contact_m   => '1011161075203',
     constant_contact_p   => 'oi',
     constant_contact_url => 'http://ui.constantcontact.com/roving/d.jsp',
-    disabled             => 0,
     maintainer_address   => 'ninkasi@ajk.name',
 );
 
@@ -58,11 +59,12 @@ sub _new_instance {
                                   qw/template/);
     }
 
-    my $self = $class->SUPER::new();
+    my $self = $class->SUPER::new( { GLOBAL => { ARGCOUNT => ARGCOUNT_ONE } } );
 
     # set defaults
     my %DEFAULT = (
         database_file => $default_database_file,
+        disabled      => '',
         log_file      => $default_log_file,
         template_path => $default_template_path,
         testing       => !!$ENV{NINKASI_TEST_SERVER_ROOT},

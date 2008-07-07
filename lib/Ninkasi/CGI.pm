@@ -16,9 +16,11 @@ sub new {
 
     # if app is disabled, display error card and exit
     my $config = Ninkasi::Config->new();
-    if ( $config->disabled() ) {
+    my $disabled_template = $config->disabled();
+    if ($disabled_template) {
         my $template_object = Ninkasi::Template->new();
-        $template_object->process('disabled.html') or warn $template_object->error();
+        $template_object->process("$disabled_template.html")
+            or warn $template_object->error();
         exit;
     }
 
