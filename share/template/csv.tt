@@ -1,0 +1,39 @@
+[% BLOCK even_row -%]
+[% content | $remove_trailing_comma %]
+[% END ~%]
+
+[% BLOCK odd_row -%]
+[% content | $remove_trailing_comma %]
+[% END ~%]
+
+[% BLOCK column -%]
+"[% content | $escape_quotes -%]",
+[%- END ~%]
+
+[% BLOCK judge -%]
+[% WRAPPER column -%]
+[% content -%]
+[% END -%]
+[% END ~%]
+
+[% BLOCK table -%]
+[% content -%]
+[% END ~%]
+
+[% BLOCK body_text -%]
+<div id="body_text">
+[% content -%]
+</div>
+[% END ~%]
+
+[% BLOCK thead -%]
+[% content -%]
+[% END ~%]
+
+[% BLOCK tbody -%]
+[% content -%]
+[% END ~%]
+
+[% BLOCK header %][% END ~%]
+
+[% BLOCK footer %][% END ~%]
