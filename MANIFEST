@@ -9,7 +9,7 @@ cgi/judge-signup.tt
 cgi/view.tt
 css/ninkasi.css
 lib/Ninkasi.pm
-lib/Ninkasi/ApacheHandler.pm
+lib/Ninkasi/CGI.pm
 lib/Ninkasi/Config.pm.tt
 lib/Ninkasi/Constraint.pm
 lib/Ninkasi/Judge.pm
@@ -18,13 +18,16 @@ lib/Ninkasi/Table.pm
 lib/Ninkasi/Template.pm
 share/htpasswd
 share/template/confirmation.tt
+share/template/csv.tt
+share/template/disabled.html
 share/template/footer.html
 share/template/header.html
 share/template/html.tt
 share/template/judge_form.html
 share/template/mail.tt
 share/template/test
-share/template/view_judges.html
+share/template/view_judge.html
+share/template/view_judges.tt
 t/Ninkasi.t
 t/TEST.PL
 t/conf/extra.conf.in
