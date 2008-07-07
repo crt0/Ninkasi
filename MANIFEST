@@ -17,9 +17,10 @@ lib/Ninkasi/JudgeSignup.pm
 lib/Ninkasi/Table.pm
 lib/Ninkasi/Template.pm
 share/htpasswd
+share/template/closed.html
 share/template/confirmation.tt
 share/template/csv.tt
-share/template/disabled.html
+share/template/down.html
 share/template/footer.html
 share/template/header.html
 share/template/html.tt
