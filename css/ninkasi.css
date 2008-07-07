@@ -188,3 +188,8 @@ table.view tbody tr.ruled td {
     font-weight: bold;
     border-color: #39f;
 }
+
+.view_judge th {
+    text-align:     right;
+    vertical-align: top;
+}

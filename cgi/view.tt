@@ -109,9 +109,36 @@ sub view_all_judges {
 }
 
 sub view_judge {
-    my ($format, $id) = @_;
+    my ($format, $judge_id) = @_;
 
-    return view_all_judges() if !$id;
+    # show all judges if no id is specified
+    return view_all_judges() if !$judge_id;
+
+    # columns to display
+    my @judge_columns = qw/judge_id first_name last_name address city state zip
+                           phone_evening phone_day email rank bjcp_id
+                           competitions_judged pro_brewer when_created/;
+
+    # fetch the judge object from the database
+    my $judge = Ninkasi::Judge->new();
+    my ($sth, $result) = $judge->bind_hash( {
+        bind_values => [$judge_id],
+        columns     => \@judge_columns,
+        where       => 'judge_id = ?',
+    } );
+    $sth->fetch();
+
+    # process the template to display this judge's information
+    my $template_object = Ninkasi::Template->new();
+    $template_object->process( 'view_judge.html', {
+        judge => $result,
+        title => join( ' ', @$result{qw/first_name last_name/} ),
+    } ) or warn $template_object->error();
+
+    # ignore remaining rows
+    $sth->finish();
+
+    return;
 }
 
 sub escape_quotes {

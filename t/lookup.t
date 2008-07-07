@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 18;
+use Test::More tests => 20;
 
 use Apache::TestConfig;
 use Ninkasi::Table;
@@ -159,9 +159,9 @@ $mech->submit_form_ok( {
     }
 } );
 
+# test view of all judges
 my $lookup_url = "$url_base/cgi-bin/view/judge/";
 $mech->get_ok($lookup_url);
-
 $mech->content_like(qr{<a\ href="/cgi-bin/view/judge/[A-Za-z0-9=]{24}">\s+
                        |&lt;iefer,\ Angelina\s+
                        </a>\s+
@@ -197,9 +197,50 @@ $mech->content_like(qr{<a\ href="/cgi-bin/view/judge/[A-Za-z0-9=]{24}">\s+
                        <a\ href="/cgi-bin/view/style/24">24</a></td>\s+
                        <td><a\ href="/cgi-bin/view/style/2">2</a></td>}msx);
 
+# test view of individual judge information
+$mech->follow_link_ok( { text_regex => qr/Mayers, Liam/ } );
+$mech->content_like(qr{<h2>Liam\ Mayers</h2>\s+
+                       <table\ class="view_judge">\s+
+                       <tr>\s+
+                       <th>Address:</th>\s+
+                       <td>\s+
+                       2239\ Hale\ Cove\s+
+                       <br>\s+
+                       Ventura,\ CA\ 93007\s+
+                       </td>\s+
+                       </tr>\s+
+                       <tr>\s+
+                       <th>Phone\ \(day\):</th>\s+
+                       <td>964-722-0584</td>\s+
+                       </tr>\s+
+                       <tr>\s+
+                       <th>Phone\ \(eve\):</th>\s+
+                       <td>964-710-1677</td>\s+
+                       </tr>\s+
+                       <tr>\s+
+                       <th>E-mail:</th>\s+
+                       <td>ninkasi\@ajk\.name</td>\s+
+                       </tr>\s+
+                       <tr>\s+
+                       <th>BJCP\ Rank:</th>\s+
+                       <td>10</td>\s+
+                       </tr>\s+
+                       <tr>\s+
+                       <th>BJCP\ ID:</th>\s+
+                       <td>Z9991</td>\s+
+                       </tr>\s+
+                       <tr>\s+
+                       <th>Competitions\ Judged:</th>\s+
+                       <td>2</td>\s+
+                       </tr>\s+
+                       <tr>\s+
+                       <th>Pro\ Brewer\?</th>\s+
+                       <td>yes</td>\s+
+                       </tr>}msx);
+
+# test category view
 $lookup_url = "$url_base/cgi-bin/view/style/8";
 $mech->get_ok($lookup_url);
-
 $mech->content_like(qr{<a\ href="/cgi-bin/view/judge/[A-Za-z0-9=]{24}">\s+
                        Mayers,\ Liam\s+
                        </a>\s+
@@ -212,16 +253,16 @@ $mech->content_like(qr{<a\ href="/cgi-bin/view/judge/[A-Za-z0-9=]{24}">\s+
                        <td>Y</td>\s+
                        <td>whatever</td>}msx);
 
+# test CSV format for style with one judge
 $mech->follow_link_ok( { text_regex => qr/CSV/ } );
-
 $mech->content_is(<<EOF);
 "Name","Rank","Fri. PM?","Sat. AM?","Sat. PM?","Comps Judged","Pro Brewer?","Preference"
 "Mayers, Liam","Novice","Y","Y","Y","2","Y","whatever"
 EOF
 
+# test CSV format for style with multiple judges
 $lookup_url = "$url_base/cgi-bin/view/style/1?format=csv";
 $mech->get_ok($lookup_url);
-
 $mech->content_is(<<EOF);
 "Name","Rank","Fri. PM?","Sat. AM?","Sat. PM?","Comps Judged","Pro Brewer?","Preference"
 "Underhill, Leann","Certified","Y","N","Y","10","N","whatever"
