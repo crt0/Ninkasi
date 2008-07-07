@@ -102,6 +102,7 @@ sub view_all_judges {
             };
         },
         rank_name => \%Ninkasi::Judge::NAME,
+        title     => 'Registered Judges',
         type      => 'html',
     } ) or warn $template_object->error();
 
@@ -182,6 +183,7 @@ sub view_style {
         fetch_judge           => sub { $sth->fetch() && $result },
         rank_name             => \%Ninkasi::Judge::NAME,
         remove_trailing_comma => sub { \&remove_trailing_comma },
+        title                 => "Category $category_number. $category->{name}",
         type                  => $format,
     } ) or warn $template_object->error();
 

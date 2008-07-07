@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 20;
+use Test::More tests => 23;
 
 use Apache::TestConfig;
 use Ninkasi::Table;
@@ -196,6 +196,7 @@ $mech->content_like(qr{<a\ href="/cgi-bin/view/judge/[A-Za-z0-9=]{24}">\s+
                        <a\ href="/cgi-bin/view/style/23">23</a>,\s+
                        <a\ href="/cgi-bin/view/style/24">24</a></td>\s+
                        <td><a\ href="/cgi-bin/view/style/2">2</a></td>}msx);
+$mech->content_like( qr{<title>Registered Judges</title>} );
 
 # test view of individual judge information
 $mech->follow_link_ok( { text_regex => qr/Mayers, Liam/ } );
@@ -237,6 +238,7 @@ $mech->content_like(qr{<h2>Liam\ Mayers</h2>\s+
                        <th>Pro\ Brewer\?</th>\s+
                        <td>yes</td>\s+
                        </tr>}msx);
+$mech->content_like( qr{<title>Liam Mayers</title>} );
 
 # test category view
 $lookup_url = "$url_base/cgi-bin/view/style/8";
@@ -252,6 +254,7 @@ $mech->content_like(qr{<a\ href="/cgi-bin/view/judge/[A-Za-z0-9=]{24}">\s+
                        <td>2</td>\s+
                        <td>Y</td>\s+
                        <td>whatever</td>}msx);
+$mech->content_like( qr{<title>Category 8. English Pale Ale</title>} );
 
 # test CSV format for style with one judge
 $mech->follow_link_ok( { text_regex => qr/CSV/ } );
