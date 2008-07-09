@@ -46,6 +46,10 @@
 Category [% category.number %]. [% category.name %]
 [<a href="/cgi-bin/view/style/[% category.number %]?format=csv">CSV</a>]
 </p>
+[% ELSE -%]
+<p>
+All Registered Judges [<a href="/cgi-bin/view/judge/?format=csv">CSV</a>]
+</p>
 [% END -%]
 <table cellspacing="0" class="view">
 [% content -%]

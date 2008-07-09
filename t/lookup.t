@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 23;
+use Test::More tests => 25;
 
 use Apache::TestConfig;
 use Ninkasi::Table;
@@ -198,7 +198,20 @@ $mech->content_like(qr{<a\ href="/cgi-bin/view/judge/[A-Za-z0-9=]{24}">\s+
                        <td><a\ href="/cgi-bin/view/style/2">2</a></td>}msx);
 $mech->content_like( qr{<title>Registered Judges</title>} );
 
+
+# test CSV format for view of all judges
+$mech->follow_link_ok( { text_regex => qr/CSV/ } );
+$mech->content_is(<<EOF);
+"Name","Rank","Fri. PM?","Sat. AM?","Sat. PM?","Comps Judged","Pro Brewer?","Entries","Prefers Not","Whatever","Prefers"
+"Carrera, Lyndsey","Certified","Y","N","Y","10","N","8, 10, 15, 21","20","1, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 16, 17, 18, 19, 22, 23, 24","2"
+"Mayers, Liam","Novice","Y","Y","Y","2","Y","","","1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24",""
+"Reynoso, Greggory","Certified","Y","N","Y","10","N","8, 10, 15, 21","20","1, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 16, 17, 18, 19, 22, 23, 24","2"
+"Underhill, Leann","Certified","Y","N","Y","10","N","8, 10, 15, 21","20","1, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 16, 17, 18, 19, 22, 23, 24","2"
+"|&lt;iefer, Angelina","Certified","Y","N","Y","10","N","8, 10, 15, 21","20","1, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 16, 17, 18, 19, 22, 23, 24","2"
+EOF
+
 # test view of individual judge information
+$mech->back();
 $mech->follow_link_ok( { text_regex => qr/Mayers, Liam/ } );
 $mech->content_like(qr{<h2>Liam\ Mayers</h2>\s+
                        <table\ class="view_judge">\s+

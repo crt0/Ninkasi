@@ -33,7 +33,7 @@ my %PROCESS = (
 
 # generate a comma-separated list of hyperlinked constraints
 sub fetch_constraint_lists {
-    my ($judge_id) = @_;
+    my ($judge_id, $suppress_hyperlinks) = @_;
 
     # fetch constraints for the specified judge
     my $constraint = Ninkasi::Constraint->new();
@@ -69,15 +69,21 @@ sub fetch_constraint_lists {
     # return a hash of comma-separated, hyperlinked constraint lists
     return {
         map {
-            $_ => join ', ', map {
-                      qq{<a href="/cgi-bin/view/style/$_">$_</a>}
-                  } @{ $constraint{$_} || [] }
+            my @categories = @{ $constraint{$_} || [] };
+            if (!$suppress_hyperlinks) {
+                @categories
+                    = map { qq{<a href="/cgi-bin/view/style/$_">$_</a>} }
+                          @categories;
+            }
+
+            $_ => join ', ', @categories;
         } keys %constraint
     };
 }
 
 # display big table of all judges
 sub view_all_judges {
+    my ($format) = @_;
 
     # columns to display
     my @judge_columns = qw/judge_id first_name last_name rank flight1
@@ -94,16 +100,19 @@ sub view_all_judges {
     # process the template, passing it a function to fetch judge data
     my $template_object = Ninkasi::Template->new();
     $template_object->process( 'view_judges.tt', {
+        escape_quotes         => sub { \&escape_quotes },
         fetch_judge => sub {
             return $sth->fetch() && {
                 %$result,
                 fetch_constraint_lists
-                    => sub { fetch_constraint_lists $result->{judge_id} },
+                    => sub { fetch_constraint_lists $result->{judge_id},
+                                                    $format eq 'csv' },
             };
         },
         rank_name => \%Ninkasi::Judge::NAME,
+        remove_trailing_comma => sub { \&remove_trailing_comma },
         title     => 'Registered Judges',
-        type      => 'html',
+        type      => $format,
     } ) or warn $template_object->error();
 
     return;
@@ -113,7 +122,7 @@ sub view_judge {
     my ($format, $judge_id) = @_;
 
     # show all judges if no id is specified
-    return view_all_judges() if !$judge_id;
+    return view_all_judges $format if !$judge_id;
 
     # columns to display
     my @judge_columns = qw/judge_id first_name last_name address city state zip
