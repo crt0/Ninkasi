@@ -25,6 +25,7 @@ use Ninkasi::Constraint;
 use Ninkasi::Judge;
 use Ninkasi::JudgeSignup;
 use Ninkasi::Template;
+use URI::Escape ();
 
 my %PROCESS = (
     judge => \&view_judge,
@@ -120,6 +121,9 @@ sub view_all_judges {
 
 sub view_judge {
     my ($format, $judge_id) = @_;
+
+    # decode judge_id, which has likely been double encoded
+    $judge_id = URI::Escape::uri_unescape $judge_id;
 
     # show all judges if no id is specified
     return view_all_judges $format if !$judge_id;
