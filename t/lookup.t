@@ -239,7 +239,7 @@ $mech->content_like(qr{<h2>Liam\ Mayers</h2>\s+
                        </tr>\s+
                        <tr>\s+
                        <th>BJCP\ Rank:</th>\s+
-                       <td>10</td>\s+
+                       <td>Novice</td>\s+
                        </tr>\s+
                        <tr>\s+
                        <th>BJCP\ ID:</th>\s+

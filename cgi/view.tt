@@ -145,8 +145,9 @@ sub view_judge {
     # process the template to display this judge's information
     my $template_object = Ninkasi::Template->new();
     $template_object->process( 'view_judge.html', {
-        judge => $result,
-        title => join( ' ', @$result{qw/first_name last_name/} ),
+        judge     => $result,
+        rank_name => \%Ninkasi::Judge::NAME,
+        title     => join( ' ', @$result{qw/first_name last_name/} ),
     } ) or warn $template_object->error();
 
     # ignore remaining rows
