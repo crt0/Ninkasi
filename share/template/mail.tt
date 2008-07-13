@@ -17,7 +17,7 @@
 [% BLOCK body_text -%]
 From:    "Brewers Cup" <brewerscup@indianastatefair.com>
 Subject: [% title %]
-To:      "[% form.first_name %] [% form.last_name %]" <[% form.email1 %]>
+To:      "[% form.first_name | html_entity %] [% form.last_name | html_entity %]" <[% form.email1 | html_entity %]>
 
 [% content -%]
 

@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 25;
+use Test::More tests => 28;
 
 use Apache::TestConfig;
 use Ninkasi::Table;
@@ -162,7 +162,7 @@ $mech->submit_form_ok( {
 # test view of all judges
 my $lookup_url = "$url_base/cgi-bin/view/judge/";
 $mech->get_ok($lookup_url);
-$mech->content_like(qr{<a\ href="/cgi-bin/view/judge/[A-Za-z0-9=]{24}">\s+
+$mech->content_like(qr{<a\ href="/cgi-bin/view/judge/[A-Za-z0-9%]{24,}">\s+
                        |&lt;iefer,\ Angelina\s+
                        </a>\s+
                        </td>\s+
@@ -220,7 +220,9 @@ $mech->content_like(qr{<h2>Liam\ Mayers</h2>\s+
                        <td>\s+
                        2239\ Hale\ Cove\s+
                        <br>\s+
-                       Ventura,\ CA\ 93007\s+
+                       Ventura,\s+
+                       CA\s+
+                       93007\s+
                        </td>\s+
                        </tr>\s+
                        <tr>\s+
@@ -253,10 +255,16 @@ $mech->content_like(qr{<h2>Liam\ Mayers</h2>\s+
                        </tr>}msx);
 $mech->content_like( qr{<title>Liam Mayers</title>} );
 
+# test view of individual judge information with html encoding
+$mech->back();
+$mech->follow_link_ok( { text_regex => qr/iefer, Angelina/ } );
+$mech->content_like( qr{<h2>Angelina |&lt;iefer</h2>} );
+$mech->content_like( qr{<title>Angelina |&lt;iefer</title>} );
+
 # test category view
 $lookup_url = "$url_base/cgi-bin/view/style/8";
 $mech->get_ok($lookup_url);
-$mech->content_like(qr{<a\ href="/cgi-bin/view/judge/[A-Za-z0-9=]{24}">\s+
+$mech->content_like(qr{<a\ href="/cgi-bin/view/judge/[A-Za-z0-9%]{24,}">\s+
                        Mayers,\ Liam\s+
                        </a>\s+
                        </td>\s+
