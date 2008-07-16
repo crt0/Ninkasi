@@ -87,7 +87,7 @@ sub view_all_judges {
     my ($format) = @_;
 
     # columns to display
-    my @judge_columns = qw/judge_id first_name last_name rank flight1
+    my @judge_columns = qw/rowid first_name last_name rank flight1
                            flight2 flight3 competitions_judged
                            pro_brewer/;
 
@@ -106,7 +106,7 @@ sub view_all_judges {
             return $sth->fetch() && {
                 %$result,
                 fetch_constraint_lists
-                    => sub { fetch_constraint_lists $result->{judge_id},
+                    => sub { fetch_constraint_lists $result->{rowid},
                                                     $format eq 'csv' },
             };
         },
@@ -122,14 +122,11 @@ sub view_all_judges {
 sub view_judge {
     my ($format, $judge_id) = @_;
 
-    # decode judge_id, which has likely been double encoded
-    $judge_id = URI::Escape::uri_unescape $judge_id;
-
     # show all judges if no id is specified
     return view_all_judges $format if !$judge_id;
 
     # columns to display
-    my @judge_columns = qw/judge_id first_name last_name address city state zip
+    my @judge_columns = qw/rowid first_name last_name address city state zip
                            phone_evening phone_day email rank bjcp_id
                            competitions_judged pro_brewer when_created/;
 
@@ -138,7 +135,7 @@ sub view_judge {
     my ($sth, $result) = $judge->bind_hash( {
         bind_values => [$judge_id],
         columns     => \@judge_columns,
-        where       => 'judge_id = ?',
+        where       => 'rowid = ?',
     } );
     $sth->fetch();
 
@@ -174,7 +171,7 @@ sub view_style {
     my $category = $Ninkasi::JudgeSignup::CATEGORIES[$category_number - 1];
     my $entry    = $Ninkasi::Constraint::NUMBER{entry};
 
-    my @judge_columns = qw/judge_id first_name last_name rank flight1
+    my @judge_columns = qw/judge.rowid first_name last_name rank flight1
                            flight2 flight3 competitions_judged
                            pro_brewer/;
     my @constraint_columns = qw/category judge type/;
@@ -183,10 +180,11 @@ sub view_style {
     my ($sth, $result) = $judge->bind_hash( {
         bind_values => [$category_number, $entry],
         columns     => [@judge_columns, @constraint_columns],
-        join        => [qw/Ninkasi::Constraint/],
+        join        => 'Ninkasi::Constraint',
         order       => 'type DESC, rank DESC, competitions_judged DESC',
-        where       => "category = ? AND type != ? AND judge = judge_id",
+        where       => 'category = ? AND type != ? AND judge = judge.rowid',
     } );
+    $sth->bind_col(1, \$result->{rowid});
 
     # process the template, passing it a function to fetch judge data
     my $template_object = Ninkasi::Template->new();

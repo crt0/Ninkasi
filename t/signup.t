@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 129;
+use Test::More tests => 131;
 
 use Apache::TestConfig;
 use Ninkasi::Constraint;
@@ -24,6 +24,28 @@ eval {
     $dbh->do("DELETE FROM 'constraint'");
     $dbh->{PrintError} = 1;
 };
+
+my $judge = Ninkasi::Judge->new();
+ok $judge;
+
+my $rowid = $judge->add( {
+        address             => '123 Fake Street',
+        bjcp_id             => 'Z9988',
+        city                => 'Springfield',
+        competitions_judged => 10,
+        email1              => 'ninkasi@ajk.name',
+        email2              => 'ninkasi@ajk.name',
+        first_name          => 'Lance',
+        flight1             => 1,
+        flight3             => 1,
+        last_name           => 'Uppercut',
+        phone_day           => '123-456-7890',
+        phone_evening       => '123-456-7890',
+        rank                => 50,
+        state               => '--',
+        zip                 => '12345',
+} );
+ok $rowid == 1;
 
 my $mech = Test::WWW::Mechanize->new();
 $mech->get_ok($form_url);
@@ -300,18 +322,17 @@ $mech->content_like(qr{name="zip"\s+
                        value="12345"}msx);
 
 # test table names in class data
-is(Ninkasi::Judge->Table_Name(),      'judge'     );
-is(Ninkasi::Constraint->Table_Name(), 'constraint');
+is(Ninkasi::Judge->Table_Name(),      'judge'       );
+is(Ninkasi::Constraint->Table_Name(), "'constraint'");
 
-my $judge = Ninkasi::Judge->new();
+$judge = Ninkasi::Judge->new();
 ok $judge;
 
 my ($sth, $result) = $judge->bind_hash(
     {
         columns     => [ qw/address bjcp_id city competitions_judged email
-                            first_name flight1 flight2 flight3 judge_id
-                            last_name phone_day phone_evening rank state
-                            zip/ ],
+                            first_name flight1 flight2 flight3 rowid last_name
+                            phone_day phone_evening rank state zip/ ],
         where       => 'email = ?',
         bind_values => [ qw/ninkasi@ajk.name/ ],
     }
@@ -319,7 +340,7 @@ my ($sth, $result) = $judge->bind_hash(
 
 ok $sth->fetch();
 
-my $judge_id = $result->{judge_id};
+my $judge_id = $result->{rowid};
 ok $judge_id;
 
 is $result->{ address             }, '123 Fake Street'  ;
@@ -343,7 +364,7 @@ my $constraint = Ninkasi::Constraint->new();
 ok $constraint;
 ($sth, $result) = $constraint->bind_hash(
     {
-        columns     => [ qw/category constraint_id judge type/ ],
+        columns     => [ qw/category rowid judge type/ ],
         where       => 'judge = ?',
         bind_values => [ $judge_id ],
     }
@@ -385,7 +406,7 @@ my $rows_fetched = 0;
 while ( $sth->fetch() ) {
     is $result->{type}, $expected_constraint{ $result->{category} };
     is $result->{judge}, $judge_id;
-    ok $result->{constraint_id};
+    ok $result->{rowid} > 0;
     ++$rows_fetched;
 }
 

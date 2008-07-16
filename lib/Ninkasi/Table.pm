@@ -6,7 +6,6 @@ use warnings;
 use base 'Class::Data::Inheritable';
 
 use DBI;
-use Data::UUID;
 use Ninkasi::Config;
 use Smart::Comments;
 
@@ -33,20 +32,16 @@ sub new {
 sub add {
     my ($self, $column) = @_;
 
-    # store UUID in primary key (table name with '_id' appended)
-    my $primary_key = $self->Table_Name() . '_id';
-    $column->{$primary_key} ||= Data::UUID->new()->create_b64();
-
     my $table_name = $self->Table_Name();
     my @column_names = $self->columns_to_update($column);
     my $column_name_list = join ', ', @column_names;
     my $placeholders = join ', ', ('?') x @column_names;
     my $sth = $self->prepare(<<EOF);
-INSERT INTO '$table_name' ($column_name_list) VALUES ($placeholders)
+INSERT INTO $table_name ($column_name_list) VALUES ($placeholders)
 EOF
     $sth->execute( @$column{ @column_names } );
 
-    return $column->{judge_id};
+    return $self->Database_Handle()->last_insert_id( (undef) x 4 );
 }
 
 # thank you chromatic
@@ -66,11 +61,8 @@ sub bind_hash {
 
     # format table list
     my $table_list = exists $argument->{join}
-                   ? '(' . join(', ', $table,
-                                      map { "'" . $_->Table_Name() . "'" }
-                                          @{ $argument->{join} })
-                         . ')'
-                   : "'$table'"
+                   ? "$table JOIN " . $argument->{join}->Table_Name()
+                   : $table
                    ;
 
     my $sql = <<EOF;
@@ -97,13 +89,14 @@ EOF
 }
 
 sub prepare {
-    my ($self, $sql) = @_;
+    my $self = shift;
+    my $sql  = shift;
 
     my $dbh = $self->Database_Handle();
     my $sth;
     for (;;) {
         $dbh->{PrintError} = 0;
-        $sth = eval { $dbh->prepare($sql) };
+        $sth = eval { $dbh->prepare($sql, @_) };
         $dbh->{PrintError} = 1;
         if ($@) {
             if ($@ =~ /no such table/) {

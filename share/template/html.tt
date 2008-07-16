@@ -34,7 +34,7 @@
 
 [% BLOCK judge -%]
 [% WRAPPER column %]
-<a href="/cgi-bin/view/judge/[% judge.judge_id | uri | uri %]">
+<a href="/cgi-bin/view/judge/[% judge.rowid %]">
 [% content %]
 </a>
 [% END -%]

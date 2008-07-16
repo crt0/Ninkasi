@@ -162,7 +162,7 @@ $mech->submit_form_ok( {
 # test view of all judges
 my $lookup_url = "$url_base/cgi-bin/view/judge/";
 $mech->get_ok($lookup_url);
-$mech->content_like(qr{<a\ href="/cgi-bin/view/judge/[A-Za-z0-9%]{24,}">\s+
+$mech->content_like(qr{<a\ href="/cgi-bin/view/judge/[1-9][0-9]*">\s+
                        |&lt;iefer,\ Angelina\s+
                        </a>\s+
                        </td>\s+
@@ -264,7 +264,7 @@ $mech->content_like( qr{<title>Angelina |&lt;iefer</title>} );
 # test category view
 $lookup_url = "$url_base/cgi-bin/view/style/8";
 $mech->get_ok($lookup_url);
-$mech->content_like(qr{<a\ href="/cgi-bin/view/judge/[A-Za-z0-9%]{24,}">\s+
+$mech->content_like(qr{<a\ href="/cgi-bin/view/judge/\d+">\s+
                        Mayers,\ Liam\s+
                        </a>\s+
                        </td>\s+
