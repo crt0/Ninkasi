@@ -6,7 +6,6 @@ use warnings;
 use Data::Dumper;
 use Date::Format qw/time2str/;
 use File::Spec;
-use LWP::UserAgent;
 use Ninkasi::Config;
 use Ninkasi::Constraint;
 use Ninkasi::Judge;
