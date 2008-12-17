@@ -1,0 +1,53 @@
+[% USE date -%]
+[% PROCESS html.tt -%]
+[% PROCESS header -%]
+[% WRAPPER body_text -%]
+[% WRAPPER heading -%]
+[% judge.first_name | html_entity %] [% judge.last_name | html_entity -%]
+[% END %]
+<table class="view_judge">
+<tr>
+<th>Address:</th>
+<td>
+[% judge.address | html_entity %]
+<br>
+[% judge.city | html_entity %],
+[% judge.state | html_entity %]
+[% judge.zip | html_entity %]
+</td>
+</tr>
+<tr>
+  <th>Phone (day):</th>
+  <td>[% judge.phone_day | html_entity %]</td>
+</tr>
+<tr>
+  <th>Phone (eve):</th>
+  <td>[% judge.phone_evening | html_entity %]</td>
+</tr>
+<tr>
+  <th>E-mail:</th>
+  <td>[% judge.email | html_entity %]</td>
+</tr>
+<tr>
+  <th>BJCP Rank:</th>
+  <td>[% rank_name.${judge.rank} %]</td>
+</tr>
+<tr>
+  <th>BJCP ID:</th>
+  <td>[% judge.bjcp_id | html_entity %]</td>
+</tr>
+<tr>
+  <th>Competitions Judged:</th>
+  <td>[% judge.competitions_judged | html_entity %]</td>
+</tr>
+<tr>
+  <th>Pro Brewer?</th>
+  <td>[% IF judge.pro_brewer %]yes[% ELSE %]no[% END %]</td>
+</tr>
+<tr>
+  <th>Date Registered:</th>
+  <td>[% date.format(judge.when_created) %]</td>
+</tr>
+</table>
+[% END -%]
+[% PROCESS footer -%]
