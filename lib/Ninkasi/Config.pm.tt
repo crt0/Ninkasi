@@ -13,9 +13,6 @@ use base qw/AppConfig Class::Singleton/;
 use AppConfig qw/:argcount/;
 
 Readonly our %USER_DEFAULT => (
-    constant_contact_m   => '1011161075203',
-    constant_contact_p   => 'oi',
-    constant_contact_url => 'http://ui.constantcontact.com/roving/d.jsp',
     maintainer_address   => 'ninkasi@ajk.name',
 );
 
