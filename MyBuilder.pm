@@ -29,7 +29,6 @@ sub process_dir {
     }
 }
 
-sub process_css_files    { shift->process_dir( 'css'    ) }
 sub process_htdocs_files { shift->process_dir( 'htdocs' ) }
 sub process_share_files  { shift->process_dir( 'share'  ) }
 

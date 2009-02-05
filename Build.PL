@@ -9,9 +9,8 @@ use MyBuilder;
 
 our %RELPATH = (
     cgi    => 'cgi-bin',
-    css    => File::Spec->catfile(qw/httpdocs css test/),
-    htdocs => 'httpdocs/test',
-    share  => File::Spec->catfile(qw/share ninkasi test/),
+    htdocs => 'httpdocs',
+    share  => File::Spec->catfile(qw/share ninkasi/),
 );
 
 my $build = MyBuilder->new(
@@ -37,7 +36,6 @@ foreach my $subdir (keys %RELPATH) {
     $build->install_base_relpaths( $subdir => $RELPATH{$subdir} );
 }
 
-$build->add_build_element('css'   );
 $build->add_build_element('htdocs');
 $build->add_build_element('share' );
 $build->add_build_element('tt'    );
