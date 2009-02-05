@@ -1,0 +1,77 @@
+[% PROCESS header.html,
+   title => 'Directions to the Brewers&#8217; Cup' -%]
+[% PROCESS navbar.html -%]
+<div id="body_text">
+  <h2>Directions to the Brewers&#8217; Cup</h2>
+  <p>
+    The Indiana State Fairgrounds is located on the corner of East
+    38th Street and Fall Creek Parkway in Indianapolis.
+  </p>
+  <div id="map">
+    <object height="350" width="425"
+            data="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=1202+E.+38th+Street,+Indianapolis,+IN+46205&amp;sll=42.778699,-84.58736&amp;sspn=0.044918,0.040169&amp;g=lansing+airport&amp;ie=UTF8&amp;s=AARTsJrkiTRwjhDoKJeCfb0rgZtHfq191Q&amp;ll=39.845054,-86.128693&amp;spn=0.046129,0.072956&amp;z=13&amp;iwloc=addr&amp;output=embed">
+    </object>
+    <div>
+      <a href="http://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=1202+E.+38th+Street,+Indianapolis,+IN+46205&amp;sll=42.778699,-84.58736&amp;sspn=0.044918,0.040169&amp;g=lansing+airport&amp;ie=UTF8&amp;ll=39.845054,-86.128693&amp;spn=0.046129,0.072956&amp;z=13&amp;iwloc=addr">
+        View Larger Map
+      </a>
+    </div>
+  </div>
+  <h3>I-65 North (from Louisville, KY; Columbus, IN)</h3>
+  <ol>
+    <li>
+      Take I-65 North to I-70 East to Keystone Avenue (exit 85B).
+    </li>
+    <li>Take Keystone Avenue north to 38th Street.</li>
+    <li>Turn left (west) on 38th Street.</li>
+  </ol>
+  <h3>I-65 South (from Chicago, IL; Lafayette, IN)</h3>
+  <ol>
+    <li>Take I-65 South to the 38th Street exit.</li>
+    <li>Continue east to the Fairgrounds entrance.</li>
+  </ol>
+  <h3>I-70 East (from St. Louis, MO; Terre Haute, IN)</h3>
+  <ol>
+    <li>Take I-70 East to Keystone Avenue (exit 85B).</li>
+    <li>Take Keystone Avenue north to 38th Street.</li>
+    <li>Turn left (west) on 38th Street.</li>
+  </ol>
+  <h3>I-70 West (from Columbus, OH; Richmond, IN)</h3>
+  <ol>
+    <li>Take I-70 West to Keystone Avenue (exit 85B).</li>
+    <li>Take Keystone Avenue north to 38th Street.</li>
+    <li>Turn left (west) on 38th Street.</li>
+  </ol>
+  <h3>I-69 South (from Detroit, MI; Fort Wayne, IN)</h3>
+  <ol>
+    <li>
+      I-69 South becomes Binford Boulevard (SR 37), which becomes Fall
+      Creek Parkway.
+    </li>
+    <li>
+      The Fairgrounds is located just north of 38th Street on Fall
+      Creek Parkway.
+    </li>
+  </ol>
+  <h3>I-74 West (from Cincinnati, OH)</h3>
+  <ol>
+    <li>Take I-74 West to I-465 North.</li>
+    <li>Take I-465 North to I-70 West.</li>
+    <li>Take I-70 West to Keystone Avenue (exit 85B).</li>
+    <li>Take Keystone Avenue north to 38th Street.</li>
+    <li>Turn left (west) on 38th Street.</li>
+  </ol>
+  <h3>From Indianapolis International Airport</h3>
+  <ol>
+    <li>
+      Take the Sam Jones Expressway (formerly Airport Expressway) to
+      I-70 East to Keystone Avenue (exit 85B).
+    </li>
+    <li>Take Keystone Avenue north to 38th Street.</li>
+    <li>
+      Turn left (west) on 38th Street and continue to Fairgrounds
+      entrance.
+    </li>
+  </ol>
+</div>
+[% PROCESS footer.html -%]

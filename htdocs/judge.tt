@@ -1,0 +1,163 @@
+[% PROCESS header.html,
+   title => 'Register to Judge at the Brewers&#8217; Cup' -%]
+[% PROCESS navbar.html -%]
+<div id="body_text">
+<h2>Invitation to Judge at the Indiana State Fair Brewers&#8217; Cup</h2>
+<div id="top_ten">
+  <h3>Top Ten Reasons You Should Judge at the Brewers&#8217; Cup</h3>
+<ol>
+  <li value="10"> We pay a small stipend.</li>
+  <li value="9"> Indianapolis isn&#8217;t Indian-no-place anymore.</li>
+  <li value="8">
+    The hotel is within walking distance
+    <a href="http://www.alcatrazbrewing.com/indianapolis.php">to</a>
+    <a href="http://www.theram.com/indiana/indianapolis.shtml">three</a>
+    <a href="http://www.rockbottom.com/DisplayLocationRBR.php?FKLocationID=10067">brewpubs</a>.
+  </li>
+  <li value="7"> Special brewers&#8217; dinner on Saturday night.</li>
+  <li value="6"> Home brew and commercial entries in separate divisions.</li>
+  <li value="5"> Entries are served at the proper temperature.</li>
+  <li value="4">
+    Plenty of
+    <a href="http://www.indy.org/indianapolis/web/jsp/index.jsp?p=1&amp;x=1233677098405">cool activities</a>
+    to keep the family busy.
+  </li>
+  <li value="3">
+    Good food and plenty of it at breakfast, lunch, and awards
+    ceremony.
+  </li>
+  <li value="2">
+    <a href="http://bjcp.org/">BJCP</a> points will be awarded.
+  </li>
+  <li value="1"> This competition is a well-oiled machine!</li>
+</ol>
+</div>
+<div id="invite_body">
+<p>
+<em>
+  <a href="/cgi-bin/judge-signup">Sign up to judge on the web!</a>
+</em>
+</p>
+<p>
+The Brewers&#8217; Cup beer competition has cultivated a reputation as
+a well-run competition, and we are looking for good judges to join us
+at this year&#8217;s competition. <a href="http://bjcp.org/">BJCP</a>
+judges, BJCP apprentices and professional brewers are welcomed and
+encouraged to judge at the [% year %] Brewers&#8217; Cup.
+</p>
+<p>
+Judging will take place on Friday, July 11th and Saturday, July 12th
+at the Farm Bureau building on the grounds of the Indiana State Fair.
+This is a <a href="http://bjcp.org/">BJCP</a>-sanctioned competition
+so points will be awarded.  We also pay a small stipend to offset some
+of the expenses of BJCP judges and professional brewers at the
+following rate: $25 for local judges and $100 for judges traveling
+more than 50 miles one way to the competition.  We provide meals
+during the judging, and you are welcome to stay for the Awards
+Reception that will feature the [% year - 1 %] Best of Show beers
+(re-brewed, of course) and sumptuous buffet of heavy appetizers on
+Saturday night.
+</p>
+<p>
+We have arranged for a special rate of $69/night at
+the <a href="http://martenhousehotel.com/">Marten House Hotel</a>.
+You may also want to consider the
+<a href="http://www.hamptoninn.com/">Hampton Inn</a> downtown.  The
+Hampton is located in Indianapolis&#8217; safe and vibrant downtown,
+conveniently located within walking distance
+<a href="http://www.alcatrazbrewing.com/indianapolis.php">to</a>
+<a href="http://www.theram.com/indiana/indianapolis.shtml">three</a>
+<a href="http://www.rockbottom.com/DisplayLocationRBR.php?FKLocationID=10067">brewpubs</a>
+and
+<a href="http://www.simon.com/mall/default.aspx?ID=163">Circle Centre</a>
+mall.
+</p>
+<h3>To find out what is happening in Indianapolis during your
+visit, check out:</h3>
+<ul>
+  <li>
+    <a href="http://www.indy.org/">Indianapolis Visitor
+    Information</a>
+  </li>
+  <li>
+    <a href="http://www.indoorwaterparks.net/caribbean-cove.htm">Caribbean
+    Cove Indoor Water Park</a>
+  </li>
+  <li>
+    <a href="http://www.childrensmuseum.org/">Children&#8217;s Museum
+    of Indianapolis</a>
+  </li>
+  <li>
+    <a href="http://www.connerprairie.org/">Conner Prairie Interactive
+    History Museum</a>
+  </li>
+  <li><a href="http://eaglecreekpark.org/">Eagle Creek Park</a></li>
+  <li>
+    <a href="http://www.in.gov/dnr/parklake/2982.htm">Fort Harrison
+    State Park</a>
+  </li>
+  <li>
+    <a href="http://www.garfieldgardensconservatory.org/">Garfield
+    Park Conservatory &amp; Sunken Garden</a>
+  </li>
+  <li><a href="http://www.hollidaypark.org/">Holliday Park</a></li>
+  <li>
+    <a href="http://www.indyindians.com/">Indianapolis Indians
+    Baseball</a>
+  </li>
+  <li>
+    <a href="http://www.imamuseum.org/">Indianapolis Museum of Art</a>
+  </li>
+  <li>
+    <a href="http://www.indyzoo.com/">Indianapolis Zoo and White
+    River Gardens</a>
+  </li>
+  <li><a href="http://www.indygreenways.org/">Indy Greenways</a></li>
+  <li>
+    <a href="http://www.traderspointcreamery.com/">Traders Point
+    Creamery</a>
+  </li>
+  <li>
+    <a href="http://www.state.in.us/whiteriver">
+      White River State Park
+    </a>
+  </li>
+</ul>
+<h2>Schedule of Events</h2>
+<table>
+  <caption>Friday, July 11th</caption>
+  <tr>
+    <td colspan="4">
+      <em>
+        Farm Bureau Building, <a href="maps">Indiana State
+        Fairgrounds</a>
+      </em>
+    </td>
+  </tr>
+<tr><td class="time">6:00 am</td><td>&#8211;</td><td>7:00 pm:</td><td>Check-in, Buffet Dinner (provided)</td></tr>
+<tr><td class="time">7:15 am</td><td>&#8211;</td><td>7:30 pm:</td><td>Calibration beer</td></tr>
+<tr><td class="time">7:30 am</td><td>&#8211;</td><td>9:00 pm:</td><td>First Session of Judging</td></tr>
+</table>
+<table>
+  <caption>Saturday, July 12th</caption>
+  <tr>
+    <td colspan="4">
+      <em>Farm Bureau Building, <a href="map.htm">Indiana State
+      Fairgrounds</a></em>
+    </td>
+  </tr>
+<tr><td class="time">9:00 am</td><td>&#8211;</td><td class="time">9:45 am:</td><td>Check-in, continental breakfast (provided)</td></tr>
+<tr><td class="time">9:45 am</td><td>&#8211;</td><td class="time">10:00 am:</td><td>Calibration Beer</td></tr>
+<tr><td class="time">10:00 am</td><td>&#8211;</td><td class="time">12:00 pm:</td><td>First Session of Judging</td></tr>
+<tr><td class="time">12:00 pm</td><td>&#8211;</td><td class="time">12:45 pm:</td><td>Lunch (provided)</td></tr>
+<tr><td class="time">1:00 pm</td><td>&#8211;</td><td class="time">3:00 pm:</td><td>Second Session of Judging</td></tr>
+<tr><td class="time">6:00 pm</td><td>&#8211;</td><td class="time">8:00 pm:</td><td>Awards Presentation</td></tr>
+</table>
+<p>
+If you are willing to judge, please use
+our <a href="/cgi-bin/judge-signup">online judge registration</a> so
+we can also capture your judging preferences.
+</p>
+</div>
+</div>
+[% PROCESS footer.html -%]

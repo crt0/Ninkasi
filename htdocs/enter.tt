@@ -1,0 +1,26 @@
+[%# -*- html -*- %]
+[% PROCESS header.html,
+           title => 'Brewers&#8217; Cup Entry Forms and Guidelines' -%]
+[% PROCESS navbar.html -%]
+<div id="body_text">
+<h2>Brewers&#8217; Cup Entry Forms and Guidelines</h2>
+<ul>
+<li>
+  <a href="https://secure.in.gov/statefair/fairentry/(S(1on0x345xol03v55nfdo5eij))/Default.aspx">
+    Online entry form
+  </a>
+</li>
+<li>
+  <a href="BCupInteractiveEntryForm.pdf">Interactive, printable entry form, including
+  bottle labels (PDF)</a>
+</li>
+<li>
+  <a href="entry_form.pdf">Printable blank entry form, including
+  bottle labels (PDF)</a>
+</li>
+<li>
+  <a href="2008Dept118.pdf">Rules and regulations for the competition (PDF)</a>
+</li>
+</ul>
+</div>
+[% PROCESS footer.html -%]

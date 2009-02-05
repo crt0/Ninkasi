@@ -1,0 +1,13 @@
+[% PROCESS header.html,
+   title => 'Access Denied' -%]
+[% PROCESS navbar.html -%]
+<div id="body_text">
+  <h2>Access Denied</h2>
+  <p>
+    You&#8217;ve stumbled onto a restricted portion of the site for
+    which you haven&#8217;t been granted access.  If you feel this
+    message is in error, please <a href="mailto:ajk@ajk.name">mail the
+    webmaster</a> to report the problem.
+  </p>
+</div>
+[% PROCESS footer.html -%]

@@ -1,0 +1,19 @@
+[% PROCESS header.html,
+   title => 'Results of Past Brewers&#8217; Cup Competitions' -%]
+[% PROCESS navbar.html -%]
+<div id="body_text">
+  <h3>Results of Past Competitions</h3>
+  <ul>
+    <li>
+      2008 [ <a href="2008-hb-winners.html">homebrew</a>
+      | <a href="2008-pb-winners.html">commercial</a>
+      | <a href="/photos/2008/">photos</a> ]
+    </li>
+    <li>
+      2007 [ <a href="2007-hb-winners.html">homebrew</a>
+      | <a href="2007-pb-winners.html">commercial</a>
+      | <a href="/photos/2007/">photos</a> ]
+    </li>
+  </ul>
+</div>
+[% PROCESS footer.html -%]

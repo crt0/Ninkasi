@@ -12,12 +12,11 @@ use Smart::Comments;
 sub new { shift->instance(@_) }
 
 sub _new_instance {
-    my $class = shift;
+    my ($class, $template_config) = @_;
 
     my $config = Ninkasi::Config->new();
-    my $self = $class->SUPER::new( {
-        INCLUDE_PATH => $config->get('template_path'),
-    } );
+    $template_config->{INCLUDE_PATH} = $config->get('template_path');
+    my $self = $class->SUPER::new($template_config);
 
     return $self;
 }

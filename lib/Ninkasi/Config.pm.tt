@@ -13,6 +13,7 @@ use base qw/AppConfig Class::Singleton/;
 use AppConfig qw/:argcount/;
 
 Readonly our %USER_DEFAULT => (
+    authentication_cgi   => 'authenticate',
     maintainer_address   => 'ninkasi@ajk.name',
 );
 
@@ -24,6 +25,7 @@ sub _new_instance {
     # use a test config if we're running under "./Build test"
     my ($config_file, $default_database_file, $default_log_file,
         $default_template_path);
+    my $default_cgi_uri = File::Spec->catfile("/[% install_base_relpath.cgi %]");
     if ( $ENV{NINKASI_TEST_SERVER_ROOT} ) {
         $config_file = File::Spec->catfile( $ENV{NINKASI_TEST_SERVER_ROOT},
                                             qw/conf ninkasi.conf/ );
@@ -60,6 +62,7 @@ sub _new_instance {
 
     # set defaults
     my %DEFAULT = (
+        cgi_uri       => $default_cgi_uri,
         database_file => $default_database_file,
         disabled      => '',
         log_file      => $default_log_file,

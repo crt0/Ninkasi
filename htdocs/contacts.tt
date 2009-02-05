@@ -1,0 +1,57 @@
+[% PROCESS header.html,
+   title => 'Brewers&#8217; Cup Contact Information' -%]
+[% PROCESS navbar.html -%]
+<div id="body_text">
+  <h2>Brewers&#8217; Cup Contact Information</h2>
+  <div id="contact_list">
+    <h3>Department Director</h3>
+    <div class="address">Al Polin, Indianapolis
+      Indiana State Fair, Department 118
+      Brewers&#8217; Cup Competition</div>
+    <h3>Brewers&#8217; Cup Co-Chairs</h3>
+    <div class="address">Anita Johnson, Indianapolis
+      317-257-9463
+      888-463-2739
+      anita AT greatfermentations.com</div>
+    <div class="address">Brian Snider, Fishers IN
+      317-570-9851
+      briancavalier AT sbcglobal.net</div>
+    <h3>Judge Coordinator</h3>
+    <div class="address">Tom Stilabower, Indianapolis
+      judgecoordinator AT brewerscup.org</div>
+    <h3>Chief Steward</h3>
+    <div class="address">John Morrical, Indianapolis
+      317-283-6344
+      jmorrica AT sbcglobal.net</div>
+    <h3>Reception Coordinators</h3>
+    <div class="address">Don St. Peters, Indianapolis
+      317-788-8791
+      stpeters AT ix.netcom.com</div>
+    <div class="address">Tom Stilabower, Indianapolis
+      tstilabower AT comcast.net</div>
+    <h3>Saturday Beer Dinner Coordinator</h3>
+    <div class="address">Paul Henry
+      317-257-4603
+      gforcepaul@yahoo.com</div>
+    <h3>Registrar</h3>
+    <div class="address">Matt Mauer, Westfield</div>
+  </div>
+<!--
+  <h2>Related Organizations</h2>
+  <ul>
+    <li><a href="http://www.in.gov/statefair/">Indiana State Fair</a></li>
+    <li><a href="http://www.bjcp.org/">Beer Judge Certification Program</a></li>
+    <li><a href="http://www.beertown.org/">Brewers&#8217; Association</a></li>
+    <li><a href="http://www.brewersofindianaguild.com/">Brewers of Indiana Guild</a></li>
+    <li><a href="http://www.indianabeer.com/">Indianabeer.com</a></li>
+    <li><a href="http://www.foamblowers.com/">Foamblowers of Indiana</a></li>
+    <li><a href="http://www.tippyhomebrewers.org/">Tippecanoe Homebrewers&#8217; Circle</a></li>
+    <li><a href="http://www.broadripplebrewpub.com/">Broad Ripple Brewpub</a></li>
+    <li><a href="http://greatfermentations.com/">Great Fermentations</a></li>
+    <li><a href="http://crownliquors.net/">Crown Liquors</a></li>
+    <li><a href="http://www.homebrewit.com/">Quality Wine and Ale
+        Supply</a></li>
+  </ul>
+-->
+</div>
+[% PROCESS footer.html -%]

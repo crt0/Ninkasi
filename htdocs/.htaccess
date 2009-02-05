@@ -1,0 +1,18 @@
+DefaultType    text/html
+DirectoryIndex index
+ErrorDocument  403 /403
+ErrorDocument  404 /404
+ErrorDocument  500 /500
+
+RewriteEngine on
+RewriteRule ^2006Results\.htm$ /2006-winners.html [L,R=permanent]
+RewriteRule ^2008Dept118\.pdf$ /rules.pdf         [L,R=permanent]
+RewriteRule ^BCupInteractiveEntryForm\.pdf$ /entry-form-interactive.pdf \
+            [L,R=permanent]
+RewriteRule ^entry_form\.pdf$  /entry-form.pdf    [L,R=permanent]
+RewriteRule ^Entries\.htm$     /enter             [L,R=permanent]
+RewriteRule ^JudgeInfo\.htm$   /judge             [L,R=permanent]
+RewriteRule ^Links\.htm$       /contacts          [L,R=permanent]
+RewriteRule ^Results\.htm$     /results           [L,R=permanent]
+RewriteRule ^index\.html$      /                  [L,R=permanent]
+RewriteRule ^map\.htm$         /maps              [L,R=permanent]

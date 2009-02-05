@@ -19,24 +19,28 @@ sub process_dir {
 
     $destination ||= $self->blib();
     my $files_to_copy = $self->rscan_dir( $type_subdir,
-                                          sub { -f && !m{/\.svn/} && !m{/#}
-                                                   && !m{~$} } );
+                                          sub { -f && !m{/\.svn/}
+                                                   && !m{/#}
+                                                   && !m{~$}
+                                                   && !m{\.tt$} } );
     foreach my $file (@$files_to_copy) {
         $self->copy_if_modified( $file, $destination )
             or next;
     }
 }
 
-sub process_css_files   { shift->process_dir( 'css'   ) }
-sub process_share_files { shift->process_dir( 'share' ) }
+sub process_css_files    { shift->process_dir( 'css'    ) }
+sub process_htdocs_files { shift->process_dir( 'htdocs' ) }
+sub process_share_files  { shift->process_dir( 'share'  ) }
 
 # find files to process with the Template Toolkit
 sub find_tt_files {
     my ($self) = @_;
 
     my %tt_files = (
-        %{ $self->_find_file_by_type('tt', 'cgi') },
-        %{ $self->_find_file_by_type('tt', 'lib') },
+        %{ $self->_find_file_by_type('tt', 'cgi'   ) },
+        %{ $self->_find_file_by_type('tt', 'htdocs') },
+        %{ $self->_find_file_by_type('tt', 'lib'   ) },
     );
     foreach my $source (keys %tt_files) {
         $tt_files{$source} =~ s/\.tt$//;
@@ -58,11 +62,13 @@ sub process_tt_files {
 
     # process Template files
     require Template;
-    my $template = Template->new();
+    my $template = Template->new( {
+        INCLUDE_PATH => File::Spec->catfile(qw/share template/) . ':.' } );
     my $tt_files = $self->find_tt_files();
     my %template_variables = (
         install_base          => $self->install_base(),
         install_base_relpath  => \%install_base_relpath,
+        year                  => 1900 + (localtime)[5],
     );
     while ( my ($source, $destination) = each %$tt_files ) {
         my $blib_destination = File::Spec->catfile( $self->blib(),

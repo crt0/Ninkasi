@@ -1,0 +1,17 @@
+[% PROCESS header.html,
+   title => 'Brewers&#8217; Cup Newsletter' -%]
+[% PROCESS navbar.html -%]
+<div id="body_text">
+  <h2>Brewers&#8217; Cup Newsletter</h2>
+  <form action="http://ui.constantcontact.com/roving/d.jsp" method="post">
+    <p>
+      Enter your e-mail address to sign up to receive the latest news
+      about the Brewers&#8217; Cup:
+      <input name="ea" type="text"   size="25"             />
+      <input name="m"  type="hidden" value="1011161075203" />
+      <input name="p"  type="hidden" value="oi"            />
+      <input name="go" type="submit" value="Submit"        />
+    </p>
+  </form>
+</div>
+[% PROCESS footer.html -%]

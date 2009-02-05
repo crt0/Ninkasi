@@ -1,4 +1,4 @@
-<Files "view">
+<FilesMatch "^(admin|view)$">
     Allow from   localhost
     AuthName     "Brewers Cup"
     AuthType     Basic

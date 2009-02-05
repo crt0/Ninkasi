@@ -1,0 +1,13 @@
+[% PROCESS header.html,
+   title => 'Error' -%]
+[% PROCESS navbar.html -%]
+<div id="body_text">
+  <h2>Error</h2>
+  <p>
+    Sorry, something&#8217;s wrong with the web site at the moment.
+    Relax, don't worry, have a homebrew, and try again later.  If you
+    still have trouble, please <a href="mailto:ajk@ajk.name">mail the
+    webmaster</a> to report the problem.
+  </p>
+</div>
+[% PROCESS footer.html -%]

@@ -1,6 +1,86 @@
 body {
-    font-family: Verdana, sans-serif;
-    text-align: center;
+    background-color: #fff5e6;
+}
+
+h1 {
+    color:         #807059;
+    font-family:   Gill Sans, sans-serif;
+    font-weight:   normal;
+    margin-bottom: 0px;
+}
+
+h2 {
+    color:         #807059;
+    font-family:   Gill Sans, sans-serif;
+    font-weight:   normal;
+    margin-bottom: 0.3em;
+}
+
+h3 {
+    color:       #807059;
+    font-family: Gill Sans, sans-serif;
+    font-weight: normal;
+    margin-bottom: 0.2em;
+}
+
+ol, p, ul {
+    margin: 0.5em 0;
+}
+
+a:link {
+    color: #596380;
+}
+
+a:visited {
+    color: #394360;
+}
+
+#masthead h2 {
+    color:       #807059;
+    font-family: Gill Sans, sans-serif;
+    font-weight: normal;
+    margin-top:  0px;
+    margin-left: 6px;
+}
+
+#masthead a {
+    color:           #807059;
+    text-decoration: none;
+}
+
+#navigation_bar_horizontal {
+    float:        left;
+    font-family:  Gill Sans, sans-serif;
+    font-size:    11pt;
+    margin-left:  6px;
+    margin-right: 12px;
+}
+
+#navigation_bar_vertical {
+    float:        left;
+    font-family:  Gill Sans, sans-serif;
+    margin-left:  6px;
+    margin-right: 12px;
+    padding-top:  1em;
+}
+
+#search {
+    float: left;
+}
+
+#photo_bar {
+    height:      190px;
+    width:       70%;
+    overflow:    auto;
+    white-space: nowrap;
+}
+
+.photo_bar_slot {
+    padding: 0;
+}
+
+#body_text {
+    margin: 0 5%;
 }
 
 #menu {
@@ -25,7 +105,7 @@ body {
     width: 19%;
 }
 
-.menu_item a {
+.menu_item a:link {
     text-decoration: none;
 }
 
@@ -120,7 +200,7 @@ caption {
 }
 
 #top_ten {
-    background-color: #ffc;
+    background-color: #cfd4e6;
     float: right;
     margin: 2%;
     padding: 0 2% 2% 2%;
@@ -136,17 +216,22 @@ caption {
     white-space: pre;
 }
 
-h1 {
-    font-size: 130%;
-    font-weight: normal;
+#categories {
+    font-family: Gill Sans, sans-serif;
 }
-h2 {
-    font-size: 120%;
-    font-weight: normal;
+
+#categories table {
+    border-collapse: collapse;
 }
-h3 {
-    font-size: 110%;
-    font-weight: normal;
+
+#categories th {
+    background-color: #eff4ff;
+    font-weight:      normal;
+    text-align:       left;
+}
+
+#categories td {
+    background-color: #cfd4e6;
 }
 
 table.view {
@@ -192,4 +277,21 @@ table.view tbody tr.ruled td {
 .view_judge th {
     text-align:     right;
     vertical-align: top;
+}
+
+#map {
+    font-family: Gill Sans, sans-serif;
+    font-size:   smaller;
+    text-align:  center;
+}
+
+.address {
+    border:      0px;
+    float:       left;
+    padding:     0.5em 0em 0.75em 0em;
+    white-space: pre-line;
+}
+
+#contact_list h3, div#contact_list {
+    clear: both;
 }

@@ -22,76 +22,11 @@
        value="[% form.$name | html_entity %]">
 [% END ~%]
 
-[% PROCESS "header.html" -%]
+[% PROCESS header.html,
+   title => 'Brewers&#8217; Cup Judge Registration Form' -%]
+[% PROCESS navbar.html -%]
 <div id="body_text">
-<table border="0" width="100%" id="table9" cellspacing="0" cellpadding="0">
-  <tr>
-    <td>
-      <h2>Indiana State Fair Brewers Cup Competition 2008 Judge Signup Form</h2>
-    </td>
-    <td>
-      <table border="1" width="100%" id="table10">
-	<tr>
-	  <td align="center" width="20">S</td>
-	  <td align="center" width="20">M</td>
-	  <td align="center" width="20">T</td>
-	  <td align="center" width="20">W</td>
-	  <td align="center" width="20">T</td>
-	  <td align="center" width="20">F</td>
-	  <td align="center" width="20">S</td>
-	</tr>
-	<tr>
-	  <td colspan="3">
-	    <p align="center">JULY 2008</td>
-	  <td align="right">
-	    <table border="0" width="100%" id="table11" cellspacing="0" cellpadding="0">
-	      <tr>
-		<td>
-		  <p align="right">9</td>
-	      </tr>
-	      <tr>
-		<td>&nbsp;</td>
-	      </tr>
-	    </table>
-	  </td>
-	  <td align="right">
-	    <table border="0" width="100%" id="table12" cellspacing="0" cellpadding="0">
-	      <tr>
-		<td>
-		  <p align="right">10</td>
-	      </tr>
-	      <tr>
-		<td>&nbsp;</td>
-	      </tr>
-	    </table>
-	  </td>
-	  <td align="right">
-	    <table border="0" width="100%" id="table13" cellspacing="0" cellpadding="0">
-	      <tr>
-		<td>
-		  <p align="right">11</td>
-	      </tr>
-	      <tr>
-		<td bgcolor="#00FF00">&nbsp;</td>
-	      </tr>
-	    </table>
-	  </td>
-	  <td align="right">
-	    <table border="0" width="100%" id="table14" cellspacing="0" cellpadding="0">
-	      <tr>
-		<td bgcolor="#00FF00">
-		  <p align="right">12</td>
-	      </tr>
-	      <tr>
-		<td bgcolor="#00FF00">&nbsp;</td>
-	      </tr>
-	    </table>
-	  </td>
-	</tr>
-      </table>
-    </td>
-  </tr>
-</table>
+  <h2>Judge Registration Form</h2>
 [% IF system_error || user_errors -%]
 <div class="error">
 [% IF system_error -%]
@@ -290,9 +225,9 @@
     assigned to a flight containing that category in your division
     (professional/homebrew division).
   </p>
-  <table border=2 cellpadding="3" style="border-collapse: collapse" cellspacing="0">
+  <table border="2" cellpadding="3" cellspacing="0" id="categories">
     <tr>
-      <th align=left>Description</th>
+      <th>Description</th>
       <th>prefer</th>
       <th>prefer not</th>
       <th>entry</th>
@@ -300,6 +235,15 @@
     </tr>
     [% FOREACH category IN categories -%]
     [% field_name = category.field_name -%]
+    [% IF category.number == 13 -%]
+    <tr>
+      <th>Description</th>
+      <th>prefer</th>
+      <th>prefer not</th>
+      <th>entry</th>
+      <th>whatever</th>
+    </tr>
+    [% END -%]
     <tr>
       <td bgcolor="#FFFFCC">
         [% category.number %]. [% category.name %] 
@@ -326,13 +270,6 @@
       </td>
     </tr>
     [% END -%]
-    <tr>
-      <th align=left>Description</th>
-      <th>prefer</th>
-      <th>prefer not</th>
-      <th>entry</th>
-      <th>whatever</th>
-    </tr>
   </table>
   <hr size=4 width="90%">
   <center>
@@ -359,15 +296,15 @@ Coordinator <a href="mailto:dallaben@sbcglobal.net">David Allaben</a>
 if you have questions about judging or volunteering.  If there is a
 web form problem, then write <a href="mailto:public@ajk.name">Andrew
 Korty</a>.  See the 
-<a href="http://www.brewerscup.org/">Brewers Cup web site</a> for more
-information about the competition.
+<a href="http://www.brewerscup.org/">Brewers&#8217; Cup web site</a>
+for more information about the competition.
 </p>
 <p>
 <i>Thanks to Linda Swihart for the previous version of this form.
 Thanks also to the BUZZ club of Champaign-Urbana for their form on
 which Linda's was derived.
 <a href="https://netfiles.uiuc.edu/ro/www/BoneyardUnionofZymurgicalZealots/brewoff.html">
-Their competition</a> is a really great time, make it if you can!</i>
+Their competition</a> is a really great time; make it if you can!</i>
 </p>
 </div>
 [% PROCESS "footer.html" -%]

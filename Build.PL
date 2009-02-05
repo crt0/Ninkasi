@@ -8,10 +8,10 @@ use lib 'inc';
 use MyBuilder;
 
 our %RELPATH = (
-    cgi   => 'cgi-bin',
-    css   => File::Spec->catfile(qw/httpdocs css/),
-    etc   => 'etc',
-    share => File::Spec->catfile(qw/share ninkasi/),
+    cgi    => 'cgi-bin',
+    css    => File::Spec->catfile(qw/httpdocs css test/),
+    htdocs => 'httpdocs/test',
+    share  => File::Spec->catfile(qw/share ninkasi test/),
 );
 
 my $build = MyBuilder->new(
@@ -22,7 +22,6 @@ my $build = MyBuilder->new(
         'Data::Dumper'             => '2.121_08',
         'Date::Format'             => '2.22',
         'Module::Build'            => '0.2808',
-        'Object::InsideOut'        => '3.21',
         'Readonly'                 => '1.03',
         'Taint::Util'              => '0.06',
         'Template'                 => '2.19',
@@ -34,12 +33,13 @@ my $build = MyBuilder->new(
     module_name        => 'Ninkasi',
 );
 
-foreach my $subdir (qw/cgi css share/) {
-    $build->install_base_relpaths($subdir => $RELPATH{$subdir});
+foreach my $subdir (keys %RELPATH) {
+    $build->install_base_relpaths( $subdir => $RELPATH{$subdir} );
 }
 
-$build->add_build_element('css');
-$build->add_build_element('share');
-$build->add_build_element('tt');
+$build->add_build_element('css'   );
+$build->add_build_element('htdocs');
+$build->add_build_element('share' );
+$build->add_build_element('tt'    );
 
 $build->create_build_script();
