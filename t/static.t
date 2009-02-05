@@ -18,7 +18,7 @@ sub header_ok {
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<link href="/css/ninkasi.css" rel="stylesheet" type="text/css" />
+<link href="ninkasi.css" rel="stylesheet" type="text/css" />
 <title>$title</title>
 </head>
 <body>
@@ -35,12 +35,12 @@ sub navbar_ok {
     $mech->content_contains(<<EOF, 'navbar');
 <div id="navigation_bar_horizontal">
 <a accesskey="h" href="/">Home</a>
-| <a accesskey="e" href="/enter">Enter</a>
-| <a accesskey="j" href="/judge">Judge</a>
-| <a accesskey="m" href="/maps">Maps</a>
-| <a accesskey="r" href="/results">Results</a>
-| <a accesskey="n" href="/newsletter">Newsletter</a>
-| <a accesskey="c" href="/contacts">Contacts</a>
+| <a accesskey="e" href="enter">Enter</a>
+| <a accesskey="j" href="judge">Judge</a>
+| <a accesskey="m" href="maps">Maps</a>
+| <a accesskey="r" href="results">Results</a>
+| <a accesskey="n" href="newsletter">Newsletter</a>
+| <a accesskey="c" href="contacts">Contacts</a>
 </div>
 <form action="http://www.google.com/cse" id="cse-search-box">
   <div>
@@ -78,12 +78,12 @@ $mech->get_ok($url_base);
 header_ok $mech, 'The Brewers&#8217; Cup Competition';
 $mech->content_contains(<<EOF, 'navigation bar');
 <div id="navigation_bar_vertical">
-  <div><a accesskey="e" href="/enter">Submit Entries</a></div>
-  <div><a accesskey="j" href="/judge">Register to Judge</a></div>
-  <div><a accesskey="m" href="/maps">Find the Fairgrounds</a></div>
-  <div><a accesskey="r" href="/results">View 2008 Results</a></div>
-  <div><a accesskey="n" href="/newsletter">Get the Newsletter</a></div>
-  <div><a accesskey="c" href="/contacts">Contact Us</a></div>
+  <div><a accesskey="e" href="enter">Submit Entries</a></div>
+  <div><a accesskey="j" href="judge">Register to Judge</a></div>
+  <div><a accesskey="m" href="maps">Find the Fairgrounds</a></div>
+  <div><a accesskey="r" href="results">View 2008 Results</a></div>
+  <div><a accesskey="n" href="newsletter">Get the Newsletter</a></div>
+  <div><a accesskey="c" href="contacts">Contact Us</a></div>
   <div><form action="http://www.google.com/cse" id="cse-search-box">
   <div>
     <input type="hidden" name="cx" value="004596647214513492520:lcp17p0a-fw" />

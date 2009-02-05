@@ -1,11 +1,11 @@
 [% PROCESS header.html, title => "The Brewers&#8217; Cup Competition" -%]
 <div id="navigation_bar_vertical">
-  <div><a accesskey="e" href="/enter">Submit Entries</a></div>
-  <div><a accesskey="j" href="/judge">Register to Judge</a></div>
-  <div><a accesskey="m" href="/maps">Find the Fairgrounds</a></div>
-  <div><a accesskey="r" href="/results">View 2008 Results</a></div>
-  <div><a accesskey="n" href="/newsletter">Get the Newsletter</a></div>
-  <div><a accesskey="c" href="/contacts">Contact Us</a></div>
+  <div><a accesskey="e" href="enter">Submit Entries</a></div>
+  <div><a accesskey="j" href="judge">Register to Judge</a></div>
+  <div><a accesskey="m" href="maps">Find the Fairgrounds</a></div>
+  <div><a accesskey="r" href="results">View 2008 Results</a></div>
+  <div><a accesskey="n" href="newsletter">Get the Newsletter</a></div>
+  <div><a accesskey="c" href="contacts">Contact Us</a></div>
   <div>[% PROCESS searchbox.html %]</div>
 </div>
 <div id="photo_bar">
