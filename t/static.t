@@ -151,19 +151,3 @@ $mech->html_lint_ok('HTML validation of /contacts');
 $mech->page_links_ok('check all links on /contacts');
 $mech->get_ok("$url_base/Links.htm");
 $mech->back();
-
-# Redirect permanent /2006Results.htm http://brewerscup.org/2006-winners.html
-# Redirect permanent /BCupInteractiveEntryForm.pdf \
-#                    http://brewerscup.org/entry-form-interactive.pdf
-# Redirect permanent /entry_form.pdf  http://brewerscup.org/entry-form.pdf
-# Redirect permanent /Entries.htm     http://brewerscup.org/enter
-# Redirect permanent /JudgeInfo.htm   http://brewerscup.org/judge
-# Redirect permanent /Links.htm       http://brewerscup.org/contacts
-# Redirect permanent /Results.htm     http://brewerscup.org/results
-# Redirect permanent /index.html      http://brewerscup.org/
-# Redirect permanent /map.htm         http://brewerscup.org/maps
-
-# RedirectMatch permanent /200([78])/200[78]HBWinners.htm \
-#                         http://brewerscup.org/200$1-hb-winners.html
-# RedirectMatch permanent /200([78])/200[78]pBWinners.htm \
-#                         http://brewerscup.org/200$1-pb-winners.html
