@@ -1,5 +1,18 @@
-[% PROCESS header.html,
-   title => 'Register to Judge at the Brewers&#8217; Cup' -%]
+[%# -*- html -*- -%]
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link href="ninkasi.css" rel="stylesheet" type="text/css" />
+<title>Register to Judge at the Brewers&#8217; Cup</title>
+</head>
+<body>
+<div id="masthead">
+<h1><a href="/">The Brewers&#8217; Cup Competition</a></h1>
+<h2><a href="http://www.in.gov/statefair/">Indiana State Fair</a></h2>
+</div>
 [% PROCESS navbar.html -%]
 <div id="body_text">
 <h2>Invitation to Judge at the Indiana State Fair Brewers&#8217; Cup</h2>
