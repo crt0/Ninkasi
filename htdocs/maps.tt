@@ -1,16 +1,30 @@
-[% PROCESS header.html,
-   title => 'Directions to the Brewers&#8217; Cup' -%]
+[%# -*- html -*- -%]
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link href="ninkasi.css" rel="stylesheet" type="text/css" />
+<title>Directions to the Brewers&#8217; Cup</title>
+</head>
+<body>
+<div id="masthead">
+<h1><a href="/">The Brewers&#8217; Cup Competition</a></h1>
+<h2><a href="http://www.in.gov/statefair/">Indiana State Fair</a></h2>
+</div>
 [% PROCESS navbar.html -%]
 <div id="body_text">
   <h2>Directions to the Brewers&#8217; Cup</h2>
   <p>
-    The Indiana State Fairgrounds is located on the corner of East
+    The Indiana State Fairgrounds are located on the corner of East
     38th Street and Fall Creek Parkway in Indianapolis.
   </p>
   <div id="map">
-    <object height="350" width="425"
-            data="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=1202+E.+38th+Street,+Indianapolis,+IN+46205&amp;sll=42.778699,-84.58736&amp;sspn=0.044918,0.040169&amp;g=lansing+airport&amp;ie=UTF8&amp;s=AARTsJrkiTRwjhDoKJeCfb0rgZtHfq191Q&amp;ll=39.845054,-86.128693&amp;spn=0.046129,0.072956&amp;z=13&amp;iwloc=addr&amp;output=embed">
-    </object>
+    <iframe height="350" width="425"
+            frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
+            src="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=1202+E.+38th+Street,+Indianapolis,+IN+46205&amp;sll=42.778699,-84.58736&amp;sspn=0.044918,0.040169&amp;g=lansing+airport&amp;ie=UTF8&amp;s=AARTsJrkiTRwjhDoKJeCfb0rgZtHfq191Q&amp;ll=39.845054,-86.128693&amp;spn=0.046129,0.072956&amp;z=13&amp;iwloc=addr&amp;output=embed">
+    </iframe>
     <div>
       <a href="http://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=1202+E.+38th+Street,+Indianapolis,+IN+46205&amp;sll=42.778699,-84.58736&amp;sspn=0.044918,0.040169&amp;g=lansing+airport&amp;ie=UTF8&amp;ll=39.845054,-86.128693&amp;spn=0.046129,0.072956&amp;z=13&amp;iwloc=addr">
         View Larger Map
