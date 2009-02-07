@@ -15,14 +15,14 @@
 [%- END ~%]
 
 [% BLOCK body_text -%]
-From:    "Brewers Cup" <brewerscup@indianastatefair.com>
+From:    "Brewers' Cup" <brewerscup@indianastatefair.com>
 Subject: [% title %]
 To:      "[% form.first_name | html_entity %] [% form.last_name | html_entity %]" <[% form.email1 | html_entity %]>
 
 [% content -%]
 
 -- 
-Brewers Cup
+Brewers' Cup
 Indiana State Fair
 brewerscup@indianastatefair.com
 [% END ~%]

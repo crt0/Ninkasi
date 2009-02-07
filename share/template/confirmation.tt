@@ -5,7 +5,7 @@
 [% WRAPPER heading %]Thank you, [% form.first_name | html_entity %]![% END %]
 [% WRAPPER paragraph %]
 You've agreed to judge the following flight(s) at the Indiana State Fair
-Brewers Cup:
+Brewers[% apostrophe %] Cup:
 [% END %]
 [% WRAPPER list -%]
 [% IF form.flight1 -%]
@@ -19,7 +19,8 @@ Brewers Cup:
 [% END -%]
 [% END -%]
 [% WRAPPER paragraph %]
-Please refer to [% link('http://brewerscup.org/', 'the Brewers Cup web site') %]
+Please refer to [% link('http://brewerscup.org/',
+                        "the Brewers$apostrophe Cup web site") %]
 for up-to-the-minute information on the competition.  Thanks!
 [% END -%]
 [% END -%]

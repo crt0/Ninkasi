@@ -126,14 +126,14 @@ $mech->content_is(<<'EOF');
 <h2>Thank you, Andrew!</h2>
 <p>
 You've agreed to judge the following flight(s) at the Indiana State Fair
-Brewers Cup:
+Brewers&#8217; Cup:
 </p>
 <ul>
 <li>Friday, July 11, starting at 6 pm</li>
 <li>Saturday, July 12, starting at noon</li>
 </ul>
 <p>
-Please refer to <a href="http://brewerscup.org/">the Brewers Cup web site</a>
+Please refer to <a href="http://brewerscup.org/">the Brewers&#8217; Cup web site</a>
 for up-to-the-minute information on the competition.  Thanks!
 </p></div>
 </body>
