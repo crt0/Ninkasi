@@ -29,6 +29,27 @@ sub header_ok {
 EOF
 }
 
+sub header_transitional_ok {
+    my ($mech, $title) = @_;
+
+    $mech->content_contains(<<EOF, "header of $title");
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link href="ninkasi.css" rel="stylesheet" type="text/css" />
+<title>$title</title>
+</head>
+<body>
+<div id="masthead">
+<h1><a href="/">The Brewers&#8217; Cup Competition</a></h1>
+<h2><a href="http://www.in.gov/statefair/">Indiana State Fair</a></h2>
+</div>
+EOF
+}
+
 sub navbar_ok {
     my ($mech) = @_;
 
@@ -112,7 +133,7 @@ $mech->get_ok("$url_base/entry_form.pdf");
 $mech->back();
 
 $mech->follow_link_ok( {text => 'Judge'} );
-header_ok $mech, 'Register to Judge at the Brewers&#8217; Cup';
+header_transitional_ok $mech, 'Register to Judge at the Brewers&#8217; Cup';
 navbar_ok $mech;
 $mech->html_lint_ok('HTML validation of /judge');
 $mech->page_links_ok('check all links on /judge');
@@ -120,7 +141,7 @@ $mech->get_ok("$url_base/JudgeInfo.htm");
 $mech->back();
 
 $mech->follow_link_ok( {text => 'Maps'} );
-header_ok $mech, 'Directions to the Brewers&#8217; Cup';
+header_transitional_ok $mech, 'Directions to the Brewers&#8217; Cup';
 navbar_ok $mech;
 $mech->html_lint_ok('HTML validation of /maps');
 $mech->page_links_ok('check all links on /maps');
