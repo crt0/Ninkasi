@@ -5,7 +5,6 @@ Makefile.PL
 MyBuilder.pm
 README
 cgi/.htaccess
-cgi/judge-signup.tt
 cgi/view.tt
 htdocs/.htaccess
 htdocs/2006-winners.html
@@ -36,6 +35,7 @@ htdocs/judge.tt
 htdocs/maps.tt
 htdocs/newsletter.tt
 htdocs/ninkasi.css
+htdocs/register-to-judge.tt
 htdocs/results.tt
 htdocs/rules.pdf
 lib/Ninkasi.pm
@@ -63,4 +63,4 @@ t/Ninkasi.t
 t/TEST.PL
 t/conf/extra.conf.in
 t/lookup.t
-t/signup.t
+t/register-to-judge.t
