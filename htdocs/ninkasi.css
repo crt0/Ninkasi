@@ -119,12 +119,11 @@ a:visited {
     color: #c00;
     font-style: italic;
     font-weight: bold;
-    text-align: center;
 }
 
 .form_instructions {
     font-size: smaller;
-    text-align: center;
+    padding:   0.25em 0em 0.75em 0em;
 }
 
 #masthead_bottom {
