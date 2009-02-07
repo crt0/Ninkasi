@@ -81,3 +81,5 @@ All Registered Judges [<a href="/cgi-bin/view/judge/?format=csv">CSV</a>]
 [% BLOCK header %][% PROCESS "header.html" %][% END ~%]
 
 [% BLOCK footer %][% PROCESS "footer.html" %][% END ~%]
+
+[% apostrophe = '&#8217;' ~%]

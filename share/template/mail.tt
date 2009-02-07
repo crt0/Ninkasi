@@ -30,3 +30,5 @@ brewerscup@indianastatefair.com
 [% BLOCK header %][% END ~%]
 
 [% BLOCK footer %][% END ~%]
+
+[% apostrophe = "'" ~%]

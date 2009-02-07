@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 131;
+use Test::More tests => 130;
 
 use Apache::TestConfig;
 use Ninkasi::Constraint;
@@ -15,7 +15,7 @@ use Test::WWW::Mechanize;
 
 my $config = Apache::TestConfig->new();
 my $url_base = join '', $config->{vars}{scheme}, '://', $config->hostport();
-my $form_url = "$url_base/cgi-bin/judge-signup";
+my $form_url = "$url_base/register-to-judge";
 
 my $dbh = Ninkasi::Table->new()->Database_Handle();
 eval {
@@ -49,7 +49,6 @@ ok $rowid == 1;
 
 my $mech = Test::WWW::Mechanize->new();
 $mech->get_ok($form_url);
-$mech->title_is('Brewers Cup Judge Volunteer Form');
 $mech->content_contains('Experienced but not in the BJCP');
 
 $mech->submit_form_ok( { with_fields => { first_name => 'Andrew' } } );
@@ -110,14 +109,19 @@ if ( !$mech->content_lacks('<div class="error">') ) {
 
 $mech->content_is(<<'EOF');
 <?xml version="1.0" encoding="utf-8" ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-          "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en">
+<!DOCTYPE html
+     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<link href="/css/ninkasi.css" rel="stylesheet" type="text/css">
-<title>Brewers Cup Judge Volunteer Confirmation</title>
+<link href="ninkasi.css" rel="stylesheet" type="text/css" />
+<title>Brewers&#8217; Cup Judge Registration Confirmation</title>
 </head>
 <body>
+<div id="masthead">
+<h1><a href="/">The Brewers&#8217; Cup Competition</a></h1>
+<h2><a href="http://www.in.gov/statefair/">Indiana State Fair</a></h2>
+</div>
 <div id="body_text">
 <h2>Thank you, Andrew!</h2>
 <p>

@@ -2,6 +2,7 @@ DirectoryIndex index
 ErrorDocument  403 /403
 ErrorDocument  404 /404
 ErrorDocument  500 /500
+Options        ExecCGI SymLinksIfOwnerMatch
 
 RewriteEngine on
 
@@ -18,3 +19,5 @@ RewriteRule ^index\.html$      /                  [L,R=permanent]
 RewriteRule ^map\.htm$         /maps              [L,R=permanent]
 
 RewriteRule ^[^.]*$ - [T=text/html]
+
+RewriteRule ^register-to-judge$ - [H=cgi-script]
