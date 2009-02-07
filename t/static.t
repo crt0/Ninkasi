@@ -11,7 +11,7 @@ use Test::WWW::Mechanize;
 sub header_ok {
     my ($mech, $title) = @_;
 
-    $mech->content_contains(<<EOF, 'header');
+    $mech->content_contains(<<EOF, "header of $title");
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE html
      PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
