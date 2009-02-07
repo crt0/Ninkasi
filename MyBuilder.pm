@@ -15,22 +15,22 @@ BEGIN {
 
 # copy a subdirectory into blib/
 sub process_dir {
-    my ($self, $type_subdir, $destination) = @_;
+    my ($self, $type_subdir, $want_tt_files) = @_;
 
-    $destination ||= $self->blib();
-    my $files_to_copy = $self->rscan_dir( $type_subdir,
-                                          sub { -f && !m{/\.svn/}
-                                                   && !m{/#}
-                                                   && !m{~$}
-                                                   && !m{\.tt$} } );
+    my $files_to_copy = $self->rscan_dir(
+        $type_subdir, sub { -f && !m{/\.svn/}
+                               && !m{/#}
+                               && !m{~$}
+                               && ( $want_tt_files || !m{\.tt$} ) }
+    );
     foreach my $file (@$files_to_copy) {
-        $self->copy_if_modified( $file, $destination )
+        $self->copy_if_modified( $file, $self->blib() )
             or next;
     }
 }
 
-sub process_htdocs_files { shift->process_dir( 'htdocs' ) }
-sub process_share_files  { shift->process_dir( 'share'  ) }
+sub process_htdocs_files { shift->process_dir('htdocs'  ) }
+sub process_share_files  { shift->process_dir('share', 1) }
 
 # find files to process with the Template Toolkit
 sub find_tt_files {
