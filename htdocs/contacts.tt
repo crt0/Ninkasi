@@ -1,3 +1,4 @@
+[%# -*- html -*- -%]
 [% PROCESS header.html,
    title => 'Brewers&#8217; Cup Contact Information' -%]
 [% PROCESS navbar.html -%]
