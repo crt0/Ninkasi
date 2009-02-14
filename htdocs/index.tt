@@ -1,3 +1,4 @@
+[%# -*- html -*- -%]
 [% PROCESS header.html, title => "The Brewers&#8217; Cup Competition" -%]
 <div id="navigation_bar_vertical">
   <div><a accesskey="e" href="enter">Submit Entries</a></div>
