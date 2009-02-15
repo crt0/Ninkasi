@@ -114,7 +114,7 @@ $mech->content_is(<<'EOF');
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<link href="ninkasi.css" rel="stylesheet" type="text/css" />
+<link href="/ninkasi.css" rel="stylesheet" type="text/css" />
 <title>Brewers&#8217; Cup Judge Registration Confirmation</title>
 </head>
 <body>
