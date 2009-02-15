@@ -34,7 +34,7 @@
 
 [% BLOCK judge -%]
 [% WRAPPER column %]
-<a href="/cgi-bin/view/judge/[% judge.rowid %]">
+<a href="[% judge.rowid %]">
 [% content %]
 </a>
 [% END -%]
@@ -44,11 +44,11 @@
 [% IF category -%]
 <p>
 Category [% category.number %]. [% category.name %]
-[<a href="/cgi-bin/view/style/[% category.number %]?format=csv">CSV</a>]
+[<a href="../style/[% category.number %]?format=csv">CSV</a>]
 </p>
 [% ELSE -%]
 <p>
-All Registered Judges [<a href="/cgi-bin/view/judge/?format=csv">CSV</a>]
+All Registered Judges [<a href="?format=csv">CSV</a>]
 </p>
 [% END -%]
 <table cellspacing="0" class="view">

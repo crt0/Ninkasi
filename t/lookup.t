@@ -22,7 +22,7 @@ eval {
     $dbh->{PrintError} = 1;
 };
 
-my $signup_url = "$url_base/cgi-bin/judge-signup";
+my $signup_url = "$url_base/register-to-judge";
 
 my $mech = Test::WWW::Mechanize->new();
 
@@ -160,9 +160,9 @@ $mech->submit_form_ok( {
 } );
 
 # test view of all judges
-my $lookup_url = "$url_base/cgi-bin/view/judge/";
+my $lookup_url = "$url_base/manage/judge/";
 $mech->get_ok($lookup_url);
-$mech->content_like(qr{<a\ href="/cgi-bin/view/judge/[1-9][0-9]*">\s+
+$mech->content_like(qr{<a\ href="judge/[1-9][0-9]*">\s+
                        |&lt;iefer,\ Angelina\s+
                        </a>\s+
                        </td>\s+
@@ -172,30 +172,30 @@ $mech->content_like(qr{<a\ href="/cgi-bin/view/judge/[1-9][0-9]*">\s+
                        <td>Y</td>\s+
                        <td>10</td>\s+
                        <td>N</td>\s+
-                       <td><a\ href="/cgi-bin/view/style/8">8</a>,\s+
-                       <a\ href="/cgi-bin/view/style/10">10</a>,\s+
-                       <a\ href="/cgi-bin/view/style/15">15</a>,\s+
-                       <a\ href="/cgi-bin/view/style/21">21</a></td>\s+
-                       <td><a\ href="/cgi-bin/view/style/20">20</a></td>\s+
-                       <td><a\ href="/cgi-bin/view/style/1">1</a>,\s+
-                       <a\ href="/cgi-bin/view/style/3">3</a>,\s+
-                       <a\ href="/cgi-bin/view/style/4">4</a>,\s+
-                       <a\ href="/cgi-bin/view/style/5">5</a>,\s+
-                       <a\ href="/cgi-bin/view/style/6">6</a>,\s+
-                       <a\ href="/cgi-bin/view/style/7">7</a>,\s+
-                       <a\ href="/cgi-bin/view/style/9">9</a>,\s+
-                       <a\ href="/cgi-bin/view/style/11">11</a>,\s+
-                       <a\ href="/cgi-bin/view/style/12">12</a>,\s+
-                       <a\ href="/cgi-bin/view/style/13">13</a>,\s+
-                       <a\ href="/cgi-bin/view/style/14">14</a>,\s+
-                       <a\ href="/cgi-bin/view/style/16">16</a>,\s+
-                       <a\ href="/cgi-bin/view/style/17">17</a>,\s+
-                       <a\ href="/cgi-bin/view/style/18">18</a>,\s+
-                       <a\ href="/cgi-bin/view/style/19">19</a>,\s+
-                       <a\ href="/cgi-bin/view/style/22">22</a>,\s+
-                       <a\ href="/cgi-bin/view/style/23">23</a>,\s+
-                       <a\ href="/cgi-bin/view/style/24">24</a></td>\s+
-                       <td><a\ href="/cgi-bin/view/style/2">2</a></td>}msx);
+                       <td><a\ href="../style/8">8</a>,\s+
+                       <a\ href="../style/10">10</a>,\s+
+                       <a\ href="../style/15">15</a>,\s+
+                       <a\ href="../style/21">21</a></td>\s+
+                       <td><a\ href="../style/20">20</a></td>\s+
+                       <td><a\ href="../style/1">1</a>,\s+
+                       <a\ href="../style/3">3</a>,\s+
+                       <a\ href="../style/4">4</a>,\s+
+                       <a\ href="../style/5">5</a>,\s+
+                       <a\ href="../style/6">6</a>,\s+
+                       <a\ href="../style/7">7</a>,\s+
+                       <a\ href="../style/9">9</a>,\s+
+                       <a\ href="../style/11">11</a>,\s+
+                       <a\ href="../style/12">12</a>,\s+
+                       <a\ href="../style/13">13</a>,\s+
+                       <a\ href="../style/14">14</a>,\s+
+                       <a\ href="../style/16">16</a>,\s+
+                       <a\ href="../style/17">17</a>,\s+
+                       <a\ href="../style/18">18</a>,\s+
+                       <a\ href="../style/19">19</a>,\s+
+                       <a\ href="../style/22">22</a>,\s+
+                       <a\ href="../style/23">23</a>,\s+
+                       <a\ href="../style/24">24</a></td>\s+
+                       <td><a\ href="../style/2">2</a></td>}msx);
 $mech->content_like( qr{<title>Registered Judges</title>} );
 
 
@@ -262,9 +262,9 @@ $mech->content_like( qr{<h2>Angelina |&lt;iefer</h2>} );
 $mech->content_like( qr{<title>Angelina |&lt;iefer</title>} );
 
 # test category view
-$lookup_url = "$url_base/cgi-bin/view/style/8";
+$lookup_url = "$url_base/manage/style/8";
 $mech->get_ok($lookup_url);
-$mech->content_like(qr{<a\ href="/cgi-bin/view/judge/\d+">\s+
+$mech->content_like(qr{<a\ href="\d+">\s+
                        Mayers,\ Liam\s+
                        </a>\s+
                        </td>\s+
@@ -285,7 +285,7 @@ $mech->content_is(<<EOF);
 EOF
 
 # test CSV format for style with multiple judges
-$lookup_url = "$url_base/cgi-bin/view/style/1?format=csv";
+$lookup_url = "$url_base/manage/style/1?format=csv";
 $mech->get_ok($lookup_url);
 $mech->content_is(<<EOF);
 "Name","Rank","Fri. PM?","Sat. AM?","Sat. PM?","Comps Judged","Pro Brewer?","Preference"

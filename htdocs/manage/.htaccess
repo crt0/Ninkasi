@@ -1,0 +1,12 @@
+Allow from   localhost localhost.localdomain
+AuthName     "Brewers Cup"
+AuthType     Basic
+AuthUserFile /home/httpd/vhosts/brewerscup.org/share/ninkasi/htpasswd
+Order        Allow,Deny
+Require user ajk anita
+Satisfy      any
+
+Options ExecCGI SymLinksIfOwnerMatch
+
+RewriteEngine on
+RewriteRule . - [H=cgi-script]

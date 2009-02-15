@@ -1,0 +1,93 @@
+#!/usr/bin/perl -T
+
+use strict;
+use warnings;
+
+use lib '[% install_base %]/lib/perl5';
+
+use File::Spec;
+use Taint::Util;
+
+BEGIN {
+    if ( exists $ENV{NINKASI_TEST_SERVER_ROOT} ) {
+        my $blib = File::Spec->catfile($ENV{NINKASI_TEST_SERVER_ROOT},
+                                       File::Spec->updir(), 'blib');
+        untaint $blib;
+        require lib;
+        lib->import( File::Spec->catfile($blib, 'lib' ),
+                     File::Spec->catfile($blib, 'arch') );
+    }
+}
+
+use CGI;
+use Ninkasi::Config;
+use Ninkasi::Constraint;
+use Ninkasi::Judge;
+use Ninkasi::JudgeSignup;
+use Ninkasi::Template;
+use URI::Escape ();
+
+sub escape_quotes {
+    my ($text) = @_;
+    $text =~ s/"/""/g;
+    return $text;
+}
+
+sub remove_trailing_comma {
+    my ($text) = @_;
+    $text =~ s/,$//;
+    return $text;
+}
+
+sub view_style {
+    my ($format, $category_number) = @_;
+
+    my $category = $Ninkasi::JudgeSignup::CATEGORIES[$category_number - 1];
+    my $entry    = $Ninkasi::Constraint::NUMBER{entry};
+
+    my @judge_columns = qw/judge.rowid first_name last_name rank flight1
+                           flight2 flight3 competitions_judged
+                           pro_brewer/;
+    my @constraint_columns = qw/category judge type/;
+
+    my $judge = Ninkasi::Judge->new();
+    my ($sth, $result) = $judge->bind_hash( {
+        bind_values => [$category_number, $entry],
+        columns     => [@judge_columns, @constraint_columns],
+        join        => 'Ninkasi::Constraint',
+        order       => 'type DESC, rank DESC, competitions_judged DESC',
+        where       => 'category = ? AND type != ? AND judge = judge.rowid',
+    } );
+    $sth->bind_col(1, \$result->{rowid});
+
+    # process the template, passing it a function to fetch judge data
+    my $template_object = Ninkasi::Template->new();
+    $template_object->process( 'view_judges.tt', {
+        category              => $category,
+        constraint_name       => \%Ninkasi::Constraint::NAME,
+        escape_quotes         => sub { \&escape_quotes },
+        fetch_judge           => sub { $sth->fetch() && $result },
+        rank_name             => \%Ninkasi::Judge::NAME,
+        remove_trailing_comma => sub { \&remove_trailing_comma },
+        title                 => "Category $category_number. $category->{name}",
+        type                  => $format,
+    } ) or warn $template_object->error();
+
+    return;
+}
+
+MAIN: {
+    my $cgi_object = CGI->new();
+
+    # format paramter determines content type
+    my $format = $cgi_object->param('format') || 'html';
+    print $cgi_object->header($format eq 'html' ? 'text/html' : 'text/plain');
+
+    # parse path_info to get object id
+    my ($id) = ( split '/', $cgi_object->path_info(), 3 )[1];
+
+    # build & display selected view
+    view_style $format, $id;
+
+    exit;
+}
