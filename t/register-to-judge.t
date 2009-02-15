@@ -125,7 +125,7 @@ $mech->content_is(<<'EOF');
 <div id="body_text">
 <h2>Thank you, Andrew!</h2>
 <p>
-You've agreed to judge the following flight(s) at the Indiana State Fair
+You&#8217;ve agreed to judge the following flight(s) at the Indiana State Fair
 Brewers&#8217; Cup:
 </p>
 <ul>
