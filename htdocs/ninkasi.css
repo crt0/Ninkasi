@@ -234,7 +234,8 @@ caption {
 }
 
 table.view {
-    border: 1px solid #666;
+    border:      1px solid #666;
+    font-family: Gill Sans, sans-serif;
 }
 
 table.view tr td {
@@ -246,7 +247,6 @@ table.view tr td {
 table.view thead td {
     color: #fff;
     background-color: #c9c;
-    font-weight: bold;
     border-bottom: 1px solid #999;
 }
 
