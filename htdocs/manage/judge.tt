@@ -179,12 +179,19 @@ sub remove_trailing_comma {
 MAIN: {
     my $cgi_object = CGI->new();
 
+    # parse path_info to get object id
+    my ($id) = ( split '/', $cgi_object->path_info(), 3 )[1];
+
+    # redirect if trailing slash is missing
+    my $url = $cgi_object->url(-path_info => 1);
+    if (!$id && $url !~ m{/$}) {
+        print $cgi_object->redirect("$url/");
+        exit;
+    }
+
     # format paramter determines content type
     my $format = $cgi_object->param('format') || 'html';
     print $cgi_object->header($format eq 'html' ? 'text/html' : 'text/plain');
-
-    # parse path_info to get object id
-    my ($id) = ( split '/', $cgi_object->path_info(), 3 )[1];
 
     # build & display selected view
     view_judge $cgi_object, $format, $id;
