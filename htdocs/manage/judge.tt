@@ -79,12 +79,12 @@ sub fetch_constraint_lists {
 
 # display big table of all judges
 sub view_all_judges {
-    my ($format) = @_;
+    my ($cgi_object, $format) = @_;
 
     # columns to display
-    my @judge_columns = qw/rowid first_name last_name rank flight1
-                           flight2 flight3 competitions_judged
-                           pro_brewer/;
+    my @judge_columns = qw/rowid first_name last_name rank flight1 flight2
+                           flight3 flight1_table flight2_table flight3_table
+                           competitions_judged pro_brewer/;
 
     # select whole table & order by last name
     my $judge = Ninkasi::Judge->new();
@@ -93,10 +93,14 @@ sub view_all_judges {
         order   => 'last_name',
     } );
 
+    # initialize queue for updates we'll find when rendering page
+    my @update_queue = ();
+
     # process the template, passing it a function to fetch judge data
     my $template_object = Ninkasi::Template->new();
     $template_object->process( 'view_judges.tt', {
-        escape_quotes         => sub { \&escape_quotes },
+        cgi           => scalar $cgi_object->Vars(),
+        escape_quotes => sub { \&escape_quotes },
         fetch_judge => sub {
             return $sth->fetch() && {
                 %$result,
@@ -105,20 +109,32 @@ sub view_all_judges {
                                                     $format eq 'csv' },
             };
         },
+        queue_update => sub { push @update_queue, [@_] },
         rank_name => \%Ninkasi::Judge::NAME,
         remove_trailing_comma => sub { \&remove_trailing_comma },
         title     => 'Registered Judges',
         type      => $format,
     } ) or warn $template_object->error();
+    $sth->finish();
+
+    # process queue of updates collected while rendering page
+    my $table_name = $judge->Table_Name();
+    foreach my $update (@update_queue) {
+        my ($judge_id, $flight, $table) = @$update;
+        $sth = $judge->Database_Handle()->prepare(<<EOF);
+UPDATE $table_name SET ${flight}_table = ? WHERE rowid = ?
+EOF
+        $sth->execute($table, $judge_id);
+    }
 
     return;
 }
 
 sub view_judge {
-    my ($format, $judge_id) = @_;
+    my ($cgi_object, $format, $judge_id) = @_;
 
     # show all judges if no id is specified
-    return view_all_judges $format if !$judge_id;
+    return view_all_judges $cgi_object, $format if !$judge_id;
 
     # columns to display
     my @judge_columns = qw/rowid first_name last_name address city state zip
@@ -171,7 +187,7 @@ MAIN: {
     my ($id) = ( split '/', $cgi_object->path_info(), 3 )[1];
 
     # build & display selected view
-    view_judge $format, $id;
+    view_judge $cgi_object, $format, $id;
 
     exit;
 }

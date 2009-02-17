@@ -16,6 +16,10 @@
 [% END -%]
 [% END ~%]
 
+[% BLOCK input -%]
+[% content -%]
+[% END ~%]
+
 [% BLOCK table -%]
 [% content -%]
 [% END ~%]

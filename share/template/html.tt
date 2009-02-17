@@ -32,6 +32,18 @@
 <td>[% content -%]</td>
 [% END ~%]
 
+[% BLOCK input ~%]
+[% name = "judge${judge.rowid}_$flight" -%]
+[% name_old = "${name}_old" -%]
+<input name="[% name_old %]" type="hidden" value="[% content %]" />
+[% IF cgi.save && cgi.$name_old != cgi.$name -%]
+[% CALL queue_update(judge.rowid, flight, cgi.$name) -%]
+<input name="[% name %]" size="5" value="[% cgi.$name %]" />
+[% ELSE -%]
+<input name="[% name %]" size="5" value="[% content %]" />
+[% END -%]  
+[% END ~%]
+
 [% BLOCK judge -%]
 [% WRAPPER column %]
 <a href="[% judge.rowid %]">
@@ -51,6 +63,7 @@ Category [% category.number %]. [% category.name %]
 All Registered Judges [<a href="?format=csv">CSV</a>]
 </p>
 [% END -%]
+<form method="post">
 <table cellspacing="0" class="view">
 [% content -%]
 </table>
@@ -58,6 +71,8 @@ All Registered Judges [<a href="?format=csv">CSV</a>]
   [% row %] [% IF row == 1 %]judge is[% ELSE %]judges are[% END %]
   [% IF category %]available for this style[% ELSE %]registered[% END %].
 </p>
+<input name="save" type="submit" value="Save" />
+</form>
 [% END ~%]
 
 [% BLOCK body_text -%]
