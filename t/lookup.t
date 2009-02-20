@@ -167,9 +167,15 @@ $mech->content_like(qr{<a\ href="judge/[1-9][0-9]*">\s+
                        </a>\s+
                        </td>\s+
                        <td>Certified</td>\s+
-                       <td>Y</td>\s+
-                       <td>N</td>\s+
-                       <td>Y</td>\s+
+                       <td>\s+
+                       <input\ name="judge4_flight1_old"\ type="hidden"\ value=""\ />\s+
+                       <input\ name="judge4_flight1"\ size="5"\ value=""\ />\s+
+                       </td>\s+
+                       <td>N/A</td>\s+
+                       <td>\s+
+                       <input\ name="judge4_flight3_old"\ type="hidden"\ value=""\ />\s+
+                       <input\ name="judge4_flight3"\ size="5"\ value=""\ />\s+
+                       </td>\s+
                        <td>10</td>\s+
                        <td>N</td>\s+
                        <td><a\ href="../style/8">8</a>,\s+
