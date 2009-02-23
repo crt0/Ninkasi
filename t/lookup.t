@@ -162,46 +162,48 @@ $mech->submit_form_ok( {
 # test view of all judges
 my $lookup_url = "$url_base/manage/judge/";
 $mech->get_ok($lookup_url);
-$mech->content_like(qr{<a\ href="judge/[1-9][0-9]*">\s+
-                       |&lt;iefer,\ Angelina\s+
-                       </a>\s+
-                       </td>\s+
-                       <td>Certified</td>\s+
-                       <td>\s+
-                       <input\ name="judge4_flight1_old"\ type="hidden"\ value=""\ />\s+
-                       <input\ name="judge4_flight1"\ size="5"\ value=""\ />\s+
-                       </td>\s+
-                       <td>N/A</td>\s+
-                       <td>\s+
-                       <input\ name="judge4_flight3_old"\ type="hidden"\ value=""\ />\s+
-                       <input\ name="judge4_flight3"\ size="5"\ value=""\ />\s+
-                       </td>\s+
-                       <td>10</td>\s+
-                       <td>N</td>\s+
-                       <td><a\ href="../style/8">8</a>,\s+
-                       <a\ href="../style/10">10</a>,\s+
-                       <a\ href="../style/15">15</a>,\s+
-                       <a\ href="../style/21">21</a></td>\s+
-                       <td><a\ href="../style/20">20</a></td>\s+
-                       <td><a\ href="../style/1">1</a>,\s+
-                       <a\ href="../style/3">3</a>,\s+
-                       <a\ href="../style/4">4</a>,\s+
-                       <a\ href="../style/5">5</a>,\s+
-                       <a\ href="../style/6">6</a>,\s+
-                       <a\ href="../style/7">7</a>,\s+
-                       <a\ href="../style/9">9</a>,\s+
-                       <a\ href="../style/11">11</a>,\s+
-                       <a\ href="../style/12">12</a>,\s+
-                       <a\ href="../style/13">13</a>,\s+
-                       <a\ href="../style/14">14</a>,\s+
-                       <a\ href="../style/16">16</a>,\s+
-                       <a\ href="../style/17">17</a>,\s+
-                       <a\ href="../style/18">18</a>,\s+
-                       <a\ href="../style/19">19</a>,\s+
-                       <a\ href="../style/22">22</a>,\s+
-                       <a\ href="../style/23">23</a>,\s+
-                       <a\ href="../style/24">24</a></td>\s+
-                       <td><a\ href="../style/2">2</a></td>}msx);
+$mech->content_like(
+    qr{<a\ href="judge/[1-9][0-9]*">\s+
+       |&lt;iefer,\ Angelina\s+
+       </a>\s+
+       </td>\s+
+       <td>Certified</td>\s+
+       <td>\s+
+       <input\ name="judge4_flight1_old"\ type="hidden"\ value=""\ />\s+
+       <input\ name="judge4_flight1"\ size="5"\ value=""\ />\s+
+       </td>\s+
+       <td>N/A</td>\s+
+       <td>\s+
+       <input\ name="judge4_flight3_old"\ type="hidden"\ value=""\ />\s+
+       <input\ name="judge4_flight3"\ size="5"\ value=""\ />\s+
+       </td>\s+
+       <td>10</td>\s+
+       <td>N</td>\s+
+       <td><a\ href="../style/8">8</a>,\s+
+       <a\ href="../style/10">10</a>,\s+
+       <a\ href="../style/15">15</a>,\s+
+       <a\ href="../style/21">21</a></td>\s+
+       <td><a\ href="../style/20">20</a></td>\s+
+       <td><a\ href="../style/1">1</a>,\s+
+       <a\ href="../style/3">3</a>,\s+
+       <a\ href="../style/4">4</a>,\s+
+       <a\ href="../style/5">5</a>,\s+
+       <a\ href="../style/6">6</a>,\s+
+       <a\ href="../style/7">7</a>,\s+
+       <a\ href="../style/9">9</a>,\s+
+       <a\ href="../style/11">11</a>,\s+
+       <a\ href="../style/12">12</a>,\s+
+       <a\ href="../style/13">13</a>,\s+
+       <a\ href="../style/14">14</a>,\s+
+       <a\ href="../style/16">16</a>,\s+
+       <a\ href="../style/17">17</a>,\s+
+       <a\ href="../style/18">18</a>,\s+
+       <a\ href="../style/19">19</a>,\s+
+       <a\ href="../style/22">22</a>,\s+
+       <a\ href="../style/23">23</a>,\s+
+       <a\ href="../style/24">24</a></td>\s+
+       <td><a\ href="../style/2">2</a></td>}msx
+);
 $mech->content_like( qr{<title>Registered Judges</title>} );
 
 
