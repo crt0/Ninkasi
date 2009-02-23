@@ -211,11 +211,11 @@ $mech->content_like( qr{<title>Registered Judges</title>} );
 $mech->follow_link_ok( { text_regex => qr/CSV/ } );
 $mech->content_is(<<EOF);
 "Name","Rank","Fri. PM?","Sat. AM?","Sat. PM?","Comps Judged","Pro Brewer?","Entries","Prefers Not","Whatever","Prefers"
-"Carrera, Lyndsey","Certified","Y","N","Y","10","N","8, 10, 15, 21","20","1, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 16, 17, 18, 19, 22, 23, 24","2"
-"Mayers, Liam","Novice","Y","Y","Y","2","Y","","","1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24",""
-"Reynoso, Greggory","Certified","Y","N","Y","10","N","8, 10, 15, 21","20","1, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 16, 17, 18, 19, 22, 23, 24","2"
-"Underhill, Leann","Certified","Y","N","Y","10","N","8, 10, 15, 21","20","1, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 16, 17, 18, 19, 22, 23, 24","2"
-"|&lt;iefer, Angelina","Certified","Y","N","Y","10","N","8, 10, 15, 21","20","1, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 16, 17, 18, 19, 22, 23, 24","2"
+"Carrera, Lyndsey","Certified","","N/A","","10","N","8, 10, 15, 21","20","1, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 16, 17, 18, 19, 22, 23, 24","2"
+"Mayers, Liam","Novice","","","","2","Y","","","1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24",""
+"Reynoso, Greggory","Certified","","N/A","","10","N","8, 10, 15, 21","20","1, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 16, 17, 18, 19, 22, 23, 24","2"
+"Underhill, Leann","Certified","","N/A","","10","N","8, 10, 15, 21","20","1, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 16, 17, 18, 19, 22, 23, 24","2"
+"|&lt;iefer, Angelina","Certified","","N/A","","10","N","8, 10, 15, 21","20","1, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 16, 17, 18, 19, 22, 23, 24","2"
 EOF
 
 # test view of individual judge information
@@ -272,24 +272,35 @@ $mech->content_like( qr{<title>Angelina |&lt;iefer</title>} );
 # test category view
 $lookup_url = "$url_base/manage/style/8";
 $mech->get_ok($lookup_url);
-$mech->content_like(qr{<a\ href="\d+">\s+
-                       Mayers,\ Liam\s+
-                       </a>\s+
-                       </td>\s+
-                       <td>Novice</td>\s+
-                       <td>Y</td>\s+
-                       <td>Y</td>\s+
-                       <td>Y</td>\s+
-                       <td>2</td>\s+
-                       <td>Y</td>\s+
-                       <td>whatever</td>}msx);
+$mech->content_like(
+    qr{<a\ href="\d+">\s+
+       Mayers,\ Liam\s+
+       </a>\s+
+       </td>\s+
+       <td>Novice</td>\s+
+       <td>\s+
+       <input\ name="judge2_flight1_old"\ type="hidden"\ value=""\ />\s+
+       <input\ name="judge2_flight1"\ size="5"\ value=""\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="judge2_flight2_old"\ type="hidden"\ value=""\ />\s+
+       <input\ name="judge2_flight2"\ size="5"\ value=""\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="judge2_flight3_old"\ type="hidden"\ value=""\ />\s+
+       <input\ name="judge2_flight3"\ size="5"\ value=""\ />\s+
+       </td>\s+
+       <td>2</td>\s+
+       <td>Y</td>\s+
+       <td>whatever</td>}msx
+);
 $mech->content_like( qr{<title>Category 8. English Pale Ale</title>} );
 
 # test CSV format for style with one judge
 $mech->follow_link_ok( { text_regex => qr/CSV/ } );
 $mech->content_is(<<EOF);
 "Name","Rank","Fri. PM?","Sat. AM?","Sat. PM?","Comps Judged","Pro Brewer?","Preference"
-"Mayers, Liam","Novice","Y","Y","Y","2","Y","whatever"
+"Mayers, Liam","Novice","","","","2","Y","whatever"
 EOF
 
 # test CSV format for style with multiple judges
@@ -297,9 +308,9 @@ $lookup_url = "$url_base/manage/style/1?format=csv";
 $mech->get_ok($lookup_url);
 $mech->content_is(<<EOF);
 "Name","Rank","Fri. PM?","Sat. AM?","Sat. PM?","Comps Judged","Pro Brewer?","Preference"
-"Underhill, Leann","Certified","Y","N","Y","10","N","whatever"
-"Reynoso, Greggory","Certified","Y","N","Y","10","N","whatever"
-"|&lt;iefer, Angelina","Certified","Y","N","Y","10","N","whatever"
-"Carrera, Lyndsey","Certified","Y","N","Y","10","N","whatever"
-"Mayers, Liam","Novice","Y","Y","Y","2","Y","whatever"
+"Underhill, Leann","Certified","","N/A","","10","N","whatever"
+"Reynoso, Greggory","Certified","","N/A","","10","N","whatever"
+"|&lt;iefer, Angelina","Certified","","N/A","","10","N","whatever"
+"Carrera, Lyndsey","Certified","","N/A","","10","N","whatever"
+"Mayers, Liam","Novice","","","","2","Y","whatever"
 EOF
