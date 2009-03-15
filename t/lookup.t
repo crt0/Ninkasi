@@ -18,6 +18,7 @@ my $dbh = Ninkasi::Table->new()->Database_Handle();
 eval {
     $dbh->{PrintError} = 0;
     $dbh->do('DELETE FROM judge'       );
+    $dbh->do('DELETE FROM category'    );
     $dbh->do("DELETE FROM 'constraint'");
     $dbh->{PrintError} = 1;
 };
@@ -205,7 +206,6 @@ $mech->content_like(
        <td><a\ href="../style/2">2</a></td>}msx
 );
 $mech->content_like( qr{<title>Registered Judges</title>} );
-
 
 # test CSV format for view of all judges
 $mech->follow_link_ok( { text_regex => qr/CSV/ } );
