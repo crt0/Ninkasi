@@ -1,23 +1,23 @@
 body {
-    background-color: #fff5e6;
+    background-color: #e6e6ba;
 }
 
 h1 {
-    color:         #807059;
+    color:         #8a391b;
     font-family:   Gill Sans, sans-serif;
     font-weight:   normal;
     margin-bottom: 0px;
 }
 
 h2 {
-    color:         #807059;
+    color:         #8a391b;
     font-family:   Gill Sans, sans-serif;
     font-weight:   normal;
     margin-bottom: 0.3em;
 }
 
 h3 {
-    color:       #807059;
+    color:       #8a391b;
     font-family: Gill Sans, sans-serif;
     font-weight: normal;
     margin-bottom: 0.2em;
@@ -28,15 +28,15 @@ ol, p, ul {
 }
 
 a:link {
-    color: #596380;
+    color: #495370;
 }
 
 a:visited {
-    color: #394360;
+    color: #697390;
 }
 
 #masthead h2 {
-    color:       #807059;
+    color:       #8a391b;
     font-family: Gill Sans, sans-serif;
     font-weight: normal;
     margin-top:  0px;
@@ -44,7 +44,7 @@ a:visited {
 }
 
 #masthead a {
-    color:           #807059;
+    color:           #8a391b;
     text-decoration: none;
 }
 
@@ -80,7 +80,7 @@ a:visited {
 }
 
 #body_text {
-    margin: 0 5%;
+    padding: 0 5%;
 }
 
 #menu {
@@ -199,7 +199,7 @@ caption {
 }
 
 #top_ten {
-    background-color: #cfd4e6;
+    background-color: #e0c278;
     float: right;
     margin: 2%;
     padding: 0 2% 2% 2%;
@@ -292,4 +292,9 @@ table.view tbody tr.ruled td {
 
 #contact_list h3, div#contact_list {
     clear: both;
+}
+
+strong {
+    font-family: sans-serif;
+    font-weight: bold;
 }
