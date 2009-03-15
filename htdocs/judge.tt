@@ -19,17 +19,18 @@
 <div id="top_ten">
   <h3>Top Ten Reasons You Should Judge at the Brewers&#8217; Cup</h3>
 <ol>
-  <li value="10"> We pay a small stipend.</li>
-  <li value="9"> Indianapolis isn&#8217;t Indian-no-place anymore.</li>
-  <li value="8">
-    The hotel is within walking distance
-    <a href="http://www.alcatrazbrewing.com/indianapolis.php">to</a>
-    <a href="http://www.theram.com/indiana/indianapolis.shtml">three</a>
-    <a href="http://www.rockbottom.com/DisplayLocationRBR.php?FKLocationID=10067">brewpubs</a>.
+  <li value="10">
+    We pay money, more depending on how far away you are.
   </li>
-  <li value="7"> Special brewers&#8217; dinner on Saturday night.</li>
-  <li value="6"> Home brew and commercial entries in separate divisions.</li>
-  <li value="5"> Entries are served at the proper temperature.</li>
+  <li value="9">
+    Indianapolis is a great craft-beer and fine-dining town.
+  </li>
+  <li value="8"> Special brewers&#8217; dinner on Saturday night.</li>
+  <li value="7">
+    Home brew and commercial entries in separate divisions.
+  </li>
+  <li value="6"> Commercial entries greatly increased.</li>
+  <li value="5"> Extraordinary attention to detail.</li>
   <li value="4">
     Plenty of
     <a href="http://www.indy.org/indianapolis/web/jsp/index.jsp?p=1&amp;x=1233677098405">cool activities</a>
@@ -48,23 +49,23 @@
 <div id="invite_body">
 <p>
 <em>
-  <a href="/cgi-bin/judge-signup">Sign up to judge on the web!</a>
+  <a href="/register-to-judge">Sign up to judge on the web!</a>
 </em>
 </p>
 <p>
 The Brewers&#8217; Cup beer competition has cultivated a reputation as
 a well-run competition, and we are looking for good judges to join us
 at this year&#8217;s competition. <a href="http://bjcp.org/">BJCP</a>
-judges, BJCP apprentices and professional brewers are welcomed and
+judges, BJCP apprentices, and professional brewers are welcomed and
 encouraged to judge at the [% year %] Brewers&#8217; Cup.
 </p>
 <p>
-Judging will take place on Friday, July 10th and Saturday, July 11th
+Judging will take place on Friday, July 10th, and Saturday, July 11th,
 at the Farm Bureau building on the grounds of the Indiana State Fair.
-This is a <a href="http://bjcp.org/">BJCP</a>-sanctioned competition
+This is a <a href="http://bjcp.org/">BJCP</a>-sanctioned competition,
 so points will be awarded.  We also pay a small stipend to offset some
 of the expenses of BJCP judges and professional brewers at the
-following rate: $25 for local judges and $100 for judges traveling
+following rates: $25 for local judges and $100 for judges traveling
 more than 50 miles one way to the competition.  We provide meals
 during the judging, and you are welcome to stay for the Awards
 Reception that will feature the [% year - 1 %] Best of Show beers
@@ -77,13 +78,14 @@ the <a href="http://martenhousehotel.com/">Marten House Hotel</a>.
 You may also want to consider the
 <a href="http://www.hamptoninn.com/">Hampton Inn</a> downtown.  The
 Hampton is located in Indianapolis&#8217; safe and vibrant downtown,
-conveniently located within walking distance
-<a href="http://www.alcatrazbrewing.com/indianapolis.php">to</a>
-<a href="http://www.theram.com/indiana/indianapolis.shtml">three</a>
-<a href="http://www.rockbottom.com/DisplayLocationRBR.php?FKLocationID=10067">brewpubs</a>
-and
-<a href="http://www.simon.com/mall/default.aspx?ID=163">Circle Centre</a>
-mall.
+conveniently located within walking distance of the
+<a href="http://www.theram.com/indiana/indianapolis.shtml">RAM</a>,
+<a href="http://www.rockbottom.com/DisplayLocationRBR.php?FKLocationID=10067">Rock
+Bottom</a>,
+and <a href="http://www.alcatrazbrewing.com/indianapolis.php">Alcatraz</a>
+brewpubs.  If you&#8217;re bringing family or guests, you might consider
+<a href="http://www.homewood-suites.com/">Homewood Suites</a>
+(apartment-style accommodations with a shuttle to the Fairgrounds).
 </p>
 <h3>To find out what is happening in Indianapolis during your
 visit, check out:</h3>
@@ -168,7 +170,7 @@ visit, check out:</h3>
 </table>
 <p>
 If you are willing to judge, please use
-our <a href="/cgi-bin/judge-signup">online judge registration</a> so
+our <a href="/register-to-judge">online judge registration</a> so
 we can also capture your judging preferences.
 </p>
 </div>
