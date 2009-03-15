@@ -5,25 +5,28 @@
 <div id="body_text">
   <h2>Brewers&#8217; Cup Contact Information</h2>
   <div id="contact_list">
-    <h3>Department Director</h3>
-    <div class="address">Al Polin, Indianapolis
-      Indiana State Fair, Department 118
-      Brewers&#8217; Cup Competition</div>
+    <h3>Brewers&#8217; Cup Executive Committee</h3>
+    <div class="address"><a href="mailto:pennjensen@yahoo.com">Penn Jensen</a>, Chairman
+      Bloomington, Indiana
+      (650) 400-9812</div>
+    <div class="address"><a href="http://www.indianastatefair.com/">Pat Berger</a>
+          Indianapolis, Indiana</div>
+    <div class="address"><a href="mailto:anita@greatfermentations.com">Anita Johnson</a>
+          Indianapolis, Indiana</div>
     <h3>Brewers&#8217; Cup Chair</h3>
-    <div class="address">Penn Jensen, Bloomington
-      pennjensen AT yahoo.com</div>
+    <div class="address"><a href="mailto:pennjensen@yahoo.com">Penn Jensen</a>
+      Bloomington, Indiana
+      (650) 400-9812</div>
     <h3>Judge Coordinator</h3>
-    <div class="address">Tom Stilabower, Indianapolis
-      judgecoordinator AT brewerscup.org</div>
+    <div class="address"><a href="mailto:judgecoordinator@brewerscup.org">Tom Stilabower</a>
+      Indianapolis, Indiana</div>
     <h3>Chief Steward</h3>
-    <div class="address">John Morrical, Indianapolis
-      317-283-6344
-      jmorrica AT sbcglobal.net</div>
+    <div class="address"><a href="mailto:jmorrica@sbcglobal.net">John Morrical</a>
+      Indianapolis, Indiana</div>
     <h3>Reception Coordinator</h3>
-    <div class="address">Tom Stilabower, Indianapolis
-      tstilabower AT comcast.net</div>
-    <h3>Registrar</h3>
-    <div class="address">Matt Mauer, Westfield</div>
+    <div class="address"><a href="mailto:gforcepaul@yahoo.com">Paul Henry</a>
+      Indianapolis, Indiana
+      (317) 257-4603</div>
   </div>
 </div>
 [% PROCESS footer.html -%]
