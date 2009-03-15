@@ -43,30 +43,94 @@
 </span>
 </div>
 <div id="body_text">
-<h2>What's new at the 2008 Brewers&#8217; Cup?</h2>
+<h2>Welcome to the 2009 Indiana Brewers&#8217; Cup</h2>
 <p>
-The Brewers&#8217; Cup announces several changes for the 2008 competition:
-</p>
-<h3>Homebrewer of the Year Award</h3>
-<p>
-This award recognizes brewers who prove their brewing expertise by
-earning the most points at the Brewers&#8217; Cup.
+  <strong>New for 2009: All entries must be made online and paid by
+  credit card.  No exceptions!</strong>
 </p>
 <p>
-What is going to take to win this award? Expertise in several styles
-and lots of brewing! Winners will receive 3 points for first place, 2
-for second and 1 for third place with a bonus of 5 points for best of
-show. The winner will receive a trophy and a beautiful 15 gallon
-Blichmann Boilermaker pot! The mill has it that prolific brewers, Bill
-Ballinger, Mike Pearson and Mark Schiess are revving up their brew
-pots!
+  <a href="https://secure.in.gov/statefair/fairentry/(S(1on0x345xol03v55nfdo5eij))/Default.aspx">Online
+  registration</a> will be available mid-April 2009.  If for any
+  reason you cannot comply with this requirement,
+  please <a href="mailto:brewerscup@indianastatefair.com">e-mail Penn
+  Jensen</a>.
 </p>
+<h2>Summary of Important 2009 Changes</h2>
+<ul>
+  <li>
+    All online entries close at midnight Thursday, June 25, 2009.
+  </li>
+  <li>
+    Last beer delivery accepted by 6 pm Thursday, June 25, at Sahara
+    Mart East in Bloomington, Indiana.  <a href="#delivery">See below
+    for other delivery options.</a>
+  </li>
+  <li>
+    <strong>New:</strong> <a href="http://www.brewersofindianaguild.com/">VIP
+    and Professional Awards Dinner</a> Friday evening, July 17, 2009,
+    6 pm to 9 pm.  This dinner is in addition to the traditional
+    post-competition feast and awards presentations on Saturday
+    evening, July 11, 2009.
+  </li>
+</ul>
+<h2>Brewers&#8217; Cup Competition Fees and Instructions</h2>
+<ul>
+  <li>
+    Entry fee for Home Brewers is $10 per entered beer (three 12-oz.
+    bottles per entry).
+  </li>
+  <li>
+    Entry fee for Professional Brewers is $30 per entered beer (three
+    bottles of any size per entry).
+  </li>
+  <li>
+    When shipping or delivering bottled entries to any cellaring
+    location, exhibitor must include a copy of the completed online
+    entry form and proof of payment (your credit card receipt).
+  </li>
+  <li>
+    Bottle ID labels should be affixed to each bottle with a rubber
+    band.
+  </li>
+  <li>
+    No late or carry-in entries will be accepted on the day of
+    competition.
+  </li>
+</ul>
+<h2 id="delivery">When and Where to Send Your Beer</h2>
 <p>
-The formula for Indiana Homebrew Club of the Year has been changed to
-a simpler formula. Club members must declare their club affiliation on
-their entry forms. The club with the most points will have bragging
-rights for a year and have the club name added to the Homebrew Club of
-the Year Trophy.
+  Beer may be delivered in person or by parcel carrier to the
+  following cellaring locations beginning Saturday, June 13, 2009.
 </p>
+<div id="contact_list">
+<h3>Cellaring Drop-Off Point A</h3>
+<div class="address">Crown Liquors
+Attn: ISF/BC
+11640 Brooks School Road
+Fishers, Indiana 46031
+(317) 595-5877
+
+Monday through Thursday, 9 to 11 am
+Friday and Saturday, 9 am to midnight
+<em>Deadline for deliveries to this location is midnight Wednesday, June 24.</em></div>
+<h3>Cellaring Drop-Off Point B</h3>
+<div class="address">Lafayette Brewing Company
+622 Main Street
+Lafayette, Indiana 47901
+(765) 742-2591
+
+Monday through Thursday, 11 am to midnight
+Friday and Saturday, 11 am to midnight
+<em>Deadline for deliveries to this location is midnight Wednesday, June 24.</em></div>
+<h3>Main Cellaring Location</h3>
+<div class="address">Sahara Mart East
+2611 East Third Sreet
+Bloomington, Indiana 47401
+(812) 339-6224
+
+Monday through Saturday, 9 am to 9 pm
+Sunday, 10 am to 7 pm
+<em>Deadline for deliveries to this location is 6 pm Thursday, June 25.</em></div>
+</div>
 </div>
 [% PROCESS footer.html -%]
