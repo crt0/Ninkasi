@@ -14,20 +14,27 @@ __PACKAGE__->mk_classdata('_Column_Names');
 __PACKAGE__->mk_classdata('Table_Name');
 __PACKAGE__->mk_classdata('Create_Sql');
 
-sub new {
+sub import {
     my ($class) = @_;
-
-    my $self = [];
 
     my $config = Ninkasi::Config->new();
     my $database_file = $config->database_file();
-    __PACKAGE__->Database_Handle(
-        DBI->connect("dbi:SQLite:dbname=$database_file", '', '',
-                     { RaiseError => 1 })
-    );
+    my $dbh = DBI->connect("dbi:SQLite:dbname=$database_file", '', '',
+                           { RaiseError => 1 });
+    $class->Database_Handle($dbh);
 
-    return bless $self, $class;
+    # create table in case it doesn't already exist
+    my $create_sql = $class->Create_Sql();
+    if ($create_sql) {
+        eval {
+            local $dbh->{PrintError};
+            $dbh->do($create_sql);
+        };
+        die $@ if $@ && $@ !~ /already exists/;
+    }
 }
+
+sub new { bless [], shift }
 
 sub add {
     my ($self, $column) = @_;
@@ -36,7 +43,7 @@ sub add {
     my @column_names = $self->columns_to_update($column);
     my $column_name_list = join ', ', @column_names;
     my $placeholders = join ', ', ('?') x @column_names;
-    my $sth = $self->prepare(<<EOF);
+    my $sth = $self->Database_Handle()->prepare(<<EOF);
 INSERT INTO $table_name ($column_name_list) VALUES ($placeholders)
 EOF
     $sth->execute( @$column{ @column_names } );
@@ -86,29 +93,6 @@ EOF
     $sth->bind_columns( map { \$results{$_} } @columns );
 
     return ( $sth, \%results );
-}
-
-sub prepare {
-    my $self = shift;
-    my $sql  = shift;
-
-    my $dbh = $self->Database_Handle();
-    my $sth;
-    for (;;) {
-        $dbh->{PrintError} = 0;
-        $sth = eval { $dbh->prepare($sql, @_) };
-        $dbh->{PrintError} = 1;
-        if ($@) {
-            if ($@ =~ /no such table/) {
-                $self->create_table();
-                next;
-            }
-            die $@;
-        }
-        last;
-    }
-
-    return $sth;
 }
 
 sub Column_Names {
