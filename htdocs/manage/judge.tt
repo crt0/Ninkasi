@@ -20,12 +20,35 @@ BEGIN {
 }
 
 use CGI;
+use Ninkasi::Category;
 use Ninkasi::Config;
 use Ninkasi::Constraint;
 use Ninkasi::Judge;
 use Ninkasi::JudgeSignup;
 use Ninkasi::Template;
 use URI::Escape ();
+
+# fetch the list of category numbers a judge has been assigned for each flight
+sub fetch_categories {
+    my ($judge_id) = @_;
+
+    # fetch categories this judge has been assigned
+    my $category = Ninkasi::Category->new();
+    my ($sth, $result) = $category->bind_hash( {
+        bind_values => [$judge_id],
+        columns     => [qw/number flight/],
+        order       => 'number',
+        where       => 'judge = ?',
+    } );
+
+    # walk the rows, building a list of category numbers for each flight
+    my @flight = ();
+    while ( $sth->fetch() ) {
+        push @{ $flight[ $result->{flight} ] }, $result->{number};
+    }
+
+    return \@flight;
+}
 
 # generate a comma-separated list of hyperlinked constraints
 sub fetch_constraint_lists {
@@ -83,8 +106,7 @@ sub view_all_judges {
 
     # columns to display
     my @judge_columns = qw/rowid first_name last_name rank flight1 flight2
-                           flight3 flight1_table flight2_table flight3_table
-                           competitions_judged pro_brewer/;
+                           flight3 competitions_judged pro_brewer/;
 
     # select whole table & order by last name
     my $judge = Ninkasi::Judge->new();
@@ -104,6 +126,7 @@ sub view_all_judges {
         fetch_judge => sub {
             return $sth->fetch() && {
                 %$result,
+                fetch_categories => sub { fetch_categories $result->{rowid} },
                 fetch_constraint_lists
                     => sub { fetch_constraint_lists $result->{rowid},
                                                     $format eq 'csv' },
@@ -118,13 +141,25 @@ sub view_all_judges {
     $sth->finish();
 
     # process queue of updates collected while rendering page
-    my $table_name = $judge->Table_Name();
+    my $category = Ninkasi::Category->new();
+    my $table_name = $category->Table_Name();
+    my $dbh = $category->Database_Handle();
     foreach my $update (@update_queue) {
-        my ($judge_id, $flight, $table) = @$update;
-        $sth = $judge->Database_Handle()->prepare(<<EOF);
-UPDATE $table_name SET ${flight}_table = ? WHERE rowid = ?
+        my ($judge_id, $flight_number, $category_numbers) = @$update;
+
+        # remove old categories
+        $dbh->do(<<EOF, {}, $judge_id, $flight_number);
+DELETE FROM $table_name WHERE judge = ? AND flight = ?
 EOF
-        $sth->execute($table, $judge_id);
+
+        # insert new ones
+        foreach my $category_number (split /[^\d]+/, $category_numbers) {
+            $category->add( {
+                flight => $flight_number,
+                judge  => $judge_id,
+                number => $category_number,
+            } );
+        }
     }
 
     return;
