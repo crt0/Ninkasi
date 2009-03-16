@@ -2,7 +2,6 @@ use strict;
 use warnings;
 
 use File::Spec;
-use Smart::Comments;
 
 use lib 'inc';
 use MyBuilder;

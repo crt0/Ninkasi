@@ -7,7 +7,6 @@ use Test::More tests => 28;
 
 use Apache::TestConfig;
 use Ninkasi::Table;
-use Smart::Comments;
 use Test::WWW::Mechanize;
 
 my $test_config = Apache::TestConfig->new();

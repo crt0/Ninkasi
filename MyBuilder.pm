@@ -4,7 +4,6 @@ use strict;
 use warnings;
 
 use File::Spec;
-use Smart::Comments;
 
 BEGIN {
     our @ISA = eval { require Apache::TestMB }

@@ -7,7 +7,6 @@ use base qw/Class::Singleton Template/;
 
 use Class::Singleton;
 use Ninkasi::Config;
-use Smart::Comments;
 
 sub new { shift->instance(@_) }
 

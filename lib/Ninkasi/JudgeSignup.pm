@@ -10,7 +10,6 @@ use Ninkasi::Config;
 use Ninkasi::Constraint;
 use Ninkasi::Judge;
 use Ninkasi::Table;
-use Smart::Comments;
 use Taint::Util;
 
 my @category_names = (

@@ -10,7 +10,6 @@ use Ninkasi::Constraint;
 use Ninkasi::Judge;
 use Ninkasi::JudgeSignup;
 use Ninkasi::Table;
-use Smart::Comments;
 use Test::WWW::Mechanize;
 
 my $config = Apache::TestConfig->new();

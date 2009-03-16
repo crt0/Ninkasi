@@ -7,7 +7,6 @@ use base 'Class::Data::Inheritable';
 
 use DBI;
 use Ninkasi::Config;
-use Smart::Comments;
 
 __PACKAGE__->mk_classdata('Database_Handle');
 __PACKAGE__->mk_classdata('_Column_Names');
