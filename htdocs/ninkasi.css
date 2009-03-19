@@ -291,3 +291,8 @@ strong {
     font-family: sans-serif;
     font-weight: bold;
 }
+
+.image_right {
+    float:   right;
+    padding: 0px 5px;
+}
