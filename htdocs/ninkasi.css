@@ -135,13 +135,6 @@ a:visited {
     text-align: left;
 }
 
-#cup_left {
-    float: left;
-    margin-bottom: 10px;
-    text-align: center;
-    width: 23%;
-}
-
 #title {
     float: left;
     font-family: Cooper Black, serif;
