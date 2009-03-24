@@ -1,6 +1,7 @@
 [% PROCESS "${type}.tt" -%]
 [% PROCESS header
    title = "Brewers$apostrophe Cup Judge Registration Confirmation" -%]
+[% PROCESS navbar -%]
 [% WRAPPER body_text -%]
 [% WRAPPER heading %]Thank you, [% form.first_name | html_entity %]![% END %]
 [% WRAPPER paragraph %]
