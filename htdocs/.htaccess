@@ -1,4 +1,4 @@
-DirectoryIndex index
+DirectoryIndex index index.html
 ErrorDocument  403 /403
 ErrorDocument  404 /404
 ErrorDocument  500 /500
