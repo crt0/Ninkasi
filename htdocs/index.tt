@@ -77,7 +77,9 @@
 <a href="image/boilermaker.jpg">
 <img alt="Blichmann BoilerMaker brew pots"
      class="image_right"
-     src="image/boilermaker_small.jpg" />
+     height="108"
+     src="image/boilermaker_small.jpg"
+     width="159" />
 </a>
 <p>
 As in last year's competition, the Homebrewer of the Year award will
@@ -152,7 +154,9 @@ Sunday, 10 am to 7 pm
 <h2>Shipping Containers</h2>
 <img alt="Clark Brewing Innovations Competition Bottle Shipping System"
      class="image_left"
-     src="image/shipping.jpg" />
+     height="218"
+     src="image/shipping.jpg"
+     width="283" />
 <p>
   Brewers!  Here's a great
   <a href="http://www.clarkbrewing.com/Clark_Brewing_Innovations/Bottle_Shipping_System.html">beer-competition
