@@ -292,6 +292,11 @@ strong {
     font-weight: bold;
 }
 
+.image_left {
+    float:   left;
+    padding-right: 10px;
+}
+
 .image_right {
     float:   right;
     padding: 0px 5px;
