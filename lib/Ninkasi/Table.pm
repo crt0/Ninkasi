@@ -5,6 +5,7 @@ use warnings;
 
 use base 'Class::Data::Inheritable';
 
+use Carp qw/confess/;
 use DBI;
 use Ninkasi::Config;
 
@@ -19,7 +20,8 @@ sub import {
     my $config = Ninkasi::Config->new();
     my $database_file = $config->database_file();
     my $dbh = DBI->connect("dbi:SQLite:dbname=$database_file", '', '',
-                           { RaiseError => 1 });
+                           { HandleError => sub { confess shift },
+                             RaiseError  => 1 });
     $class->Database_Handle($dbh);
 
     # create table in case it doesn't already exist
@@ -66,10 +68,13 @@ sub bind_hash {
     my $table = $self->Table_Name();
 
     # format table list
-    my $table_list = exists $argument->{join}
-                   ? "$table JOIN " . $argument->{join}->Table_Name()
-                   : $table
-                   ;
+    my $table_list = $table;
+    if (exists $argument->{join}) {
+        $table_list = join ' JOIN ', $table,
+            ref $argument->{join}
+                ? map { $_->Table_Name() } @{ $argument->{join} }
+                : $argument->{join}->Table_Name();
+    }
 
     my $sql = <<EOF;
 SELECT $column_list FROM $table_list
