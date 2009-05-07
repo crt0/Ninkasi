@@ -68,12 +68,15 @@ sub bind_hash {
     my $table = $self->Table_Name();
 
     # format table list
-    my $table_list = $table;
+    my $table_list;
     if (exists $argument->{join}) {
         $table_list = join ' JOIN ', $table,
             ref $argument->{join}
                 ? map { $_->Table_Name() } @{ $argument->{join} }
                 : $argument->{join}->Table_Name();
+    }
+    else {
+        $table_list = $table;
     }
 
     my $sql = <<EOF;
