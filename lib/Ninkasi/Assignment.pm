@@ -33,16 +33,13 @@ sub fetch {
     } );
 
     # walk the rows, building a list ordered by flight
-    my @assignment_list = () x 4;
+    my @assignment_list = ('N/A') x 4;
     while ( $sth->fetch() ) {
         my $category = $result->{category};
         my $column_value;
 
-        # treat special category values -1 and 0
-        if ($category == -1) {
-            $column_value = 'N/A';
-        }
-        elsif ($category == 0) {
+        # treat special category value 0
+        if ($category == 0) {
             $column_value = '';
         }
 
@@ -58,8 +55,7 @@ sub fetch {
         $assignment_list[ $result->{flight} ] = $column_value;
     }
 
-    # return 'N/A' for missing rows
-    return [map { defined $_ ? $_ : 'N/A' } @assignment_list];
+    return \@assignment_list;
 }
 
 sub select_assigned_judges {
