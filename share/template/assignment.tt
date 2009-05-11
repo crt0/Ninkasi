@@ -1,0 +1,30 @@
+[% PROCESS "${type}.tt" ~%]
+
+[% BLOCK constraint_header ~%]
+   [% WRAPPER column %]Preference[% END ~%]
+[% END ~%]
+
+[% BLOCK assignment_column ~%]
+   <td>
+   [% IF assignments.$flight ~%]
+      [% assignments.$flight ~%]
+   [% ELSE ~%]
+      <input name="assign" type="checkbox" value="judge[% judge.rowid %],flight[% flight %]" />
+   [% END ~%]
+   </td>
+[% END ~%]
+
+[% BLOCK constraint_columns ~%]
+   [% WRAPPER column %][% constraint_name.${judge.type} %][% END ~%]
+[% END ~%]
+
+[% PROCESS header
+   title = "Category $category.number, $category.name" -%]
+[% PROCESS navbar -%]
+[% WRAPPER body_text ~%]
+   [% fetch_judge = assigned_judges_func() ~%]
+   [% PROCESS assigned_judges_table ~%]
+   [% fetch_judge = unassigned_judges_func() ~%]
+   [% PROCESS unassigned_judges_table ~%]
+[% END ~%]
+[% PROCESS footer -%]
