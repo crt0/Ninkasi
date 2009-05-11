@@ -14,6 +14,7 @@
       | <a href="2007-pb-winners.html">commercial</a>
       | <a href="/photos/2007/">photos</a> ]
     </li>
+    <li><a href="2006-winners.html">2006</a></li>
   </ul>
 </div>
 [% PROCESS footer.html -%]
