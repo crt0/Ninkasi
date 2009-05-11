@@ -6,6 +6,7 @@ use warnings;
 use Data::Dumper;
 use Date::Format qw/time2str/;
 use File::Spec;
+use Ninkasi::Assignment;
 use Ninkasi::Config;
 use Ninkasi::Constraint;
 use Ninkasi::Judge;
@@ -192,6 +193,7 @@ sub store {
     # create judge & constraint objects
     my $judge_table = Ninkasi::Judge->new();
     my $constraint_table = Ninkasi::Constraint->new();
+    my $assignment_table = Ninkasi::Assignment->new();
 
     # get a database handle
     my $dbh = Ninkasi::Table->Database_Handle();
@@ -222,6 +224,16 @@ sub store {
             judge    => $judge_id,
             type     => $Ninkasi::Constraint::NUMBER{$type_name},
         });
+    }
+
+    # create a row for each flight the judge is available
+    while (my ($name, $value) = each %$column) {
+        my ($flight) = $name =~ /^flight(\d+)$/ or next;
+        $assignment_table->add( {
+            category => $value ? 0 : -1,
+            flight   => $flight,
+            judge    => $judge_id,
+        } );
     }
 
     # commit this transaction & re-enable autocommit
