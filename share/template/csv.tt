@@ -38,6 +38,18 @@
 [% content -%]
 [% END ~%]
 
+[% BLOCK assigned_judges_table -%]
+[% PROCESS judges_table.tt -%]
+[% END ~%]
+
+[% BLOCK available_judges_table %][% END ~%]
+
+[% BLOCK all_judges_table ~%]   
+   [% PROCESS judges_table.tt ~%]
+[% END ~%]
+
 [% BLOCK header %][% END ~%]
+
+[% BLOCK navbar %][% END ~%]
 
 [% BLOCK footer %][% END ~%]
