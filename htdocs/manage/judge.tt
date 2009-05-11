@@ -20,6 +20,7 @@ BEGIN {
 }
 
 use CGI;
+use Ninkasi::Assignment;
 use Ninkasi::Category;
 use Ninkasi::Config;
 use Ninkasi::Constraint;
@@ -91,7 +92,7 @@ sub fetch_constraint_lists {
             my @categories = @{ $constraint{$_} || [] };
             if (!$suppress_hyperlinks) {
                 @categories
-                    = map { qq{<a href="../style/$_">$_</a>} }
+                    = map { qq{<a href="../assignment/$_">$_</a>} }
                           @categories;
             }
 
@@ -105,8 +106,8 @@ sub view_all_judges {
     my ($cgi_object, $format) = @_;
 
     # columns to display
-    my @judge_columns = qw/rowid first_name last_name rank flight1 flight2
-                           flight3 competitions_judged pro_brewer/;
+    my @judge_columns = qw/rowid first_name last_name rank competitions_judged
+                           pro_brewer/;
 
     # select whole table & order by last name
     my $judge = Ninkasi::Judge->new();
@@ -126,6 +127,10 @@ sub view_all_judges {
         fetch_judge => sub {
             return $sth->fetch() && {
                 %$result,
+                fetch_assignments => sub {
+                    Ninkasi::Assignment::fetch $result->{rowid},
+                          $format eq 'csv';
+                },
                 fetch_categories => sub { fetch_categories $result->{rowid} },
                 fetch_constraint_lists
                     => sub { fetch_constraint_lists $result->{rowid},
