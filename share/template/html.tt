@@ -52,33 +52,51 @@
 [% END -%]
 [% END ~%]
 
-[% BLOCK table -%]
-[% IF category -%]
-<p>
-Category [% category.number %]. [% category.name %]
-[<a href="../style/[% category.number %]?format=csv">CSV</a>]
-</p>
-[% ELSE -%]
-<p>
-All Registered Judges [<a href="?format=csv">CSV</a>]
-</p>
-[% END -%]
+[% BLOCK assignment_table -%]
 <form method="post">
+[% PROCESS judges_table.tt -%]
+<input name="save" type="submit" value="Save" />
+</form>
+[% END ~%]
+
+[% BLOCK table -%]
 <table cellspacing="0" class="view">
 [% content -%]
 </table>
 <p>
-  [% row %] [% IF row == 1 %]judge is[% ELSE %]judges are[% END %]
-  [% IF category %]available for this style[% ELSE %]registered[% END %].
+  [% row %] [% IF row == 1 %]judge[% ELSE %]judges[% END %].
 </p>
-<input name="save" type="submit" value="Save" />
-</form>
+[% END ~%]
+
+[% BLOCK assigned_judges_table -%]
+<p>
+Judges assigned to Category [% category.number %], [% category.name %]
+[<a href="../style/[% category.number %]?format=csv">csv</a>]:
+</p>
+[% PROCESS assignment_table -%]
+[% END ~%]
+
+[% BLOCK unassigned_judges_table -%]
+<p>
+Judges available for Category [% category.number %], [% category.name %]:
+</p>
+[% PROCESS assignment_table -%]
 [% END ~%]
 
 [% BLOCK body_text -%]
 <div id="body_text">
 [% content -%]
 </div>
+[% END ~%]
+
+[% BLOCK all_judges_table ~%]   
+   [% WRAPPER body_text ~%]
+      <p>
+      All registered judges
+      [<a href="../judge/[% category.number %]?format=csv">csv</a>]:
+      </p>
+      [% PROCESS judges_table.tt ~%]
+   [% END ~%]
 [% END ~%]
 
 [% BLOCK thead -%]
