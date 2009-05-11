@@ -24,6 +24,12 @@ sub import {
                              RaiseError  => 1 });
     $class->Database_Handle($dbh);
 
+    # enable tracing during testing
+    if ( $ENV{NINKASI_TEST_SERVER_ROOT} ) {
+        $dbh->trace( 1, File::Spec->catfile($ENV{NINKASI_TEST_SERVER_ROOT},
+                                            'dbi.log') );
+    }
+
     # create table in case it doesn't already exist
     my $create_sql = $class->Create_Sql();
     if ($create_sql) {
@@ -69,6 +75,7 @@ sub bind_hash {
 
     # format table list
     my $table_list;
+    my $dbh = $self->Database_Handle();
     if (exists $argument->{join}) {
         $table_list = join ' JOIN ', $table,
             ref $argument->{join}
