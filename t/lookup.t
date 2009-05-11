@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 28;
+use Test::More tests => 24;
 
 use Apache::TestConfig;
 use Ninkasi::Table;
@@ -168,48 +168,42 @@ $mech->content_like(
        </a>\s+
        </td>\s+
        <td>Certified</td>\s+
-       <td>\s+
-       <input\ name="judge4_flight1_old"\ type="hidden"\ value=""\ />\s+
-       <input\ name="judge4_flight1"\ size="5"\ value=""\ />\s+
-       </td>\s+
+       <td></td>\s+
        <td>N/A</td>\s+
-       <td>\s+
-       <input\ name="judge4_flight3_old"\ type="hidden"\ value=""\ />\s+
-       <input\ name="judge4_flight3"\ size="5"\ value=""\ />\s+
-       </td>\s+
+       <td></td>\s+
        <td>10</td>\s+
        <td>N</td>\s+
-       <td><a\ href="../style/8">8</a>,\s+
-       <a\ href="../style/10">10</a>,\s+
-       <a\ href="../style/15">15</a>,\s+
-       <a\ href="../style/21">21</a></td>\s+
-       <td><a\ href="../style/20">20</a></td>\s+
-       <td><a\ href="../style/1">1</a>,\s+
-       <a\ href="../style/3">3</a>,\s+
-       <a\ href="../style/4">4</a>,\s+
-       <a\ href="../style/5">5</a>,\s+
-       <a\ href="../style/6">6</a>,\s+
-       <a\ href="../style/7">7</a>,\s+
-       <a\ href="../style/9">9</a>,\s+
-       <a\ href="../style/11">11</a>,\s+
-       <a\ href="../style/12">12</a>,\s+
-       <a\ href="../style/13">13</a>,\s+
-       <a\ href="../style/14">14</a>,\s+
-       <a\ href="../style/16">16</a>,\s+
-       <a\ href="../style/17">17</a>,\s+
-       <a\ href="../style/18">18</a>,\s+
-       <a\ href="../style/19">19</a>,\s+
-       <a\ href="../style/22">22</a>,\s+
-       <a\ href="../style/23">23</a>,\s+
-       <a\ href="../style/24">24</a></td>\s+
-       <td><a\ href="../style/2">2</a></td>}msx
+       <td><a\ href="../assignment/8">8</a>,\s+
+       <a\ href="../assignment/10">10</a>,\s+
+       <a\ href="../assignment/15">15</a>,\s+
+       <a\ href="../assignment/21">21</a></td>\s+
+       <td><a\ href="../assignment/20">20</a></td>\s+
+       <td><a\ href="../assignment/1">1</a>,\s+
+       <a\ href="../assignment/3">3</a>,\s+
+       <a\ href="../assignment/4">4</a>,\s+
+       <a\ href="../assignment/5">5</a>,\s+
+       <a\ href="../assignment/6">6</a>,\s+
+       <a\ href="../assignment/7">7</a>,\s+
+       <a\ href="../assignment/9">9</a>,\s+
+       <a\ href="../assignment/11">11</a>,\s+
+       <a\ href="../assignment/12">12</a>,\s+
+       <a\ href="../assignment/13">13</a>,\s+
+       <a\ href="../assignment/14">14</a>,\s+
+       <a\ href="../assignment/16">16</a>,\s+
+       <a\ href="../assignment/17">17</a>,\s+
+       <a\ href="../assignment/18">18</a>,\s+
+       <a\ href="../assignment/19">19</a>,\s+
+       <a\ href="../assignment/22">22</a>,\s+
+       <a\ href="../assignment/23">23</a>,\s+
+       <a\ href="../assignment/24">24</a></td>\s+
+       <td><a\ href="../assignment/2">2</a></td>}msx
 );
 $mech->content_like( qr{<title>Registered Judges</title>} );
 
 # test CSV format for view of all judges
-$mech->follow_link_ok( { text_regex => qr/CSV/ } );
+$mech->follow_link_ok( { text_regex => qr/csv/ } );
 $mech->content_is(<<EOF);
-"Name","Rank","Fri. PM?","Sat. AM?","Sat. PM?","Comps Judged","Pro Brewer?","Entries","Prefers Not","Whatever","Prefers"
+"Name","Rank","Fri. PM","Sat. AM","Sat. PM","Comps Judged","Pro Brewer?","Entries","Prefers Not","Whatever","Prefers"
 "Carrera, Lyndsey","Certified","","N/A","","10","N","8, 10, 15, 21","20","1, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 16, 17, 18, 19, 22, 23, 24","2"
 "Mayers, Liam","Novice","","","","2","Y","","","1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24",""
 "Reynoso, Greggory","Certified","","N/A","","10","N","8, 10, 15, 21","20","1, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 16, 17, 18, 19, 22, 23, 24","2"
@@ -269,7 +263,7 @@ $mech->content_like( qr{<h2>Angelina |&lt;iefer</h2>} );
 $mech->content_like( qr{<title>Angelina |&lt;iefer</title>} );
 
 # test category view
-$lookup_url = "$url_base/manage/style/8";
+$lookup_url = "$url_base/manage/assignment/8";
 $mech->get_ok($lookup_url);
 $mech->content_like(
     qr{<a\ href="\d+">\s+
@@ -278,38 +272,16 @@ $mech->content_like(
        </td>\s+
        <td>Novice</td>\s+
        <td>\s+
-       <input\ name="judge2_flight1_old"\ type="hidden"\ value=""\ />\s+
-       <input\ name="judge2_flight1"\ size="5"\ value=""\ />\s+
+       <input\ name="assign"\ type="checkbox"\ value="judge2,flight1"\ />\s+
        </td>\s+
        <td>\s+
-       <input\ name="judge2_flight2_old"\ type="hidden"\ value=""\ />\s+
-       <input\ name="judge2_flight2"\ size="5"\ value=""\ />\s+
+       <input\ name="assign"\ type="checkbox"\ value="judge2,flight2"\ />\s+
        </td>\s+
        <td>\s+
-       <input\ name="judge2_flight3_old"\ type="hidden"\ value=""\ />\s+
-       <input\ name="judge2_flight3"\ size="5"\ value=""\ />\s+
+       <input\ name="assign"\ type="checkbox"\ value="judge2,flight3"\ />\s+
        </td>\s+
        <td>2</td>\s+
        <td>Y</td>\s+
        <td>whatever</td>}msx
 );
 $mech->content_like( qr{<title>Category 8. English Pale Ale</title>} );
-
-# test CSV format for style with one judge
-$mech->follow_link_ok( { text_regex => qr/CSV/ } );
-$mech->content_is(<<EOF);
-"Name","Rank","Fri. PM?","Sat. AM?","Sat. PM?","Comps Judged","Pro Brewer?","Preference"
-"Mayers, Liam","Novice","","","","2","Y","whatever"
-EOF
-
-# test CSV format for style with multiple judges
-$lookup_url = "$url_base/manage/style/1?format=csv";
-$mech->get_ok($lookup_url);
-$mech->content_is(<<EOF);
-"Name","Rank","Fri. PM?","Sat. AM?","Sat. PM?","Comps Judged","Pro Brewer?","Preference"
-"Underhill, Leann","Certified","","N/A","","10","N","whatever"
-"Reynoso, Greggory","Certified","","N/A","","10","N","whatever"
-"|&lt;iefer, Angelina","Certified","","N/A","","10","N","whatever"
-"Carrera, Lyndsey","Certified","","N/A","","10","N","whatever"
-"Mayers, Liam","Novice","","","","2","Y","whatever"
-EOF
