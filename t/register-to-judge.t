@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 130;
+use Test::More tests => 136;
 
 use Apache::TestConfig;
 use Ninkasi::Constraint;
@@ -21,6 +21,7 @@ eval {
     $dbh->{PrintError} = 0;
     $dbh->do('DELETE FROM judge'       );
     $dbh->do("DELETE FROM 'constraint'");
+    $dbh->do("DELETE FROM assignment");
     $dbh->{PrintError} = 1;
 };
 
@@ -44,7 +45,13 @@ my $rowid = $judge->add( {
         state               => '--',
         zip                 => '12345',
 } );
-ok $rowid == 1;
+is $rowid, 1;
+
+my $assignment = Ninkasi::Assignment->new();
+ok $assignment;
+
+ok $assignment->add( {category => 0, flight => 1, judge => 1} );
+ok $assignment->add( {category => 0, flight => 3, judge => 1} );
 
 my $mech = Test::WWW::Mechanize->new();
 $mech->get_ok($form_url);
@@ -121,6 +128,26 @@ $mech->content_is(<<'EOF');
 <h1><a href="/">The Brewers&#8217; Cup Competition</a></h1>
 <h2><a href="http://www.in.gov/statefair/">Indiana State Fair</a></h2>
 </div>
+<div id="navigation_bar_horizontal">
+<a accesskey="h" href="/">Home</a>
+| <a accesskey="e" href="enter">Enter</a>
+| <a accesskey="j" href="judge">Judge</a>
+| <a accesskey="m" href="maps">Maps</a>
+| <a accesskey="r" href="results">Results</a>
+| <a accesskey="n" href="newsletter">Newsletter</a>
+| <a accesskey="c" href="contacts">Contacts</a>
+</div>
+<form action="http://www.google.com/cse" id="cse-search-box">
+  <div>
+    <input type="hidden" name="cx" value="004596647214513492520:lcp17p0a-fw" />
+    <input type="hidden" name="ie" value="UTF-8" />
+    <input accesskey="s" type="text" name="q" />
+    <input type="submit" name="sa" value="Search" />
+  </div>
+</form>
+<script type="text/javascript"
+        src="http://www.google.com/coop/cse/brand?form=cse-search-box&amp;lang=en">
+</script>
 <div id="body_text">
 <h2>Thank you, Andrew!</h2>
 <p>
@@ -328,14 +355,11 @@ $mech->content_like(qr{name="zip"\s+
 is(Ninkasi::Judge->Table_Name(),      'judge'       );
 is(Ninkasi::Constraint->Table_Name(), "'constraint'");
 
-$judge = Ninkasi::Judge->new();
-ok $judge;
-
 my ($sth, $result) = $judge->bind_hash(
     {
         columns     => [ qw/address bjcp_id city competitions_judged email
-                            first_name flight1 flight2 flight3 rowid last_name
-                            phone_day phone_evening rank state zip/ ],
+                            first_name rowid last_name phone_day phone_evening
+                            rank state zip/ ],
         where       => 'email = ?',
         bind_values => [ qw/ninkasi@ajk.name/ ],
     }
@@ -352,8 +376,6 @@ is $result->{ city                }, 'Springfield'      ;
 is $result->{ competitions_judged }, 10                 ;
 is $result->{ email               }, 'ninkasi@ajk.name' ;
 is $result->{ first_name          }, 'Andrew'           ;
-is $result->{ flight1             }, 1                  ;
-is $result->{ flight3             }, 1                  ;
 is $result->{ last_name           }, 'Korty'            ;
 is $result->{ phone_day           }, '123-456-7890'     ;
 is $result->{ phone_evening       }, '123-456-7890'     ;
@@ -361,7 +383,22 @@ is $result->{ rank                }, 50                 ;
 is $result->{ state               }, '--'               ;
 is $result->{ zip                 }, 12345              ;
 
-ok !$result->{flight2};
+($sth, $result) = $assignment->bind_hash( {
+    bind_values => [$judge_id],
+    columns     => [qw/category flight/],
+    order       => 'flight',
+    where       => 'judge = ?',
+} );
+
+ok $sth->fetch();
+is $result->{flight  }, 1;
+is $result->{category}, 0;
+
+ok $sth->fetch();
+is $result->{flight  }, 3;
+is $result->{category}, 0;
+
+ok !$sth->fetch();
 
 my $constraint = Ninkasi::Constraint->new();
 ok $constraint;
