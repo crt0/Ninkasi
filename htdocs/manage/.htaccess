@@ -3,7 +3,7 @@ AuthName     "Brewers Cup"
 AuthType     Basic
 AuthUserFile /home/httpd/vhosts/brewerscup.org/share/ninkasi/htpasswd
 Order        Allow,Deny
-Require user ajk anita
+Require user ajk anita tom
 Satisfy      any
 
 Options ExecCGI SymLinksIfOwnerMatch
