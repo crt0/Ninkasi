@@ -25,9 +25,7 @@
 [% END ~%]
 
 [% BLOCK body_text -%]
-<div id="body_text">
 [% content -%]
-</div>
 [% END ~%]
 
 [% BLOCK thead -%]
