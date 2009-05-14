@@ -128,8 +128,7 @@ sub view_all_judges {
             return $sth->fetch() && {
                 %$result,
                 fetch_assignments => sub {
-                    Ninkasi::Assignment::fetch $result->{rowid},
-                          $format eq 'csv';
+                    Ninkasi::Assignment::fetch $result->{rowid};
                 },
                 fetch_categories => sub { fetch_categories $result->{rowid} },
                 fetch_constraint_lists
