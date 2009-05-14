@@ -92,7 +92,7 @@ sub fetch_constraint_lists {
             my @categories = @{ $constraint{$_} || [] };
             if (!$suppress_hyperlinks) {
                 @categories
-                    = map { qq{<a href="../assignment/$_">$_</a>} }
+                    = map { qq{<a href="/manage/assignment/$_">$_</a>} }
                           @categories;
             }
 

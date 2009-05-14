@@ -130,12 +130,12 @@ $mech->content_is(<<'EOF');
 </div>
 <div id="navigation_bar_horizontal">
 <a accesskey="h" href="/">Home</a>
-| <a accesskey="e" href="enter">Enter</a>
-| <a accesskey="j" href="judge">Judge</a>
-| <a accesskey="m" href="maps">Maps</a>
-| <a accesskey="r" href="results">Results</a>
-| <a accesskey="n" href="newsletter">Newsletter</a>
-| <a accesskey="c" href="contacts">Contacts</a>
+| <a accesskey="e" href="/enter">Enter</a>
+| <a accesskey="j" href="/judge">Judge</a>
+| <a accesskey="m" href="/maps">Maps</a>
+| <a accesskey="r" href="/results">Results</a>
+| <a accesskey="n" href="/newsletter">Newsletter</a>
+| <a accesskey="c" href="/contacts">Contacts</a>
 </div>
 <form action="http://www.google.com/cse" id="cse-search-box">
   <div>

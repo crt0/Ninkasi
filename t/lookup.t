@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 30;
+use Test::More tests => 32;
 
 use Apache::TestConfig;
 use Ninkasi::Table;
@@ -174,32 +174,34 @@ $mech->content_like(
        <td></td>\s+
        <td>10</td>\s+
        <td>N</td>\s+
-       <td><a\ href="../assignment/8">8</a>,\s+
-       <a\ href="../assignment/10">10</a>,\s+
-       <a\ href="../assignment/15">15</a>,\s+
-       <a\ href="../assignment/21">21</a></td>\s+
-       <td><a\ href="../assignment/20">20</a></td>\s+
-       <td><a\ href="../assignment/1">1</a>,\s+
-       <a\ href="../assignment/3">3</a>,\s+
-       <a\ href="../assignment/4">4</a>,\s+
-       <a\ href="../assignment/5">5</a>,\s+
-       <a\ href="../assignment/6">6</a>,\s+
-       <a\ href="../assignment/7">7</a>,\s+
-       <a\ href="../assignment/9">9</a>,\s+
-       <a\ href="../assignment/11">11</a>,\s+
-       <a\ href="../assignment/12">12</a>,\s+
-       <a\ href="../assignment/13">13</a>,\s+
-       <a\ href="../assignment/14">14</a>,\s+
-       <a\ href="../assignment/16">16</a>,\s+
-       <a\ href="../assignment/17">17</a>,\s+
-       <a\ href="../assignment/18">18</a>,\s+
-       <a\ href="../assignment/19">19</a>,\s+
-       <a\ href="../assignment/22">22</a>,\s+
-       <a\ href="../assignment/23">23</a>,\s+
-       <a\ href="../assignment/24">24</a></td>\s+
-       <td><a\ href="../assignment/2">2</a></td>}msx
+       <td><a\ href="/manage/assignment/8">8</a>,\s+
+       <a\ href="/manage/assignment/10">10</a>,\s+
+       <a\ href="/manage/assignment/15">15</a>,\s+
+       <a\ href="/manage/assignment/21">21</a></td>\s+
+       <td><a\ href="/manage/assignment/20">20</a></td>\s+
+       <td><a\ href="/manage/assignment/1">1</a>,\s+
+       <a\ href="/manage/assignment/3">3</a>,\s+
+       <a\ href="/manage/assignment/4">4</a>,\s+
+       <a\ href="/manage/assignment/5">5</a>,\s+
+       <a\ href="/manage/assignment/6">6</a>,\s+
+       <a\ href="/manage/assignment/7">7</a>,\s+
+       <a\ href="/manage/assignment/9">9</a>,\s+
+       <a\ href="/manage/assignment/11">11</a>,\s+
+       <a\ href="/manage/assignment/12">12</a>,\s+
+       <a\ href="/manage/assignment/13">13</a>,\s+
+       <a\ href="/manage/assignment/14">14</a>,\s+
+       <a\ href="/manage/assignment/16">16</a>,\s+
+       <a\ href="/manage/assignment/17">17</a>,\s+
+       <a\ href="/manage/assignment/18">18</a>,\s+
+       <a\ href="/manage/assignment/19">19</a>,\s+
+       <a\ href="/manage/assignment/22">22</a>,\s+
+       <a\ href="/manage/assignment/23">23</a>,\s+
+       <a\ href="/manage/assignment/24">24</a></td>\s+
+       <td><a\ href="/manage/assignment/2">2</a></td>}msx
 );
 $mech->content_like( qr{<title>Registered Judges</title>} );
+$mech->html_lint_ok('HTML validation');
+$mech->page_links_ok('check all links');
 
 # test CSV format for view of all judges
 $mech->follow_link_ok( { text_regex => qr/csv/ } );

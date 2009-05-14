@@ -6,7 +6,7 @@
 
 [% BLOCK assignment_link ~%]
    [% IF assignments.$flight != 'N/A' ~%]
-      <a href="../assignment/[% assignments.$flight %]">
+      <a href="/manage/assignment/[% assignments.$flight %]">
    [% END ~%]
    [% assignments.$flight ~%]
    [% IF assignments.$flight != 'N/A' ~%]

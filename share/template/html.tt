@@ -73,7 +73,7 @@
 [% BLOCK assigned_judges_table -%]
 <p>
 Judges assigned to Category [% category.number %], [% category.name %]
-[<a href="../style/[% category.number %]?format=csv">csv</a>]:
+[<a href="/manage/assignment/[% category.number %]?format=csv">csv</a>]:
 </p>
 [% PROCESS assignment_table -%]
 [% END ~%]
@@ -95,7 +95,7 @@ Judges available for Category [% category.number %], [% category.name %]:
    [% WRAPPER body_text ~%]
       <p>
       All registered judges
-      [<a href="../judge/[% category.number %]?format=csv">csv</a>]:
+      [<a href="/manage/judge/[% category.number %]?format=csv">csv</a>]:
       </p>
       [% PROCESS judges_table.tt ~%]
    [% END ~%]
