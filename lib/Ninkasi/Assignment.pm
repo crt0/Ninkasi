@@ -160,11 +160,15 @@ sub render_page {
         update_assignment [ $unassign ], 0;
     }
 
+    # escape HTML but not for CSV output
+    my $escape_html = sub { $format eq 'csv' ? sub { shift } : 'html_entity' };
+
     # process the template, passing it a function to fetch judge data
     $template_object->process( 'assignment.tt', {
         assigned_judges_func   => sub { select_assigned_judges $category },
         category               => $category,
         constraint_name        => \%Ninkasi::Constraint::NAME,
+        escape_html            => $escape_html,
         escape_quotes          => sub { \&escape_quotes },
         fetch_constraint       => \&Ninkasi::Constraint::fetch,
         rank_name              => \%Ninkasi::Judge::NAME,
