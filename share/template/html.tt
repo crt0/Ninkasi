@@ -53,9 +53,11 @@
 [% END ~%]
 
 [% BLOCK assignment_table -%]
-<form method="post">
+<form method="get">
 [% PROCESS judges_table.tt -%]
-<input name="save" type="submit" value="Save" />
+[% IF row ~%]
+<input name="save" type="submit" value="[% button_value %]" />
+[% END ~%]
 </form>
 [% END ~%]
 

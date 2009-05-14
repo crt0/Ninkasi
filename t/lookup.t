@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 24;
+use Test::More tests => 30;
 
 use Apache::TestConfig;
 use Ninkasi::Table;
@@ -19,6 +19,7 @@ eval {
     $dbh->do('DELETE FROM judge'       );
     $dbh->do('DELETE FROM category'    );
     $dbh->do("DELETE FROM 'constraint'");
+    $dbh->do("DELETE FROM assignment");
     $dbh->{PrintError} = 1;
 };
 
@@ -44,7 +45,7 @@ $mech->submit_form_ok( {
         email2              => 'ninkasi@ajk.name',
         first_name          => 'Leann',
         flight1             => 1,
-        flight3             => 1,
+        flight2             => 1,
         last_name           => 'Underhill',
         phone_day           => '628-268-5498',
         phone_evening       => '628-803-9648',
@@ -207,7 +208,7 @@ $mech->content_is(<<EOF);
 "Carrera, Lyndsey","Certified","","N/A","","10","N","8, 10, 15, 21","20","1, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 16, 17, 18, 19, 22, 23, 24","2"
 "Mayers, Liam","Novice","","","","2","Y","","","1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24",""
 "Reynoso, Greggory","Certified","","N/A","","10","N","8, 10, 15, 21","20","1, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 16, 17, 18, 19, 22, 23, 24","2"
-"Underhill, Leann","Certified","","N/A","","10","N","8, 10, 15, 21","20","1, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 16, 17, 18, 19, 22, 23, 24","2"
+"Underhill, Leann","Certified","","","N/A","10","N","8, 10, 15, 21","20","1, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 16, 17, 18, 19, 22, 23, 24","2"
 "|&lt;iefer, Angelina","Certified","","N/A","","10","N","8, 10, 15, 21","20","1, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 16, 17, 18, 19, 22, 23, 24","2"
 EOF
 
@@ -272,16 +273,116 @@ $mech->content_like(
        </td>\s+
        <td>Novice</td>\s+
        <td>\s+
-       <input\ name="assign"\ type="checkbox"\ value="judge2,flight1"\ />\s+
+       <input\ name="assign"\s+
+               type="checkbox"\s+
+               value="judge-2_flight-1"\ />\s+
        </td>\s+
        <td>\s+
-       <input\ name="assign"\ type="checkbox"\ value="judge2,flight2"\ />\s+
+       <input\ name="assign"\s+
+               type="checkbox"\s+
+               value="judge-2_flight-2"\ />\s+
        </td>\s+
        <td>\s+
-       <input\ name="assign"\ type="checkbox"\ value="judge2,flight3"\ />\s+
+       <input\ name="assign"\s+
+               type="checkbox"\s+
+               value="judge-2_flight-3"\ />\s+
        </td>\s+
        <td>2</td>\s+
        <td>Y</td>\s+
        <td>whatever</td>}msx
 );
 $mech->content_like( qr{<title>Category 8. English Pale Ale</title>} );
+
+# test assignment
+$mech->submit_form_ok( {
+    with_fields => { assign => ['judge-2_flight-3', 3] },
+} );
+$mech->content_like(
+    qr{<a\ href="\d+">\s+
+       Mayers,\ Liam\s+
+       </a>\s+
+       </td>\s+
+       <td>Novice</td>\s+
+       <td>\s+
+       </td>\s+
+       <td>\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="unassign"\s+
+               type="checkbox"\s+
+               value="judge-2_flight-3"\ />\s+
+       </td>\s+
+       <td>2</td>\s+
+       <td>Y</td>\s+
+       <td>whatever</td>}msx
+);
+$mech->content_unlike(
+    qr{<a\ href="\d+">\s+
+       Mayers,\ Liam\s+
+       </a>\s+
+       </td>\s+
+       <td>Novice</td>\s+
+       <td>\s+
+       <input\ name="assign"\s+
+               type="checkbox"\s+
+               value="judge-2_flight-1"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="assign"\s+
+               type="checkbox"\s+
+               value="judge-2_flight-2"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="assign"\s+
+               type="checkbox"\s+
+               value="judge-2_flight-3"\ />\s+
+       </td>\s+
+       <td>2</td>\s+
+       <td>Y</td>\s+
+       <td>whatever</td>}msx
+);
+
+# test unassignment
+$mech->submit_form_ok( { with_fields => { unassign => 'judge-2_flight-3' } } );
+$mech->content_like(
+    qr{<a\ href="\d+">\s+
+       Mayers,\ Liam\s+
+       </a>\s+
+       </td>\s+
+       <td>Novice</td>\s+
+       <td>\s+
+       <input\ name="assign"\s+
+               type="checkbox"\s+
+               value="judge-2_flight-1"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="assign"\s+
+               type="checkbox"\s+
+               value="judge-2_flight-2"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="assign"\s+
+               type="checkbox"\s+
+               value="judge-2_flight-3"\ />\s+
+       </td>\s+
+       <td>2</td>\s+
+       <td>Y</td>\s+
+       <td>whatever</td>}msx
+);
+$mech->content_unlike(
+    qr{<a\ href="\d+">\s+
+       Mayers,\ Liam\s+
+       </a>\s+
+       </td>\s+
+       <td>Novice</td>\s+
+       <td>\s+</td>\s+
+       <td>\s+</td>\s+
+       <td>\s+
+       <input\ name="unassign"\s+
+               type="checkbox"\s+
+               value="judge-2_flight-3"\ />\s+
+       </td>\s+
+       <td>2</td>\s+
+       <td>Y</td>\s+
+       <td>whatever</td>}msx
+);

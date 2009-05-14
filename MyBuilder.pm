@@ -36,7 +36,6 @@ sub find_tt_files {
     my ($self) = @_;
 
     my %tt_files = (
-        %{ $self->_find_file_by_type('tt', 'cgi'   ) },
         %{ $self->_find_file_by_type('tt', 'htdocs') },
         %{ $self->_find_file_by_type('tt', 'lib'   ) },
     );

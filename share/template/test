@@ -9,7 +9,7 @@ MAIN: {
     my $template = Template->new( {
         INCLUDE_PATH => '.',
     } );
-    $template->process('confirmation.tt', {
+    $template->process('assignment.tt', {
         form => {
             first_name => 'Andrew',
             last_name  => 'Korty',

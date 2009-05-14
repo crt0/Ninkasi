@@ -1,0 +1,10 @@
+[% BLOCK assignment_column ~%]
+   <td>
+   [% IF assignments.$flight ~%]
+      [% PROCESS assignment_link ~%]
+   [% ELSE ~%]
+      [% PROCESS assignment_checkbox checkbox_name = 'assign' ~%]
+   [% END ~%]
+   </td>
+[% END ~%]
+

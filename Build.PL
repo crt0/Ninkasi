@@ -7,7 +7,6 @@ use lib 'inc';
 use MyBuilder;
 
 our %RELPATH = (
-    cgi    => 'cgi-bin',
     htdocs => 'httpdocs',
     share  => File::Spec->catfile(qw/share ninkasi/),
 );
