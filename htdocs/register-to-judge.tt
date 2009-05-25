@@ -20,57 +20,9 @@ BEGIN {
 }
 
 use Ninkasi::CGI;
-use Ninkasi::Config;
-use Ninkasi::Judge;
-use Ninkasi::JudgeSignup;
-use Ninkasi::Template;
+use Ninkasi::Register;
 
 MAIN: {
-    my $cgi_object = Ninkasi::CGI->new();
-    my $cgi_param = $cgi_object->Vars();
-
-    my $template_name = 'judge_form.html';
-    my %template_variable = (
-        categories => \@Ninkasi::JudgeSignup::CATEGORIES,
-        form       => $cgi_param,
-        ranks      => \@Ninkasi::Judge::RANKS,
-    );
-    if (%$cgi_param) {
-        eval { Ninkasi::JudgeSignup::store $cgi_param };
-        if ($@) {
-            if (ref $@) {
-                $template_variable{user_errors} = $@->{messages};
-                $template_variable{error_field} = $@->{field   };
-            }
-            else {
-                my $error_message = $@;
-                $template_variable{system_error} = $error_message;
-                eval {
-                    Ninkasi::JudgeSignup::alert_maintainer $error_message,
-                                                           $cgi_param;
-                };
-                if ($@) {
-                    warn $@;
-                }
-            }
-        }
-        else {
-            $template_name = 'confirmation.tt';
-            $template_variable{type} = 'html';
-
-            my $config = Ninkasi::Config->new();
-            # if ( !$config->testing() ) {
-            eval {
-                Ninkasi::JudgeSignup::mail_confirmation $cgi_param;
-            };
-            if ($@) {
-                warn $@;
-            }
-            # }
-        }
-    }
-
-    my $template_object = Ninkasi::Template->new();
-    $template_object->process($template_name, \%template_variable)
-        or warn $template_object->error();
+    Ninkasi::Register->render_page( Ninkasi::CGI->new() );
+    exit;
 }

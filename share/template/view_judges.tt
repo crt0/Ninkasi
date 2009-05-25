@@ -10,16 +10,18 @@
 [% END ~%]
 
 [% BLOCK assignment_column ~%]
-   [% WRAPPER column %][% assignments.$flight %][% END ~%]
+   [% WRAPPER column %][% assignments.$session %][% END ~%]
 [% END ~%]
 
 [% BLOCK constraint_columns ~%]
-   [% constraint_list = judge.fetch_constraint_lists() ~%]
-   [% FOREACH constraint IN [ 'entry', 'prefer not', 'whatever',
-                              'prefer' ] ~%]
-      [% WRAPPER column ~%]
-         [% constraint_list.$constraint ~%]
+   [% constraint = judge.fetch_constraints() ~%]
+   [% FOREACH type IN [ 'entry', 'prefer not', 'whatever', 'prefer' ] ~%]
+      [% categories = [] ~%]
+      [% FOREACH category IN constraint.$type ~%]
+         [% formatted_category = WRAPPER category_link; category; END ~%]
+         [% categories.push(formatted_category) ~%]
       [% END ~%]
+      [% WRAPPER column; categories.grep('[1-9][0-9]*').join(', '); END ~%]
    [% END ~%]
 [% END ~%]
 

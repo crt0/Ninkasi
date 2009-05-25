@@ -2,7 +2,7 @@
     form.bjcp_id             = 'none'
     form.competitions_judged = 0
 -%]
-[% flight_name = [
+[% session_name = [
        'none',
        'Friday evening',
        'Saturday morning',
@@ -170,18 +170,18 @@ Online judge registration will be closed on or around July 5, 2008.
 	to judge:
       </td>
       <td>
-        [% FOREACH flight IN [ 1, 2, 3 ] %]
-        [% flight_param = "flight$flight" %]
+        [% FOREACH session IN [ 1, 2, 3 ] %]
+        [% session_param = "session$session" %]
         <div>
-          [% mark_field("$flight_param") %]
+          [% mark_field("$session_param") %]
           <input
-             [% IF form.$flight_param %]
+             [% IF form.$session_param %]
              checked="checked"
              [% END %]
-             name="flight[% flight %]"
+             name="session[% session %]"
              type="checkbox"
              value="1">
-          [% flight_name.$flight %]
+          [% session_name.$session %]
         </div>
         [% END %]
       </td>
@@ -235,7 +235,7 @@ Online judge registration will be closed on or around July 5, 2008.
       <th>entry</th>
       <th>whatever</th>
     </tr>
-    [% FOREACH category IN categories -%]
+    [% FOREACH category IN categories.slice(1,) -%]
     [% field_name = category.field_name -%]
     [% IF category.number == 13 -%]
     <tr>

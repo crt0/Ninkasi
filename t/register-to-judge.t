@@ -36,8 +36,8 @@ my $rowid = $judge->add( {
         email1              => 'ninkasi@ajk.name',
         email2              => 'ninkasi@ajk.name',
         first_name          => 'Lance',
-        flight1             => 1,
-        flight3             => 1,
+        session1             => 1,
+        session3             => 1,
         last_name           => 'Uppercut',
         phone_day           => '123-456-7890',
         phone_evening       => '123-456-7890',
@@ -50,8 +50,8 @@ is $rowid, 1;
 my $assignment = Ninkasi::Assignment->new();
 ok $assignment;
 
-ok $assignment->add( {category => 0, flight => 1, judge => 1} );
-ok $assignment->add( {category => 0, flight => 3, judge => 1} );
+ok $assignment->add( {flight => 0, session => 1, judge => 1} );
+ok $assignment->add( {flight => 0, session => 3, judge => 1} );
 
 my $mech = Test::WWW::Mechanize->new();
 $mech->get_ok($form_url);
@@ -97,8 +97,8 @@ $mech->submit_form_ok( {
         email1              => 'ninkasi@ajk.name',
         email2              => 'ninkasi@ajk.name',
         first_name          => 'Andrew',
-        flight1             => 1,
-        flight3             => 1,
+        session1            => 1,
+        session3            => 1,
         last_name           => 'Korty',
         phone_day           => '123-456-7890',
         phone_evening       => '123-456-7890',
@@ -204,12 +204,12 @@ like $last_line, qr/
                      email1              = ninkasi\@ajk\.name :
                      email2              = ninkasi\@ajk\.name :
                      first_name          = Andrew             :
-                     flight1             = 1                  :
-                     flight3             = 1                  :
                      last_name           = Korty              :
                      phone_day           = 123-456-7890       :
                      phone_evening       = 123-456-7890       :
                      rank                = 50                 :
+                     session1            = 1                  :
+                     session3            = 1                  :
                      state               = --                 :
                      zip                 = 12345
                  /msx;
@@ -252,8 +252,8 @@ $mech->submit_form_ok( {
         email1              => 'ninkasi@ajk.name',
         email2              => 'Xninkasi@ajk.name',
         first_name          => 'Andrew',
-        flight1             => 1,
-        flight3             => 1,
+        session1            => 1,
+        session3            => 1,
         last_name           => 'Korty',
         phone_day           => '123-456-7890',
         phone_evening       => '123-456-7890',
@@ -327,14 +327,14 @@ $mech->content_like(qr{name="last_name"\s+
                        size="\d+"\s+
                        value="Korty"}msx);
 $mech->content_like(qr{checked="checked"\s+
-                       name="flight1"\s+
+                       name="session1"\s+
                        type="checkbox"\s+
                        value="1"}msx);
-$mech->content_like(qr{name="flight2"\s+
+$mech->content_like(qr{name="session2"\s+
                        type="checkbox"\s+
                        value="1"}msx);
 $mech->content_like(qr{checked="checked"\s+
-                       name="flight3"\s+
+                       name="session3"\s+
                        type="checkbox"\s+
                        value="1"}msx);
 $mech->content_like(qr{name="phone_day"\s+
@@ -385,18 +385,18 @@ is $result->{ zip                 }, 12345              ;
 
 ($sth, $result) = $assignment->bind_hash( {
     bind_values => [$judge_id],
-    columns     => [qw/category flight/],
-    order       => 'flight',
+    columns     => [qw/flight session/],
+    order       => 'session',
     where       => 'judge = ?',
 } );
 
 ok $sth->fetch();
-is $result->{flight  }, 1;
-is $result->{category}, 0;
+is $result->{session}, 1;
+is $result->{flight }, 0;
 
 ok $sth->fetch();
-is $result->{flight  }, 3;
-is $result->{category}, 0;
+is $result->{session}, 3;
+is $result->{flight }, 0;
 
 ok !$sth->fetch();
 

@@ -40,4 +40,42 @@ foreach my $constraint (@CONSTRAINTS) {
     $NUMBER{ $constraint->{name  } } = $constraint->{number};
 }
 
+sub fetch {
+    my ($judge_id) = @_;
+
+    # fetch constraints for the specified judge
+    my $constraint = Ninkasi::Constraint->new();
+    my ($sth, $result) = $constraint->bind_hash( {
+        bind_values => [$judge_id],
+        columns     => [qw/category type/],
+        order       => 'category',
+        where       => 'judge = ?',
+    } );
+
+    # intialize a hash to store the constraint lists (indexed by type name)
+    my %constraint = ();
+
+    # build an index of missing rows (we'll remove the categories we find)
+    my %not_found  = ();
+    @not_found{ 1 .. $#Ninkasi::JudgeSignup::CATEGORIES } = ();
+
+    # walk the rows, building constraint lists
+    while ( $sth->fetch() ) {
+
+        # add this category to the appropriate constraint list
+        push @{ $constraint{ $Ninkasi::Constraint::NAME{ $result->{type} } } },
+             $result->{category};
+
+        # we found a constraint for this category, so delete it from %not_found
+        delete $not_found{ $result->{category} };
+    }
+
+    # add any missing rows to the 'whatever' list
+    @{ $constraint{whatever} }
+        = sort { $a <=> $b } keys %not_found, @{ $constraint{whatever} || [] };
+
+    # return the hash of constraint lists
+    return \%constraint;
+}
+
 1;

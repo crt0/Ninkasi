@@ -7,16 +7,17 @@ use base 'Ninkasi::Table';
 
 use Ninkasi::Category;
 use Ninkasi::Constraint;
+use Ninkasi::Flight;
 use Ninkasi::Judge;
 use Ninkasi::Template;
 
 __PACKAGE__->Table_Name('assignment');
-__PACKAGE__->Column_Names(qw/category flight judge/);
+__PACKAGE__->Column_Names(qw/flight judge session/);
 __PACKAGE__->Create_Sql(<<'EOF');
 CREATE TABLE assignment (
-    category    INTEGER,
-    flight      INTEGER,
-    judge       INTEGER
+    flight  INTEGER,
+    judge   INTEGER,
+    session INTEGER
 )
 EOF
 
@@ -28,7 +29,7 @@ sub fetch {
     my $assignment = Ninkasi::Assignment->new();
     my ($sth, $result) = $assignment->bind_hash( {
         bind_values => [$judge_id],
-        columns     => [qw/category flight/],
+        columns     => [qw/flight session/],
         where       => 'judge = ?',
     } );
 
@@ -36,15 +37,15 @@ sub fetch {
     my @assignment_list = ('N/A') x 4;
     while ( $sth->fetch() ) {
         # treat category value 0 as unassigned
-        $assignment_list[ $result->{flight} ]
-            = $result->{category} ? $result->{category} : '';
+        $assignment_list[ $result->{session} ]
+            = $result->{flight} ? $result->{flight} : '';
     }
 
     return \@assignment_list;
 }
 
 sub select_assigned_judges {
-    my ($category) = @_;
+    my ($flight) = @_;
 
     my @judge_columns      = qw/judge.rowid first_name last_name rank
                                 competitions_judged pro_brewer/;
@@ -52,7 +53,7 @@ sub select_assigned_judges {
 
     my $judge = Ninkasi::Judge->new();
     my ($sth, $result) = $judge->bind_hash( {
-        bind_values => [ ($category->{number}) x 2 ],
+        bind_values => [ ($flight->{category}) x 2 ],
         columns     => [@judge_columns, @constraint_columns],
         join        => 'Ninkasi::Constraint',
         order       => 'type DESC, rank DESC, competitions_judged DESC',
@@ -60,7 +61,7 @@ sub select_assigned_judges {
                                  "AND 'constraint'.category = ?",
                                  'AND judge.rowid IN (SELECT DISTINCT judge',
                                                  'FROM assignment',
-                                                 'WHERE category = ?)'),
+                                                 'WHERE flight = ?)'),
     } );
     $sth->bind_col(1, \$result->{rowid});
 
@@ -73,7 +74,7 @@ sub select_assigned_judges {
 }
 
 sub select_unassigned_judges {
-    my ($category) = @_;
+    my ($flight) = @_;
 
     my @judge_columns      = qw/judge.rowid first_name last_name rank
                                 competitions_judged pro_brewer/;
@@ -85,13 +86,13 @@ sub select_unassigned_judges {
 judge.rowid = 'constraint'.judge
 AND 'constraint'.category = ?
 AND type != $entry
-AND judge.rowid IN (SELECT DISTINCT judge FROM assignment WHERE category = 0)
-AND judge.rowid NOT IN (SELECT DISTINCT judge FROM assignment WHERE category = ?)
+AND judge.rowid IN (SELECT DISTINCT judge FROM assignment WHERE flight = 0)
+AND judge.rowid NOT IN (SELECT DISTINCT judge FROM assignment WHERE flight = ?)
 EOF
 
     my $judge = Ninkasi::Judge->new();
     my ($sth, $result) = $judge->bind_hash( {
-        bind_values => [ ($category->{number}) x 2 ],
+        bind_values => [ @$flight{qw/category number/} ],
         columns     => [@judge_columns, @constraint_columns],
         join        => 'Ninkasi::Constraint',
         order       => 'type DESC, rank DESC, competitions_judged DESC',
@@ -125,36 +126,51 @@ sub deserialize {
 }
 
 sub update_assignment {
-    my ($assignments, $category_number) = @_;
+    my ($assignments, $flight_number) = @_;
 
     my $dbh = Ninkasi::Assignment->Database_Handle();
-    my @columns = qw/judge flight/;
+    my @columns = qw/judge session/;
     foreach my $assignment (@$assignments) {
         my $constraint = deserialize $assignment;
         my $sql = <<EOF;
-UPDATE assignment SET category = ? WHERE judge = ? AND flight = ?
+UPDATE assignment SET flight = ? WHERE judge = ? AND session = ?
 EOF
-        $dbh->do($sql, {}, $category_number, @$constraint{@columns});
+        $dbh->do($sql, {}, $flight_number, @$constraint{@columns});
     }
 }
 
 sub render_page {
     my ($self, $cgi_object) = @_;
 
-    # format paramter determines content type
+    # create template object for output
+    my $template_object = Ninkasi::Template->new();
+
+    # parse path_info to get flight number and then flight info from db
+    my $flight_number = ( split '/', $cgi_object->path_info(), 3 )[1];
+    my $flight_table = Ninkasi::Flight->new();
+    my ($sth, $flight) = $flight_table->bind_hash( {
+        bind_values => [$flight_number],
+        columns     => [qw/category description pro number/],
+        where       => 'number = ?',
+    } );
+
+    if ( !$sth->fetch() ) {
+        print $cgi_object->header(-status => '404 Not Found');
+        $template_object->process( 'flight_404.html',
+                                   {flight_number => $flight_number} )
+            or warn $template_object->error();
+        exit 404;
+    }
+
+    $sth->finish();
+
+    # format parameter determines content type
     my $format = $cgi_object->param('format') || 'html';
     print $cgi_object->header($format eq 'html' ? 'text/html' : 'text/plain');
 
-    # parse path_info to get category number
-    my $category_number = ( split '/', $cgi_object->path_info(), 3 )[1];
-
-    # render header
-    my $category = $Ninkasi::Category::CATEGORIES[$category_number];
-    my $template_object = Ninkasi::Template->new();
-
     # process input
     if ( my $assign   = $cgi_object->param('assign'  ) ) {
-        update_assignment [ $assign   ], $category_number;
+        update_assignment [ $assign   ], $flight_number;
     }
     if ( my $unassign = $cgi_object->param('unassign') ) {
         update_assignment [ $unassign ], 0;
@@ -165,16 +181,16 @@ sub render_page {
 
     # process the template, passing it a function to fetch judge data
     $template_object->process( 'assignment.tt', {
-        assigned_judges_func   => sub { select_assigned_judges $category },
-        category               => $category,
+        assigned_judges_func   => sub { select_assigned_judges $flight },
         constraint_name        => \%Ninkasi::Constraint::NAME,
         escape_html            => $escape_html,
         escape_quotes          => sub { \&escape_quotes },
         fetch_constraint       => \&Ninkasi::Constraint::fetch,
+        flight                 => $flight,
         rank_name              => \%Ninkasi::Judge::NAME,
         remove_trailing_comma  => sub { \&remove_trailing_comma },
         type                   => $format,
-        unassigned_judges_func => sub { select_unassigned_judges $category },
+        unassigned_judges_func => sub { select_unassigned_judges $flight },
     } ) or warn $template_object->error();
 
     return;

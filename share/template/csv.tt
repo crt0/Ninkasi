@@ -24,6 +24,10 @@
 [% content -%]
 [% END ~%]
 
+[% BLOCK judge_table -%]
+[% content -%]
+[% END ~%]
+
 [% BLOCK body_text -%]
 [% content -%]
 [% END ~%]
@@ -45,6 +49,8 @@
 [% BLOCK all_judges_table ~%]   
    [% PROCESS judges_table.tt ~%]
 [% END ~%]
+
+[% BLOCK category_link %][% content %][% END ~%]
 
 [% BLOCK header %][% END ~%]
 

@@ -61,26 +61,37 @@
 </form>
 [% END ~%]
 
+[% BLOCK flight_table %]
+<form name="flight">
+[% PROCESS table ~%]
+<input name="save" type="submit" value="Save" />
+</form>
+[% END ~%]
+
 [% BLOCK table -%]
 <table cellspacing="0" class="view">
 [% content -%]
 </table>
-<p>
-  [% row %] [% IF row == 1 %]judge[% ELSE %]judges[% END %].
-</p>
 [% END ~%]
+
+[% BLOCK judge_table -%]
+   [% WRAPPER table; content; END ~%]
+   <p>
+     [% row %] [% IF row == 1 %]judge[% ELSE %]judges[% END %].
+   </p>
+[% END ~%]      
 
 [% BLOCK assigned_judges_table -%]
 <p>
-Judges assigned to Category [% category.number %], [% category.name %]
-[<a href="/manage/assignment/[% category.number %]?format=csv">csv</a>]:
+Judges assigned to Flight [% flight.number %], [% flight.description %]
+[<a href="/manage/assignment/[% flight.number %]?format=csv">csv</a>]:
 </p>
 [% PROCESS assignment_table -%]
 [% END ~%]
 
 [% BLOCK unassigned_judges_table -%]
 <p>
-Judges available for Category [% category.number %], [% category.name %]:
+Judges available for Flight [% flight.number %], [% flight.description %]:
 </p>
 [% PROCESS assignment_table -%]
 [% END ~%]
@@ -95,7 +106,7 @@ Judges available for Category [% category.number %], [% category.name %]:
    [% WRAPPER body_text ~%]
       <p>
       All registered judges
-      [<a href="/manage/judge/[% category.number %]?format=csv">csv</a>]:
+      [<a href="/manage/judge/?format=csv">csv</a>]:
       </p>
       [% PROCESS judges_table.tt ~%]
    [% END ~%]
@@ -111,6 +122,36 @@ Judges available for Category [% category.number %], [% category.name %]:
 <tbody>
 [%- content -%]
 </tbody>
+[% END ~%]
+
+[% BLOCK category_link ~%]
+<a href="/manage/assignment/[% content %]">[% content %]</a>
+[%~ END ~%]
+
+[% BLOCK flight_row -%]
+   [% WRAPPER column %]
+      <input name="number_[% row %]"
+             size="3"
+             value="[% flight.number | $escape_html %]" />
+   [% END -%]
+   [% WRAPPER column %]
+      <input name="category_[% row %]"
+             size="3"
+             value="[% flight.category | $escape_html  %]" />
+   [% END -%]
+   [% WRAPPER column %]
+      <input name="pro_[% row %]"
+      [%~ IF flight.pro %]
+             checked="checked"
+      [%~ END %]
+             type="checkbox"
+             value="1" />
+   [% END -%]
+   [% WRAPPER column %]
+      <input name="description_[% row %]"
+             size="40"
+             value="[% flight.description | $escape_html %]" />
+   [% END -%]
 [% END ~%]
 
 [% BLOCK header %][% PROCESS "header.html" %][% END ~%]
