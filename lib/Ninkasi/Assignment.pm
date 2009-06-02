@@ -76,16 +76,16 @@ sub select_assigned_judges {
 sub select_unassigned_judges {
     my ($flight) = @_;
 
-    my @judge_columns      = qw/judge.rowid first_name last_name rank
-                                competitions_judged pro_brewer/;
-    my @constraint_columns = qw/category type/;
+    my @columns = qw/judge.rowid 'constraint'.category first_name last_name
+                     rank competitions_judged pro_brewer type/;
 
     my $entry = $Ninkasi::Constraint::NUMBER{entry};
 
     my $where_clause = <<EOF;
 judge.rowid = 'constraint'.judge
 AND 'constraint'.category = ?
-AND type != $entry
+AND flight.category = 'constraint'.category
+AND (type != $entry OR judge.pro_brewer != flight.pro)
 AND judge.rowid IN (SELECT DISTINCT judge FROM assignment WHERE flight = 0)
 AND judge.rowid NOT IN (SELECT DISTINCT judge FROM assignment WHERE flight = ?)
 EOF
@@ -93,12 +93,13 @@ EOF
     my $judge = Ninkasi::Judge->new();
     my ($sth, $result) = $judge->bind_hash( {
         bind_values => [ @$flight{qw/category number/} ],
-        columns     => [@judge_columns, @constraint_columns],
-        join        => 'Ninkasi::Constraint',
+        columns     => \@columns,
+        join        => [ qw/Ninkasi::Constraint Ninkasi::Flight/ ],
         order       => 'type DESC, rank DESC, competitions_judged DESC',
         where       => $where_clause,
     } );
-    $sth->bind_col(1, \$result->{rowid});
+    $sth->bind_col( 1, \$result->{rowid   } );
+    $sth->bind_col( 2, \$result->{category} );
 
     return sub {
         return $sth->fetch() && {
