@@ -75,7 +75,7 @@ sub update_flights {
     my $dbh = __PACKAGE__->Database_Handle();
 
     # disable autocommit to perform this operation as one transaction
-#     $dbh->{AutoCommit} = 0;
+    $dbh->{AutoCommit} = 0;
 
     # clear the table
     $dbh->do('DELETE FROM flight');
@@ -102,8 +102,8 @@ EOF
     }
 
     # commit this transaction & re-enable autocommit
-#     $dbh->commit();
-#     $dbh->{AutoCommit} = 1;
+    $dbh->commit();
+    $dbh->{AutoCommit} = 1;
 
     return;
 }
