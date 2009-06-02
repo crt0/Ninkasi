@@ -29,7 +29,7 @@ CREATE TABLE judge (
     rank                INTEGER,
     bjcp_id             TEXT,
     competitions_judged INTEGER,
-    pro_brewer          INTEGER,
+    pro_brewer          INTEGER DEFAULT 0,
     when_created        INTEGER
 )
 EOF
@@ -115,8 +115,8 @@ sub render_all_judges {
                 %$result,
                 fetch_assignments
                     => sub { Ninkasi::Assignment::fetch $result->{rowid} },
-                fetch_constraints
-                    => sub { Ninkasi::Constraint::fetch $result->{rowid} },
+                fetch_flights
+                    => sub { Ninkasi::Flight::fetch $result->{rowid} },
             };
         },
         queue_update          => sub { push @update_queue, [@_] },

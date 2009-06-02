@@ -13,10 +13,60 @@ __PACKAGE__->Create_Sql(<<'EOF');
 CREATE TABLE flight (
     category    INTEGER,
     description INTEGER,
-    pro         INTEGER,
+    pro         INTEGER DEFAULT 0,
     number      INTEGER
 )
 EOF
+
+sub fetch {
+    my ($judge_id) = @_;
+
+    # build an index of missing rows (we'll remove the flights we find)
+    my $flight_table = Ninkasi::Flight->new();
+    my $not_found
+        = $flight_table->Database_Handle()
+                       ->selectall_hashref( 'SELECT number FROM flight',
+                                            'number' );
+
+    # fetch flights of each constraint type
+    my $sql = <<EOF;
+judge.rowid = 'constraint'.judge
+    AND 'constraint'.judge = ?
+    AND 'constraint'.category = flight.category
+    AND (type != ? OR judge.pro_brewer = flight.pro)
+EOF
+    my $entry = $Ninkasi::Constraint::NUMBER{entry};
+    my ( $flight_handle, $flight ) = $flight_table->bind_hash( {
+        bind_values => [ $judge_id, $entry ],
+        columns     => [ qw/flight.category number type/ ],
+        join        => [ qw/Ninkasi::Constraint Ninkasi::Judge/ ],
+        order       => 'flight.category',
+        where       => $sql,
+    } );
+    $flight_handle->bind_col( 1, \$flight->{category} );
+
+    # intialize a hash to store the constraint lists (indexed by type name)
+    my %constraint = ();
+
+    # walk the rows, building constraint lists
+    while ( $flight_handle->fetch() ) {
+
+        # add this flight to the appropriate constraint list
+        push @{ $constraint{ $Ninkasi::Constraint::NAME{ $flight->{type} } } },
+             $flight->{number};
+
+        # we found a constraint for this category, so delete it from $not_found
+        delete $not_found->{ $flight->{number} };
+    }
+
+    # add any missing rows to the 'whatever' list
+    @{ $constraint{whatever} }
+        = sort { $a <=> $b } keys %$not_found, @{ $constraint{whatever} || [] };
+
+    # return the hash of constraint lists
+    return \%constraint;
+
+}
 
 sub update_flights {
     my ($cgi_object) = @_;
@@ -35,7 +85,7 @@ sub update_flights {
     my $permitted_column = __PACKAGE__->_Column_Names();
     foreach my $name ( $cgi_object->param() ) {
         my ( $column, $row ) = split /_/, $name;
-        next unless exists $permitted_column->{$column};
+        next if !exists $permitted_column->{$column};
         $input_table{$row}{$column} = $cgi_object->param($name);
     }
 
@@ -46,6 +96,8 @@ INSERT INTO flight ($column_list) VALUES (?, ?, ?, ?)
 EOF
     my $sth = $dbh->prepare($sql);
     while ( my ( $row_number, $row ) = each %input_table ) {
+        next if !defined $row->{number} || $row->{number} eq '';
+        $row->{pro} ||= 0;
         $sth->execute( @$row{ keys %$permitted_column } );
     }
 

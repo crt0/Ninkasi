@@ -213,6 +213,7 @@ $mech->submit_form_ok( {
         last_name           => 'Reynoso',
         phone_day           => '512-700-9946',
         phone_evening       => '512-521-2449',
+        pro_brewer          => 1,
         rank                => 50,
         state               => 'TX',
         zip                 => '78043',
@@ -288,29 +289,11 @@ $mech->content_like(
        <td></td>\s+
        <td>10</td>\s+
        <td>N</td>\s+
-       <td><a\ href="/manage/assignment/8">8</a>,\s+
-       <a\ href="/manage/assignment/10">10</a>,\s+
+       <td><a\ href="/manage/assignment/10">10</a>,\s+
        <a\ href="/manage/assignment/15">15</a>,\s+
        <a\ href="/manage/assignment/21">21</a></td>\s+
        <td><a\ href="/manage/assignment/20">20</a></td>\s+
-       <td><a\ href="/manage/assignment/1">1</a>,\s+
-       <a\ href="/manage/assignment/3">3</a>,\s+
-       <a\ href="/manage/assignment/4">4</a>,\s+
-       <a\ href="/manage/assignment/5">5</a>,\s+
-       <a\ href="/manage/assignment/6">6</a>,\s+
-       <a\ href="/manage/assignment/7">7</a>,\s+
-       <a\ href="/manage/assignment/9">9</a>,\s+
-       <a\ href="/manage/assignment/11">11</a>,\s+
-       <a\ href="/manage/assignment/12">12</a>,\s+
-       <a\ href="/manage/assignment/13">13</a>,\s+
-       <a\ href="/manage/assignment/14">14</a>,\s+
-       <a\ href="/manage/assignment/16">16</a>,\s+
-       <a\ href="/manage/assignment/17">17</a>,\s+
-       <a\ href="/manage/assignment/18">18</a>,\s+
-       <a\ href="/manage/assignment/19">19</a>,\s+
-       <a\ href="/manage/assignment/22">22</a>,\s+
-       <a\ href="/manage/assignment/23">23</a>,\s+
-       <a\ href="/manage/assignment/24">24</a></td>\s+
+       <td><a\ href="/manage/assignment/8">8</a></td>\s+
        <td><a\ href="/manage/assignment/2">2</a></td>}msx
 );
 $mech->content_like( qr{<title>Registered Judges</title>} );
@@ -320,11 +303,11 @@ $mech->html_lint_ok('HTML validation');
 $mech->follow_link_ok( { text_regex => qr/csv/ } );
 $mech->content_is(<<EOF);
 "Name","Rank","Fri. PM","Sat. AM","Sat. PM","Comps Judged","Pro Brewer?","Entries","Prefers Not","Whatever","Prefers"
-"Carrera, Lyndsey","Certified","","N/A","","10","N","8, 10, 15, 21","20","1, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 16, 17, 18, 19, 22, 23, 24","2"
-"Mayers, Liam","Novice","","","","2","Y","","","1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24",""
-"Reynoso, Greggory","Certified","","N/A","","10","N","8, 10, 15, 21","20","1, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 16, 17, 18, 19, 22, 23, 24","2"
-"Underhill, Leann","Certified","","","N/A","10","N","8, 10, 15, 21","20","1, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 16, 17, 18, 19, 22, 23, 24","2"
-"|<iefer, Angelina","Certified","","N/A","","10","N","8, 10, 15, 21","20","1, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 16, 17, 18, 19, 22, 23, 24","2"
+"Carrera, Lyndsey","Certified","","N/A","","10","N","10, 15, 21","20","8","2"
+"Mayers, Liam","Novice","","","","2","Y","","","2, 8, 10, 15, 20, 21",""
+"Reynoso, Greggory","Certified","","N/A","","10","Y","8","20","10, 15, 21","2"
+"Underhill, Leann","Certified","","","N/A","10","N","10, 15, 21","20","8","2"
+"|<iefer, Angelina","Certified","","N/A","","10","N","10, 15, 21","20","8","2"
 EOF
 
 # test view of individual judge information
