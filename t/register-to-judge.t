@@ -155,8 +155,8 @@ You&#8217;ve agreed to judge the following flight(s) at the Indiana State Fair
 Brewers&#8217; Cup:
 </p>
 <ul>
-<li>Friday, July 11, starting at 6 pm</li>
-<li>Saturday, July 12, starting at noon</li>
+<li>Friday, July 10, starting at 6 pm</li>
+<li>Saturday, July 11, starting at noon</li>
 </ul>
 <p>
 Please refer to <a href="http://brewerscup.org/">the Brewers&#8217; Cup web site</a>
