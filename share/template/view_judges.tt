@@ -26,6 +26,6 @@
 [% END ~%]
 
 [% PROCESS header title = "Registered Judges" -%]
-[% PROCESS navbar -%]
+[% PROCESS manage_navbar -%]
 [% PROCESS all_judges_table ~%]
 [% PROCESS footer -%]

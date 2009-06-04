@@ -56,4 +56,6 @@
 
 [% BLOCK navbar %][% END ~%]
 
+[% BLOCK manage_navbar %][% END ~%]
+
 [% BLOCK footer %][% END ~%]

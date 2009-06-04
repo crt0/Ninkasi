@@ -1,7 +1,7 @@
 [% PROCESS "${type}.tt" ~%]
 
 [% PROCESS header title = "Flights" -%]
-[% PROCESS navbar -%]
+[% PROCESS manage_navbar -%]
 [% WRAPPER body_text ~%]
    [% WRAPPER heading %]Flights[% END ~%]
    [% WRAPPER flight_table ~%]
