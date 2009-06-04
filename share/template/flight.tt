@@ -11,6 +11,7 @@
             [% WRAPPER column %]Category[% END ~%]
             [% WRAPPER column %]Pro?[% END ~%]
             [% WRAPPER column %]Description[% END ~%]
+            [% WRAPPER column %]Assignments[% END ~%]
          [% END ~%]
       [% END ~%]
       [% WRAPPER tbody ~%]

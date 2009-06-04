@@ -152,6 +152,11 @@ Judges available for Flight [% flight.number %], [% flight.description %]:
              size="40"
              value="[% flight.description | $escape_html %]" />
    [% END -%]
+   [% WRAPPER column %]
+      [% IF flight.number ~%]
+         <a href="/manage/assignment/[% flight.number %]">view</a>
+      [% END -%]
+   [% END -%]
 [% END ~%]
 
 [% BLOCK header %][% PROCESS "header.html" %][% END ~%]

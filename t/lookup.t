@@ -57,6 +57,8 @@ $mech->content_like(
                size="40"\s+
                value=""\ />\s+
        </td>\s+
+       <td>\s+
+       </td>\s+
        </tr>}msx
 );
 
@@ -103,6 +105,9 @@ $mech->content_like(
                size="40"\s+
                value="English\ Pale\ Ale"\ />\s+
        </td>\s+
+       <td>\s+
+       <a\ href="/manage/assignment/8">view</a>\s+
+       </td>\s+
        </tr>}msx
 );
 
@@ -136,6 +141,9 @@ $mech->content_like(
        <input\ name="description_6"\s+
                size="40"\s+
                value="Spice/Herb/Vegetable\ Beer"\ />\s+
+       </td>\s+
+       <td>\s+
+       <a\ href="/manage/assignment/21">view</a>\s+
        </td>\s+
        </tr>}msx
 );
