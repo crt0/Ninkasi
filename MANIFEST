@@ -4,8 +4,6 @@ MANIFEST
 Makefile.PL
 MyBuilder.pm
 README
-cgi/.htaccess
-cgi/view.tt
 htdocs/.htaccess
 htdocs/2006-winners.html
 htdocs/2007-hb-winners.html
