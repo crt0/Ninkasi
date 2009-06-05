@@ -62,7 +62,7 @@
 [% END ~%]
 
 [% BLOCK flight_table %]
-<form name="flight">
+<form name="flight" method="post">
 [% PROCESS table ~%]
 <input name="save" type="submit" value="Save" />
 </form>
