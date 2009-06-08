@@ -122,33 +122,59 @@ brew pot of the size of your choice!
 </p>
 <div id="contact_list">
 <h3>Cellaring Drop-Off Point A</h3>
+<a href="http://www.crownliquors.net/">
+<img alt="Crown Liquors logo"
+     class="image_right"
+     height="67"
+     src="image/crown.png"
+     width="239" />
+</a>
 <div class="address">Crown Liquors
 Attn: ISF/BC
 11640 Brooks School Road
 Fishers, Indiana 46031
-(317) 595-5877
-
-Monday through Thursday, 9 to 11 am
-Friday and Saturday, 9 am to midnight
-<em>Deadline for deliveries to this location is midnight Wednesday, June 24.</em></div>
+(317) 595-5877</div>
+<div style="clear: left"></div>
+Hours:
+<ul>
+  <li>Monday through Thursday, 9 to 11 am</li>
+  <li>Friday and Saturday, 9 am to midnight</li>
+</ul>
+<em>Deadline for deliveries to this location is midnight Wednesday,
+June 24.</em>
 <h3>Cellaring Drop-Off Point B</h3>
 <div class="address">Lafayette Brewing Company
 622 Main Street
 Lafayette, Indiana 47901
-(765) 742-2591
-
-Monday through Thursday, 11 am to midnight
-Friday and Saturday, 11 am to midnight
-<em>Deadline for deliveries to this location is midnight Wednesday, June 24.</em></div>
+(765) 742-2591</div>
+<div style="clear: left"></div>
+Hours:
+<ul>
+  <li>Monday through Thursday, 11 am to midnight</li>
+  <li>Friday and Saturday, 11 am to midnight</li>
+</ul>
+<em>Deadline for deliveries to this location is midnight Wednesday,
+June 24.</em>
 <h3>Main Cellaring Location</h3>
+<a href="http://saharamart.com/">
+<img alt="Sahara Mart logo"
+     class="image_right"
+     height="113"
+     src="image/sahara_mart.png"
+     width="239" />
+</a>
 <div class="address">Sahara Mart East
 2611 East Third Sreet
 Bloomington, Indiana 47401
-(812) 339-6224
-
-Monday through Saturday, 9 am to 9 pm
-Sunday, 10 am to 7 pm
-<em>Deadline for deliveries to this location is 6 pm Thursday, June 25.</em></div>
+(812) 339-6224</div>
+<div style="clear: left"></div>
+Hours:
+<ul>
+  <li>Monday through Saturday, 9 am to 9 pm</li>
+  <li>Sunday, 10 am to 7 pm</li>
+</ul>
+<em>Deadline for deliveries to this location is 6 pm Thursday, June
+25.</em>
 </div>
 <div style="clear: both"></div>
 <h2>Shipping Containers</h2>
