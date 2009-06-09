@@ -203,11 +203,6 @@ caption {
     margin-bottom: 2%;
 }
 
-.address {
-    margin-left: 5%;
-    white-space: pre;
-}
-
 #categories {
     font-family: Gill Sans, sans-serif;
 }
@@ -279,7 +274,7 @@ table.view tbody tr.ruled td {
 .address {
     border:      0px;
     float:       left;
-    padding:     0.5em 0em 0.75em 0em;
+    padding:     0.5em 1em 0.75em 1em;
     white-space: pre-line;
 }
 
