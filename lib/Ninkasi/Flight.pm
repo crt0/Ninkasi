@@ -14,7 +14,7 @@ CREATE TABLE flight (
     category    INTEGER,
     description INTEGER,
     pro         INTEGER DEFAULT 0,
-    number      INTEGER
+    number      INTEGER UNIQUE
 )
 EOF
 
@@ -95,10 +95,19 @@ sub update_flights {
 INSERT INTO flight ($column_list) VALUES (?, ?, ?, ?)
 EOF
     my $sth = $dbh->prepare($sql);
-    while ( my ( $row_number, $row ) = each %input_table ) {
-        next if !defined $row->{number} || $row->{number} eq '';
-        $row->{pro} ||= 0;
-        $sth->execute( @$row{ keys %$permitted_column } );
+    while ( my ( $row_number, $flight ) = each %input_table ) {
+        next if !defined $flight->{number} || $flight->{number} eq '';
+        $flight->{pro} ||= 0;
+        eval { $sth->execute( @$flight{ keys %$permitted_column } ) };
+        if ($@) {
+            $dbh->rollback();
+            $dbh->{AutoCommit} = 1;
+            my $message = $@ =~ /column number is not unique/
+                        ? 'Flight numbers must be unique.'
+                        : $@
+                        ;
+            return { row => $flight->{number}, message => $message };
+        }
     }
 
     # commit this transaction & re-enable autocommit
@@ -108,12 +117,53 @@ EOF
     return;
 }
 
+# fake flight data from CGI query
+sub fake_flight {
+    my ($cgi_object) = @_;
+
+    my $iteration = 1;
+
+    return sub {
+        my $flight_number = $cgi_object->param("number_$iteration");
+        return if !defined $flight_number || $flight_number eq '';
+
+        my $hashref = __PACKAGE__->_Column_Names();
+
+        my %row = map { $_ => scalar $cgi_object->param("${_}_$iteration") }
+                      keys %{ __PACKAGE__->_Column_Names() };
+        ++$iteration;
+
+        return \%row;
+    };
+}
+
 sub render_page {
     my ($self, $cgi_object) = @_;
 
+    # format parameter determines content type
+    my $format = $cgi_object->param('format') || 'html';
+    print $cgi_object->header( $format eq 'html' ? 'text/html' : 'text/plain' );
+
+    # create template object for output
+    my $template_object = Ninkasi::Template->new();
+
+    # escape HTML but not for CSV output
+    my $escape_html = sub { $format eq 'csv' ? sub { shift } : 'html_entity' };
+
     # process input
     if ( $cgi_object->param('save') ) {
-        update_flights $cgi_object;
+        my $error = update_flights $cgi_object;
+
+        if ($error) {
+            $template_object->process( 'flight.tt', {
+                error        => $error,
+                escape_html  => $escape_html,
+                fetch_flight => fake_flight($cgi_object),
+                type         => $format,
+            } ) or warn $template_object->error();
+
+            return;
+        }
     }
 
     # select whole table & order by number
@@ -122,16 +172,6 @@ sub render_page {
         columns => [ keys %{ $self->_Column_Names() } ],
         order   => 'number',
     } );
-
-    # format parameter determines content type
-    my $format = $cgi_object->param('format') || 'html';
-    print $cgi_object->header($format eq 'html' ? 'text/html' : 'text/plain');
-
-    # create template object for output
-    my $template_object = Ninkasi::Template->new();
-
-    # escape HTML but not for CSV output
-    my $escape_html = sub { $format eq 'csv' ? sub { shift } : 'html_entity' };
 
     # process the template, passing it a function to fetch flight data
     $template_object->process( 'flight.tt', {

@@ -130,6 +130,9 @@ Judges available for Flight [% flight.number %], [% flight.description %]:
 
 [% BLOCK flight_row -%]
    [% WRAPPER column %]
+      [% IF error && error.row == flight.number ~%]
+         <span class="error">*</span>
+      [% END ~%]
       <input name="number_[% row %]"
              size="3"
              value="[% flight.number | $escape_html %]" />
@@ -157,6 +160,12 @@ Judges available for Flight [% flight.number %], [% flight.description %]:
          <a href="/manage/assignment/[% flight.number %]">view</a>
       [% END -%]
    [% END -%]
+[% END ~%]
+
+[% BLOCK error_message -%]
+   <div class="error">
+     [% content %]
+   </div>
 [% END ~%]
 
 [% BLOCK header %][% PROCESS "header.html" %][% END ~%]

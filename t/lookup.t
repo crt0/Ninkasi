@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 40;
+use Test::More tests => 43;
 
 use Apache::TestConfig;
 use Ninkasi::Table;
@@ -61,6 +61,21 @@ $mech->content_like(
        </td>\s+
        </tr>}msx
 );
+
+# adding flights with duplicate numbers should fail
+$mech->submit_form_ok( {
+    button => 'save',
+    with_fields => {
+        number_1      => 1,
+        category_1    => 1,
+        description_1 => 'Light Lager',
+        number_2      => 1,
+        category_2    => 1,
+        description_2 => 'Light Lager Duplicate',
+    }
+} );
+$mech->content_contains('<div class="error">');
+$mech->content_contains('Flight numbers must be unique.');
 
 # add flights
 my %data = (
