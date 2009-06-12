@@ -83,7 +83,7 @@ sub select_unassigned_judges {
 
     my $where_clause = <<EOF;
 judge.rowid = 'constraint'.judge
-AND 'constraint'.category = ?
+AND flight.number = ?
 AND flight.category = 'constraint'.category
 AND (type != $entry OR judge.pro_brewer != flight.pro)
 AND judge.rowid IN (SELECT DISTINCT judge FROM assignment WHERE flight = 0)
@@ -92,7 +92,7 @@ EOF
 
     my $judge = Ninkasi::Judge->new();
     my ($sth, $result) = $judge->bind_hash( {
-        bind_values => [ @$flight{qw/category number/} ],
+        bind_values => [ ( $flight->{number} ) x 2 ],
         columns     => \@columns,
         join        => [ qw/Ninkasi::Constraint Ninkasi::Flight/ ],
         order       => 'type DESC, rank DESC, competitions_judged DESC',

@@ -134,7 +134,7 @@ Judges available for Flight [% flight.number %], [% flight.description %]:
          <span class="error">*</span>
       [% END ~%]
       <input name="number_[% row %]"
-             size="3"
+             size="10"
              value="[% flight.number | $escape_html %]" />
    [% END -%]
    [% WRAPPER column %]

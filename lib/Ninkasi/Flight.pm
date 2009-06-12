@@ -14,7 +14,7 @@ CREATE TABLE flight (
     category    INTEGER,
     description INTEGER,
     pro         INTEGER DEFAULT 0,
-    number      INTEGER UNIQUE
+    number      TEXT UNIQUE
 )
 EOF
 
@@ -166,11 +166,11 @@ sub render_page {
         }
     }
 
-    # select whole table & order by number
+    # select whole table & order by category, then number
     my $flight = Ninkasi::Flight->new();
     my ($sth, $result) = $flight->bind_hash( {
         columns => [ keys %{ $self->_Column_Names() } ],
-        order   => 'number',
+        order   => 'category, number',
     } );
 
     # process the template, passing it a function to fetch flight data

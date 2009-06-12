@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 43;
+use Test::More tests => 44;
 
 use Apache::TestConfig;
 use Ninkasi::Table;
@@ -39,7 +39,7 @@ $mech->content_like(
     qr{<tr\ class="odd">\s+
        <td>\s+
        <input\ name="number_1"\s+
-               size="3"\s+
+               size="10"\s+
                value=""\ />\s+
        </td>\s+
        <td>\s+
@@ -79,29 +79,58 @@ $mech->content_contains('Flight numbers must be unique.');
 
 # add flights
 my %data = (
-    category    => [ 2, 8, 10, 15, 20 ],
-    pro         => [ undef, 1, (undef) x 3 ],
+    category    => [ 2, 8, 10, 14,    14,    15, 20 ],
+    number      => [ 2, 8, 10, '14a', '14b', 15, 20 ],
+    pro         => [ undef, 1, (undef) x 5 ],
     description => [
         'Pilsner',
         'English Pale Ale',
         'American Ale',
+        'India Pale Ale, Table A',
+        'India Pale Ale, Table B',
         'German Wheat and Rye Beer',
         'Fruit Beer',
     ],
 );
 my %input = ();
-foreach my $row ( 1 .. 5 ) {
+foreach my $row ( 1 .. 7 ) {
     while ( my ( $name, $value ) = each %data ) {
         $input{ "${name}_$row" } = $value->[ $row - 1 ];
     }
-    $input{"number_$row"} = $input{"category_$row"};
 }
 $mech->submit_form_ok( { button => 'save', with_fields => \%input } );
+$mech->content_like(
+    qr{<tr\ class="odd">\s+
+       <td>\s+
+       <input\ name="number_5"\s+
+               size="10"\s+
+               value="14b"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="category_5"\s+
+               size="3"\s+
+               value="14"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="pro_5"\s+
+               type="checkbox"\s+
+               value="1"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="description_5"\s+
+               size="40"\s+
+               value="India\ Pale\ Ale,\ Table\ B"\ />\s+
+       </td>\s+
+       <td>\s+
+       <a\ href="/manage/assignment/14b">view</a>\s+
+       </td>\s+
+       </tr>}msx
+);
 $mech->content_like(
     qr{<tr\ class="even">\s+
        <td>\s+
        <input\ name="number_2"\s+
-               size="3"\s+
+               size="10"\s+
                value="8"\ />\s+
        </td>\s+
        <td>\s+
@@ -130,30 +159,30 @@ $mech->content_like(
 $mech->submit_form_ok( {
     button      => 'save',
     with_fields => {
-        number_6      => 21,
-        category_6    => 21,
-        description_6 => 'Spice/Herb/Vegetable Beer',
+        number_8      => 21,
+        category_8    => 21,
+        description_8 => 'Spice/Herb/Vegetable Beer',
     }
 } );
 $mech->content_like(
     qr{<tr\ class="even">\s+
        <td>\s+
-       <input\ name="number_6"\s+
+       <input\ name="number_8"\s+
+               size="10"\s+
+               value="21"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="category_8"\s+
                size="3"\s+
                value="21"\ />\s+
        </td>\s+
        <td>\s+
-       <input\ name="category_6"\s+
-               size="3"\s+
-               value="21"\ />\s+
-       </td>\s+
-       <td>\s+
-       <input\ name="pro_6"\s+
+       <input\ name="pro_8"\s+
                type="checkbox"\s+
                value="1"\ />\s+
        </td>\s+
        <td>\s+
-       <input\ name="description_6"\s+
+       <input\ name="description_8"\s+
                size="40"\s+
                value="Spice/Herb/Vegetable\ Beer"\ />\s+
        </td>\s+
@@ -316,7 +345,9 @@ $mech->content_like(
        <a\ href="/manage/assignment/15">15</a>,\s+
        <a\ href="/manage/assignment/21">21</a></td>\s+
        <td><a\ href="/manage/assignment/20">20</a></td>\s+
-       <td><a\ href="/manage/assignment/8">8</a></td>\s+
+       <td><a\ href="/manage/assignment/8">8</a>, \s+
+       <a\ href="/manage/assignment/14a">14a</a>,\s+
+       <a\ href="/manage/assignment/14b">14b</a></td>\s+
        <td><a\ href="/manage/assignment/2">2</a></td>}msx
 );
 $mech->content_like( qr{<title>Registered Judges</title>} );
@@ -326,11 +357,11 @@ $mech->html_lint_ok('HTML validation');
 $mech->follow_link_ok( { text_regex => qr/csv/ } );
 $mech->content_is(<<EOF);
 "Name","Rank","Fri. PM","Sat. AM","Sat. PM","Comps Judged","Pro Brewer?","Entries","Prefers Not","Whatever","Prefers"
-"Carrera, Lyndsey","Certified","","N/A","","10","N","10, 15, 21","20","8","2"
-"Mayers, Liam","Novice","","","","2","Y","","","2, 8, 10, 15, 20, 21",""
-"Reynoso, Greggory","Certified","","N/A","","10","Y","8","20","10, 15, 21","2"
-"Underhill, Leann","Certified","","","N/A","10","N","10, 15, 21","20","8","2"
-"|<iefer, Angelina","Certified","","N/A","","10","N","10, 15, 21","20","8","2"
+"Carrera, Lyndsey","Certified","","N/A","","10","N","10, 15, 21","20","8, 14a, 14b","2"
+"Mayers, Liam","Novice","","","","2","Y","","","2, 8, 10, 14a, 14b, 15, 20, 21",""
+"Reynoso, Greggory","Certified","","N/A","","10","Y","8","20","10, 14a, 14b, 15, 21","2"
+"Underhill, Leann","Certified","","","N/A","10","N","10, 15, 21","20","8, 14a, 14b","2"
+"|<iefer, Angelina","Certified","","N/A","","10","N","10, 15, 21","20","8, 14a, 14b","2"
 EOF
 
 # test view of individual judge information
