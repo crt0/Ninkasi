@@ -40,7 +40,7 @@ EOF
         bind_values => [ $judge_id, $entry ],
         columns     => [ qw/flight.category number type/ ],
         join        => [ qw/Ninkasi::Constraint Ninkasi::Judge/ ],
-        order       => 'flight.category',
+        order       => 'number',
         where       => $sql,
     } );
     $flight_handle->bind_col( 1, \$flight->{category} );

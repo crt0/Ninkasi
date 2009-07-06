@@ -202,6 +202,7 @@ $mech->submit_form_ok( {
         category02          => 'prefer',
         category08          => 'entry',
         category10          => 'entry',
+        category14          => 'prefer',
         category15          => 'entry',
         category20          => 'prefer not',
         category21          => 'entry',
@@ -360,7 +361,7 @@ $mech->content_is(<<EOF);
 "Carrera, Lyndsey","Certified","","N/A","","10","N","10, 15, 21","20","08, 14a, 14b","02"
 "Mayers, Liam","Novice","","","","2","Y","","","02, 08, 10, 14a, 14b, 15, 20, 21",""
 "Reynoso, Greggory","Certified","","N/A","","10","Y","08","20","10, 14a, 14b, 15, 21","02"
-"Underhill, Leann","Certified","","","N/A","10","N","10, 15, 21","20","08, 14a, 14b","02"
+"Underhill, Leann","Certified","","","N/A","10","N","10, 15, 21","20","08","02, 14a, 14b"
 "|<iefer, Angelina","Certified","","N/A","","10","N","10, 15, 21","20","08, 14a, 14b","02"
 EOF
 
