@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 44;
+use Test::More tests => 47;
 
 use Apache::TestConfig;
 use Ninkasi::Table;
@@ -420,7 +420,7 @@ $mech->content_like( qr{<title>Angelina |&lt;iefer</title>} );
 $lookup_url = "$url_base/manage/assignment/08";
 $mech->get_ok($lookup_url);
 $mech->content_like(
-    qr{<a\ href="\d+">\s+
+    qr{<a\ href="/manage/judge/\d+">\s+
        Mayers,\ Liam\s+
        </a>\s+
        </td>\s+
@@ -462,12 +462,18 @@ $mech->content_unlike(
 );
 $mech->content_like( qr{<title>Flight 08, English Pale Ale</title>} );
 
+# test judge link
+$mech->follow_link_ok( { text_regex => qr/Mayers, Liam/ } );
+$mech->content_like( qr{<h2>Liam Mayers</h2>} );
+$mech->content_like( qr{<title>Liam Mayers</title>} );
+$mech->back();
+
 # test assignment
 $mech->submit_form_ok( {
     with_fields => { assign => ['judge-2_session-3', 3] },
 } );
 $mech->content_like(
-    qr{<a\ href="\d+">\s+
+    qr{<a\ href="/manage/judge/\d+">\s+
        Mayers,\ Liam\s+
        </a>\s+
        </td>\s+
@@ -514,7 +520,7 @@ $mech->content_unlike(
 # test unassignment
 $mech->submit_form_ok( { with_fields => { unassign => 'judge-2_session-3' } } );
 $mech->content_like(
-    qr{<a\ href="\d+">\s+
+    qr{<a\ href="/manage/judge/\d+">\s+
        Mayers,\ Liam\s+
        </a>\s+
        </td>\s+

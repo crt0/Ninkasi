@@ -46,7 +46,7 @@
 
 [% BLOCK judge -%]
 [% WRAPPER column %]
-<a href="[% judge.rowid %]">
+<a href="/manage/judge/[% judge.rowid %]">
 [% content %]
 </a>
 [% END -%]
