@@ -61,7 +61,7 @@ EOF
 
     # add any missing rows to the 'whatever' list
     @{ $constraint{whatever} }
-        = sort { $a <=> $b } keys %$not_found, @{ $constraint{whatever} || [] };
+        = sort keys %$not_found, @{ $constraint{whatever} || [] };
 
     # return the hash of constraint lists
     return \%constraint;

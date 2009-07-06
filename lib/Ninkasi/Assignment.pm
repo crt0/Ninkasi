@@ -15,7 +15,7 @@ __PACKAGE__->Table_Name('assignment');
 __PACKAGE__->Column_Names(qw/flight judge session/);
 __PACKAGE__->Create_Sql(<<'EOF');
 CREATE TABLE assignment (
-    flight  INTEGER,
+    flight  TEXT,
     judge   INTEGER,
     session INTEGER
 )
@@ -53,7 +53,7 @@ sub select_assigned_judges {
 
     my $judge = Ninkasi::Judge->new();
     my ($sth, $result) = $judge->bind_hash( {
-        bind_values => [ ($flight->{category}) x 2 ],
+        bind_values => [ @$flight{ qw/category number/ } ],
         columns     => [@judge_columns, @constraint_columns],
         join        => 'Ninkasi::Constraint',
         order       => 'type DESC, rank DESC, competitions_judged DESC',

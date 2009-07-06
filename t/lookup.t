@@ -27,10 +27,10 @@ eval {
 my $mech = Test::WWW::Mechanize->new();
 
 # with no flights configured yet, looking for one should cause a 404
-my $lookup_url = "$url_base/manage/assignment/8";
+my $lookup_url = "$url_base/manage/assignment/08";
 $mech->get($lookup_url);
 is $mech->status(), 404;
-$mech->content_like(qr/Flight 8 not found\./);
+$mech->content_like(qr/Flight 08 not found\./);
 
 # test empty flight table
 $lookup_url = "$url_base/manage/flight/";
@@ -80,14 +80,14 @@ $mech->content_contains('Flight numbers must be unique.');
 # add flights
 my %data = (
     category    => [ 2, 8, 10, 14,    14,    15, 20 ],
-    number      => [ 2, 8, 10, '14a', '14b', 15, 20 ],
+    number      => [ qw/02 08 10 14b 14a 15 20/ ],
     pro         => [ undef, 1, (undef) x 5 ],
     description => [
         'Pilsner',
         'English Pale Ale',
         'American Ale',
-        'India Pale Ale, Table A',
         'India Pale Ale, Table B',
+        'India Pale Ale, Table A',
         'German Wheat and Rye Beer',
         'Fruit Beer',
     ],
@@ -131,7 +131,7 @@ $mech->content_like(
        <td>\s+
        <input\ name="number_2"\s+
                size="10"\s+
-               value="8"\ />\s+
+               value="08"\ />\s+
        </td>\s+
        <td>\s+
        <input\ name="category_2"\s+
@@ -150,7 +150,7 @@ $mech->content_like(
                value="English\ Pale\ Ale"\ />\s+
        </td>\s+
        <td>\s+
-       <a\ href="/manage/assignment/8">view</a>\s+
+       <a\ href="/manage/assignment/08">view</a>\s+
        </td>\s+
        </tr>}msx
 );
@@ -345,10 +345,10 @@ $mech->content_like(
        <a\ href="/manage/assignment/15">15</a>,\s+
        <a\ href="/manage/assignment/21">21</a></td>\s+
        <td><a\ href="/manage/assignment/20">20</a></td>\s+
-       <td><a\ href="/manage/assignment/8">8</a>, \s+
+       <td><a\ href="/manage/assignment/08">08</a>, \s+
        <a\ href="/manage/assignment/14a">14a</a>,\s+
        <a\ href="/manage/assignment/14b">14b</a></td>\s+
-       <td><a\ href="/manage/assignment/2">2</a></td>}msx
+       <td><a\ href="/manage/assignment/02">02</a></td>}msx
 );
 $mech->content_like( qr{<title>Registered Judges</title>} );
 $mech->html_lint_ok('HTML validation');
@@ -357,11 +357,11 @@ $mech->html_lint_ok('HTML validation');
 $mech->follow_link_ok( { text_regex => qr/csv/ } );
 $mech->content_is(<<EOF);
 "Name","Rank","Fri. PM","Sat. AM","Sat. PM","Comps Judged","Pro Brewer?","Entries","Prefers Not","Whatever","Prefers"
-"Carrera, Lyndsey","Certified","","N/A","","10","N","10, 15, 21","20","8, 14a, 14b","2"
-"Mayers, Liam","Novice","","","","2","Y","","","2, 8, 10, 14a, 14b, 15, 20, 21",""
-"Reynoso, Greggory","Certified","","N/A","","10","Y","8","20","10, 14a, 14b, 15, 21","2"
-"Underhill, Leann","Certified","","","N/A","10","N","10, 15, 21","20","8, 14a, 14b","2"
-"|<iefer, Angelina","Certified","","N/A","","10","N","10, 15, 21","20","8, 14a, 14b","2"
+"Carrera, Lyndsey","Certified","","N/A","","10","N","10, 15, 21","20","08, 14a, 14b","02"
+"Mayers, Liam","Novice","","","","2","Y","","","02, 08, 10, 14a, 14b, 15, 20, 21",""
+"Reynoso, Greggory","Certified","","N/A","","10","Y","08","20","10, 14a, 14b, 15, 21","02"
+"Underhill, Leann","Certified","","","N/A","10","N","10, 15, 21","20","08, 14a, 14b","02"
+"|<iefer, Angelina","Certified","","N/A","","10","N","10, 15, 21","20","08, 14a, 14b","02"
 EOF
 
 # test view of individual judge information
@@ -416,7 +416,7 @@ $mech->content_like( qr{<h2>Angelina |&lt;iefer</h2>} );
 $mech->content_like( qr{<title>Angelina |&lt;iefer</title>} );
 
 # test category view
-$lookup_url = "$url_base/manage/assignment/8";
+$lookup_url = "$url_base/manage/assignment/08";
 $mech->get_ok($lookup_url);
 $mech->content_like(
     qr{<a\ href="\d+">\s+
@@ -459,7 +459,7 @@ $mech->content_unlike(
        <td>Y</td>\s+
        <td>whatever</td>}msx
 );
-$mech->content_like( qr{<title>Flight 8, English Pale Ale</title>} );
+$mech->content_like( qr{<title>Flight 08, English Pale Ale</title>} );
 
 # test assignment
 $mech->submit_form_ok( {
