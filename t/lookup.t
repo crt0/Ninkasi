@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 47;
+use Test::More tests => 48;
 
 use Apache::TestConfig;
 use Ninkasi::Table;
@@ -30,7 +30,8 @@ my $mech = Test::WWW::Mechanize->new();
 my $lookup_url = "$url_base/manage/assignment/08";
 $mech->get($lookup_url);
 is $mech->status(), 404;
-$mech->content_like(qr/Flight 08 not found\./);
+$mech->content_like( qr{<title>Flight 08 Not Found</title>} );
+$mech->content_like( qr/Flight 08 not found\./ );
 
 # test empty flight table
 $lookup_url = "$url_base/manage/flight/";
