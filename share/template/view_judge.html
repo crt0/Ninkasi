@@ -1,10 +1,11 @@
 [% USE date -%]
 [% PROCESS html.tt -%]
-[% PROCESS header -%]
+[% judge_name = judge.first_name _ ' ' _ judge.last_name | html_entity -%]
+[% PROCESS header title = judge_name -%]
 [% PROCESS manage_navbar -%]
 [% WRAPPER body_text -%]
 [% WRAPPER heading -%]
-[% judge.first_name | html_entity %] [% judge.last_name | html_entity -%]
+[% judge_name -%]
 [% END %]
 <table class="view_judge">
 <tr>

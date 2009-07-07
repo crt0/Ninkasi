@@ -334,8 +334,8 @@ $mech->submit_form_ok( {
 $lookup_url = "$url_base/manage/judge/";
 $mech->get_ok($lookup_url);
 $mech->content_like(
-    qr{<a\ href="judge/[1-9][0-9]*">\s+
-       |&lt;iefer,\ Angelina\s+
+    qr{<a\ href="/manage/judge/\d+">\s+
+       \|&lt;iefer,\ Angelina\s+
        </a>\s+
        </td>\s+
        <td>Certified</td>\s+
@@ -348,7 +348,7 @@ $mech->content_like(
        <a\ href="/manage/assignment/15">15</a>,\s+
        <a\ href="/manage/assignment/21">21</a></td>\s+
        <td><a\ href="/manage/assignment/20">20</a></td>\s+
-       <td><a\ href="/manage/assignment/08">08</a>, \s+
+       <td><a\ href="/manage/assignment/08">08</a>,\s+
        <a\ href="/manage/assignment/14a">14a</a>,\s+
        <a\ href="/manage/assignment/14b">14b</a></td>\s+
        <td><a\ href="/manage/assignment/02">02</a></td>}msx
@@ -416,7 +416,7 @@ $mech->content_like( qr{<title>Liam Mayers</title>} );
 $mech->back();
 $mech->follow_link_ok( { text_regex => qr/iefer, Angelina/ } );
 $mech->content_like( qr{<h2>Angelina |&lt;iefer</h2>} );
-$mech->content_like( qr{<title>Angelina |&lt;iefer</title>} );
+$mech->content_like( qr{<title>Angelina \|&lt;iefer</title>} );
 
 # test category view
 $lookup_url = "$url_base/manage/assignment/08";
@@ -496,7 +496,7 @@ $mech->content_like(
 );
 $mech->content_like(
     qr{<a\ href="/manage/judge/\d+">\s+
-       \|\&lt;iefer,\ Angelina\s+
+       \|&lt;iefer,\ Angelina\s+
        </a>\s+
        </td>\s+
        <td>Certified</td>\s+

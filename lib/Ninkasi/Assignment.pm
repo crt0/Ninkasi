@@ -259,11 +259,11 @@ sub render_page {
     }
 
     # process input
-    if ( my $assign   = $cgi_object->param('assign'  ) ) {
-        update_assignment [ $assign   ], $flight_number;
+    if ( my @assign   = $cgi_object->param('assign'  ) ) {
+        update_assignment \@assign  , $flight_number;
     }
-    if ( my $unassign = $cgi_object->param('unassign') ) {
-        update_assignment [ $unassign ], 0;
+    if ( my @unassign = $cgi_object->param('unassign') ) {
+        update_assignment \@unassign, 0;
     }
 
     # escape HTML but not for CSV output
