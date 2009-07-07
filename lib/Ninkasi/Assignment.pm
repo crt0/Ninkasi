@@ -57,7 +57,7 @@ sub select_assigned_judges {
         bind_values => [ @$flight{ qw/category number/ } ],
         columns     => [@judge_columns, @constraint_columns],
         join        => 'Ninkasi::Constraint',
-        order       => 'type DESC, rank DESC, competitions_judged DESC',
+        order       => 'rank DESC, competitions_judged DESC, type DESC',
         where       => join(' ', "judge.rowid = 'constraint'.judge",
                                  "AND 'constraint'.category = ?",
                                  'AND judge.rowid IN (SELECT DISTINCT judge',
