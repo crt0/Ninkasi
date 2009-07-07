@@ -44,6 +44,8 @@
 [% content -%]
 [% END ~%]
 
+[% BLOCK assignment_link; assignments.$session; END ~%]
+
 [% BLOCK assigned_judges_table -%]
 [% PROCESS judges_table.tt -%]
 [% END ~%]

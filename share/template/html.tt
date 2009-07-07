@@ -56,6 +56,16 @@
 [% END -%]
 [% END ~%]
 
+[% BLOCK assignment_link ~%]
+   [% IF assignments.$session && assignments.$session != 'N/A' ~%]
+      <a href="/manage/assignment/[% assignments.$session %]">
+   [% END ~%]
+   [% assignments.$session ~%]   
+   [% IF assignments.$session && assignments.$session != 'N/A' ~%]
+      </a>
+   [% END ~%]
+[% END ~%]
+
 [% BLOCK assignment_table -%]
 <form method="post">
 [% PROCESS judges_table.tt -%]

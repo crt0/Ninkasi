@@ -10,7 +10,7 @@
 [% END ~%]
 
 [% BLOCK assignment_column ~%]
-   [% WRAPPER column %][% assignments.$session %][% END ~%]
+   [% WRAPPER column; PROCESS assignment_link; END ~%]
 [% END ~%]
 
 [% BLOCK constraint_columns ~%]

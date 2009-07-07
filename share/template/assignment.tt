@@ -4,16 +4,6 @@
    [% WRAPPER column %]Preference[% END ~%]
 [% END ~%]
 
-[% BLOCK assignment_link ~%]
-   [% IF assignments.$flight ~%]
-      <a href="/manage/assignment/[% assignments.$flight %]">
-   [% END ~%]
-   [% assignments.$flight ~%]
-   [% IF assignments.$flight ~%]
-      </a>
-   [% END ~%]
-[% END ~%]
-
 [% BLOCK assignment_checkbox ~%]
    <input name="[% checkbox_name %]"
           type="checkbox"

@@ -512,7 +512,7 @@ $mech->content_like(
        <td>\s+
        </td>\s+
        <td>\s+
-       </td>\s+
+       N/A</td>\s+
        <td>\s+
        <input\ name="unassign"\s+
                type="checkbox"\s+
