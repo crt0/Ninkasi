@@ -141,6 +141,125 @@ EOF
     }
 }
 
+sub groff_to_pdf {
+    my ($groff) = @_;
+
+    $ENV{PATH} = '/usr/bin';
+    my ($groff_pid, $groff_reader, $groff_writer);
+    eval {
+        $groff_pid = IPC::Open2::open2 $groff_reader, $groff_writer,
+                                       qw/groff -Tps -t/;
+    };
+    if ($@) {
+        if ($@ =~ /^open2/) {
+            warn "open2: $!\n$@\n";
+            return;
+        }
+        die;
+    }
+
+    print $groff_writer $groff;
+    close $groff_writer;
+    local $/;
+    my $postscript = <$groff_reader>;
+    close $groff_reader;
+    waitpid $groff_pid, 0;
+
+    my ($ps2pdf_pid, $ps2pdf_reader, $ps2pdf_writer);
+    eval {
+        $ps2pdf_pid = IPC::Open2::open2 $ps2pdf_reader, $ps2pdf_writer,
+                                        qw/ps2pdf - -/;
+    };
+    if ($@) {
+        if ($@ =~ /^open2/) {
+            warn "open2: $!\n$@\n";
+            return;
+        }
+        die;
+    }
+
+    print $ps2pdf_writer $postscript;
+    close $ps2pdf_writer;
+    print <$ps2pdf_reader>;
+    close $ps2pdf_reader;
+    waitpid $ps2pdf_pid, 0;
+
+    return;
+}
+
+sub print_roster {
+
+    # select whole judge table & order by last name
+    my $judge_table = Ninkasi::Judge->new();
+    my ( $judge_handle, $judge ) = $judge_table->bind_hash( {
+        columns => [ qw/rowid first_name last_name/ ],
+        order   => 'last_name',
+    } );
+
+    my $assignment_table = Ninkasi::Assignment->new();
+    my @groff = ();
+    for (;;) {
+
+        my @rows = ();
+        my $finished = 0;
+        for (;;) {
+
+            if ( !$judge_handle->fetch() ) {
+                $finished = 1;
+                last;
+            }
+
+            last if @rows > 50;
+
+            my @columns = qw/flight session description number pro/;
+            my ( $assignment_handle, $result )
+                = $assignment_table->bind_hash( {
+                    bind_values => [ $judge->{rowid} ],
+                    columns     => \@columns,
+                    join        => 'Ninkasi::Flight',
+                    where       => 'assignment.flight = flight.number' .
+                                   ' AND judge = ?',
+                } );
+            my @assignments = '' x 3;
+            while ( $assignment_handle->fetch() ) {
+                my $division = $result->{pro} ? 'pro' : 'hb';
+                $assignments[ $result->{session} ] =
+                    "$result->{number}: $result->{description} ($division)";
+            }
+
+            push @rows,
+                join ';', "$judge->{last_name}, $judge->{first_name}",
+                          map { defined $_ ? $_ : '' } @assignments[1..3];
+
+            # draw a horizonal line every three rows for legibility
+            if ( @rows % 3 == 0 ) {
+                push @rows, '_';
+            }
+        }
+
+### @rows
+        my $rows = join "\n", @rows;
+        push @groff, <<EOF;
+.fam H
+.sp 2
+.TS
+tab(;);
+lb lb lb lb
+l  l  l  l  .
+Judge;Friday PM;Saturday AM; Saturday PM
+_
+$rows
+.TE
+EOF
+
+        last if $finished;
+    }
+
+    groff_to_pdf join "\n.bp\n", @groff;
+
+    return;
+}
+
 sub print_table_card {
     my ($flight) = @_;
 
@@ -159,21 +278,7 @@ sub print_table_card {
         $other_judges = join "\n", @judge_strings[1..$#judge_strings];
     }
 
-    $ENV{PATH} = '/usr/bin';
-    my ($groff_pid, $groff_reader, $groff_writer);
-    eval {
-        $groff_pid = IPC::Open2::open2 $groff_reader, $groff_writer,
-                                       qw{groff -Tps -b};
-    };
-    if ($@) {
-        if ($@ =~ /^open2/) {
-            warn "open2: $!\n$@\n";
-            return;
-        }
-        die;
-    }
-
-    print $groff_writer <<EOF;
+    groff_to_pdf <<EOF;
 .fam H
 .ce 100
 .ps 96
@@ -193,30 +298,6 @@ $head_judge
 .ft
 $other_judges
 EOF
-    close $groff_writer;
-    local $/;
-    my $postscript = <$groff_reader>;
-    close $groff_reader;
-    waitpid $groff_pid, 0;
-
-    my ($ps2pdf_pid, $ps2pdf_reader, $ps2pdf_writer);
-    eval {
-        $ps2pdf_pid = IPC::Open2::open2 $ps2pdf_reader, $ps2pdf_writer,
-                                        qw{ps2pdf - -};
-    };
-    if ($@) {
-        if ($@ =~ /^open2/) {
-            warn "open2: $!\n$@\n";
-            return;
-        }
-        die;
-    }
-
-    print $ps2pdf_writer $postscript;
-    close $ps2pdf_writer;
-    print <$ps2pdf_reader>;
-    close $ps2pdf_reader;
-    waitpid $ps2pdf_pid, 0;
 
     return;
 }

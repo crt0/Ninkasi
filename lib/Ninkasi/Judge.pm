@@ -197,7 +197,14 @@ sub render_page {
 
     # format paramter determines content type
     my $format = $cgi_object->param('format') || 'html';
-    print $cgi_object->header($format eq 'html' ? 'text/html' : 'text/plain');
+    print $cgi_object->header( $format eq 'csv'    ? 'text/plain'
+                             : $format eq 'roster' ? 'application/pdf'
+                             :                       'text/html'       );
+
+    if ( $format eq 'roster' ) {
+        &Ninkasi::Assignment::print_roster;
+        return;
+    }
 
     # build & display selected view
     render_judge $cgi_object, $format, $id;

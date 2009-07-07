@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 51;
+use Test::More tests => 53;
 
 use Apache::TestConfig;
 use IPC::Open2;
@@ -367,6 +367,15 @@ $mech->content_is(<<EOF);
 "|<iefer, Angelina","Certified","","N/A","","10","N","10, 15, 21","20","08, 14a, 14b","02"
 EOF
 
+# test roster
+$mech->back();
+$mech->follow_link_ok( { text_regex => qr/roster/ } );
+my $file_pid = IPC::Open2::open2 my $file_reader, my $file_writer, qw/file -/;
+print $file_writer $mech->content();
+close $file_writer;
+like <$file_reader>, qr/PDF/;
+close $file_reader;
+
 # test view of individual judge information
 $mech->back();
 $mech->follow_link_ok( { text_regex => qr/Mayers, Liam/ } );
@@ -587,7 +596,8 @@ $mech->content_unlike(
 # test table card (just make sure it's a PDF)
 $mech->back();
 $mech->follow_link_ok( { text_regex => qr/card/ } );
-my $file_pid = IPC::Open2::open2 my $file_reader, my $file_writer, qw/file -/;
+($file_pid, $file_reader, $file_writer) = ();
+$file_pid = IPC::Open2::open2 $file_reader, $file_writer, qw/file -/;
 print $file_writer $mech->content();
 close $file_writer;
 like <$file_reader>, qr/PDF/;
