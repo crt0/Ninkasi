@@ -24,8 +24,8 @@
    [% WRAPPER column %][% constraint_name.${judge.type} %][% END ~%]
 [% END ~%]
 
-[% PROCESS header
-   title = "Flight $flight.number, $flight.description" -%]
+[% flight_string = "Flight $flight.number, $flight.description" | html_entity %]
+[% PROCESS header title = flight_string -%]
 [% PROCESS manage_navbar -%]
 [% WRAPPER body_text ~%]
    [% PROCESS assigned_column.tt ~%]

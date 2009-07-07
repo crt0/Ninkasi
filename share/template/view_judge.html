@@ -1,6 +1,6 @@
 [% USE date -%]
 [% PROCESS html.tt -%]
-[% judge_name = judge.first_name _ ' ' _ judge.last_name | html_entity -%]
+[% judge_name = "$judge.first_name $judge.last_name" | html_entity -%]
 [% PROCESS header title = judge_name -%]
 [% PROCESS manage_navbar -%]
 [% WRAPPER body_text -%]
