@@ -101,14 +101,10 @@ sub render_all_judges {
     # initialize queue for updates we'll find when rendering page
     my @update_queue = ();
 
-    # escape HTML but not for CSV output
-    my $escape_html = sub { $format eq 'csv' ? sub { shift } : 'html_entity' };
-
     # process the template, passing it a function to fetch judge data
     my $template_object = Ninkasi::Template->new();
     $template_object->process( 'view_judges.tt', {
         cgi                   => scalar $cgi_object->Vars(),
-        escape_html           => $escape_html,
         escape_quotes         => sub { \&Ninkasi::CSV::escape_quotes },
         fetch_judge           => sub {
             return $sth->fetch() && {

@@ -32,6 +32,10 @@
 <td>[% content -%]</td>
 [% END ~%]
 
+[% BLOCK column_escaped -%]
+<td>[% content | html_entity -%]</td>
+[% END ~%]
+
 [% BLOCK input ~%]
 [% name = "judge${judge.rowid}_$column_name" -%]
 [% name_old = "${name}_old" %]
@@ -47,7 +51,7 @@
 [% BLOCK judge -%]
 [% WRAPPER column %]
 <a href="/manage/judge/[% judge.rowid %]">
-[% content %]
+[% content | html_entity %]
 </a>
 [% END -%]
 [% END ~%]
@@ -136,12 +140,12 @@ Judges available for Flight [% flight.number %], [% flight.description %]:
       [% END ~%]
       <input name="number_[% row %]"
              size="10"
-             value="[% flight.number | $escape_html %]" />
+             value="[% flight.number | html_entity %]" />
    [% END -%]
    [% WRAPPER column %]
       <input name="category_[% row %]"
              size="3"
-             value="[% flight.category | $escape_html  %]" />
+             value="[% flight.category | html_entity  %]" />
    [% END -%]
    [% WRAPPER column %]
       <input name="pro_[% row %]"
@@ -154,7 +158,7 @@ Judges available for Flight [% flight.number %], [% flight.description %]:
    [% WRAPPER column %]
       <input name="description_[% row %]"
              size="40"
-             value="[% flight.description | $escape_html %]" />
+             value="[% flight.description | html_entity %]" />
    [% END -%]
    [% WRAPPER column %]
       [% IF flight.number ~%]
@@ -165,7 +169,7 @@ Judges available for Flight [% flight.number %], [% flight.description %]:
 
 [% BLOCK error_message -%]
    <div class="error">
-     [% content %]
+     [% content | html_entity %]
    </div>
 [% END ~%]
 

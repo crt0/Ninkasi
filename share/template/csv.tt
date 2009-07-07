@@ -10,6 +10,10 @@
 "[% content | $escape_quotes -%]",
 [%- END ~%]
 
+[% BLOCK column_escaped -%]
+[% WRAPPER column; content; END -%]
+[%- END ~%]
+
 [% BLOCK judge -%]
 [% WRAPPER column -%]
 [% content -%]

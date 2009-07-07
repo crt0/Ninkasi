@@ -147,9 +147,6 @@ sub render_page {
     # create template object for output
     my $template_object = Ninkasi::Template->new();
 
-    # escape HTML but not for CSV output
-    my $escape_html = sub { $format eq 'csv' ? sub { shift } : 'html_entity' };
-
     # process input
     if ( $cgi_object->param('save') ) {
         my $error = update_flights $cgi_object;
@@ -157,7 +154,6 @@ sub render_page {
         if ($error) {
             $template_object->process( 'flight.tt', {
                 error        => $error,
-                escape_html  => $escape_html,
                 fetch_flight => fake_flight($cgi_object),
                 type         => $format,
             } ) or warn $template_object->error();
@@ -175,7 +171,6 @@ sub render_page {
 
     # process the template, passing it a function to fetch flight data
     $template_object->process( 'flight.tt', {
-        escape_html  => $escape_html,
         fetch_flight => sub { $sth->fetch() && $result },
         type         => $format,
     } ) or warn $template_object->error();
