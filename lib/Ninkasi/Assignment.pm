@@ -142,13 +142,13 @@ EOF
 }
 
 sub groff_to_pdf {
-    my ($groff) = @_;
+    my ($groff, @options) = @_;
 
     $ENV{PATH} = '/usr/bin';
     my ($groff_pid, $groff_reader, $groff_writer);
     eval {
         $groff_pid = IPC::Open2::open2 $groff_reader, $groff_writer,
-                                       qw/groff -Tps -t/;
+                                       qw/groff -Tps/, @options;
     };
     if ($@) {
         if ($@ =~ /^open2/) {
@@ -209,7 +209,7 @@ sub print_roster {
                 last;
             }
 
-            last if @rows > 50;
+            last if @rows > 36;
 
             my @columns = qw/flight session description number pro/;
             my ( $assignment_handle, $result )
@@ -230,15 +230,16 @@ sub print_roster {
             push @rows,
                 join ';', "$judge->{last_name}, $judge->{first_name}",
                           map { defined $_ ? $_ : '' } @assignments[1..3];
-
-            # draw a horizonal line every three rows for legibility
-            if ( @rows % 3 == 0 ) {
-                push @rows, '_';
-            }
         }
 
-### @rows
-        my $rows = join "\n", @rows;
+        # draw a horizonal line every three rows for legibility
+        my $rows = '';
+        my @triplets = ();
+        while ( my @three = splice @rows, 0, 3 ) {
+            push @triplets, join "\n", @three;
+        }
+        $rows = join "\n_\n", @triplets;
+
         push @groff, <<EOF;
 .fam H
 .sp 2
@@ -255,7 +256,7 @@ EOF
         last if $finished;
     }
 
-    groff_to_pdf join "\n.bp\n", @groff;
+    groff_to_pdf join("\n.bp\n", @groff), qw/-t -P-l/;
 
     return;
 }
