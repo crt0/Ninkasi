@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 50;
+use Test::More tests => 51;
 
 use Apache::TestConfig;
 use IPC::Open2;
@@ -471,9 +471,10 @@ $mech->content_like( qr{<title>Liam Mayers</title>} );
 $mech->back();
 
 # test assignment
-$mech->submit_form_ok( {
-    with_fields => { assign => ['judge-2_session-3', 3] },
-} );
+$mech->form_number(2);
+$mech->tick( assign => 'judge-2_session-3', 1 );
+$mech->tick( assign => 'judge-4_session-3', 1 );
+$mech->submit_form_ok();
 $mech->content_like(
     qr{<a\ href="/manage/judge/\d+">\s+
        Mayers,\ Liam\s+
@@ -492,6 +493,25 @@ $mech->content_like(
        <td>2</td>\s+
        <td>Y</td>\s+
        <td>whatever</td>}msx
+);
+$mech->content_like(
+    qr{<a\ href="/manage/judge/\d+">\s+
+       \|\&lt;iefer,\ Angelina\s+
+       </a>\s+
+       </td>\s+
+       <td>Certified</td>\s+
+       <td>\s+
+       </td>\s+
+       <td>\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="unassign"\s+
+               type="checkbox"\s+
+               value="judge-4_session-3"\ />\s+
+       </td>\s+
+       <td>10</td>\s+
+       <td>N</td>\s+
+       <td>entry</td>}msx
 );
 $mech->content_unlike(
     qr{<a\ href="\d+">\s+
