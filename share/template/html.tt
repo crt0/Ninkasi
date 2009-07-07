@@ -84,7 +84,8 @@
 [% BLOCK assigned_judges_table -%]
 <p>
 Judges assigned to Flight [% flight.number %], [% flight.description %]
-[<a href="/manage/assignment/[% flight.number %]?format=csv">csv</a>]:
+[<a href="/manage/assignment/[% flight.number %]?format=csv">csv</a>,
+<a href="/manage/assignment/[% flight.number %]?format=card">card</a>]:
 </p>
 [% PROCESS assignment_table -%]
 [% END ~%]

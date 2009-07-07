@@ -3,9 +3,10 @@
 use strict;
 use warnings;
 
-use Test::More tests => 48;
+use Test::More tests => 50;
 
 use Apache::TestConfig;
+use IPC::Open2;
 use Ninkasi::Table;
 use Test::WWW::Mechanize;
 
@@ -562,3 +563,12 @@ $mech->content_unlike(
        <td>Y</td>\s+
        <td>whatever</td>}msx
 );
+
+# test table card (just make sure it's a PDF)
+$mech->back();
+$mech->follow_link_ok( { text_regex => qr/card/ } );
+my $file_pid = IPC::Open2::open2 my $file_reader, my $file_writer, qw/file -/;
+print $file_writer $mech->content();
+close $file_writer;
+like <$file_reader>, qr/PDF/;
+close $file_reader;

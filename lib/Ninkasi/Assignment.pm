@@ -5,6 +5,7 @@ use warnings;
 
 use base 'Ninkasi::Table';
 
+use IPC::Open2 ();
 use Ninkasi::Category;
 use Ninkasi::Constraint;
 use Ninkasi::Flight;
@@ -140,6 +141,86 @@ EOF
     }
 }
 
+sub print_table_card {
+    my ($flight) = @_;
+
+    my $division = $flight->{pro} ? 'Professional' : 'Homebrew';
+
+    my $fetch_judge = select_assigned_judges $flight;
+    my @judges = ();
+    while ( my $judge = &$fetch_judge ) {
+        push @judges, $judge;
+    }
+    my ($head_judge, $other_judges) = ('', '');
+    if (@judges) {
+        my @judge_strings = map { join ' ', @$_{ qw/first_name last_name/ } }
+                                @judges;
+        $head_judge = $judge_strings[0];
+        $other_judges = join "\n", @judge_strings[1..$#judge_strings];
+    }
+
+    $ENV{PATH} = '/usr/bin';
+    my ($groff_pid, $groff_reader, $groff_writer);
+    eval {
+        $groff_pid = IPC::Open2::open2 $groff_reader, $groff_writer,
+                                       qw{groff -Tps -b};
+    };
+    if ($@) {
+        if ($@ =~ /^open2/) {
+            warn "open2: $!\n$@\n";
+            return;
+        }
+        die;
+    }
+
+    print $groff_writer <<EOF;
+.fam H
+.ce 100
+.ps 96
+.vs 115
+.sp
+Table $flight->{number}
+.ps 48
+.vs 58
+.sp
+$flight->{description}
+$division Division
+.sp
+.ps 32
+.vs 38
+.ft I
+$head_judge
+.ft
+$other_judges
+EOF
+    close $groff_writer;
+    local $/;
+    my $postscript = <$groff_reader>;
+    close $groff_reader;
+    waitpid $groff_pid, 0;
+
+    my ($ps2pdf_pid, $ps2pdf_reader, $ps2pdf_writer);
+    eval {
+        $ps2pdf_pid = IPC::Open2::open2 $ps2pdf_reader, $ps2pdf_writer,
+                                        qw{ps2pdf - -};
+    };
+    if ($@) {
+        if ($@ =~ /^open2/) {
+            warn "open2: $!\n$@\n";
+            return;
+        }
+        die;
+    }
+
+    print $ps2pdf_writer $postscript;
+    close $ps2pdf_writer;
+    print <$ps2pdf_reader>;
+    close $ps2pdf_reader;
+    waitpid $ps2pdf_pid, 0;
+
+    return;
+}
+
 sub render_page {
     my ($self, $cgi_object) = @_;
 
@@ -167,7 +248,15 @@ sub render_page {
 
     # format parameter determines content type
     my $format = $cgi_object->param('format') || 'html';
-    print $cgi_object->header($format eq 'html' ? 'text/html' : 'text/plain');
+    print $cgi_object->header( $format eq 'csv'  ? 'text/plain'
+                             : $format eq 'card' ? 'application/pdf'
+                             :                     'text/html'       );
+
+    # process table card
+    if ( $format eq 'card' ) {
+        print_table_card $flight;
+        return;
+    }
 
     # process input
     if ( my $assign   = $cgi_object->param('assign'  ) ) {
