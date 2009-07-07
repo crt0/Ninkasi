@@ -209,7 +209,7 @@ sub print_roster {
                 last;
             }
 
-            last if @rows > 36;
+            last if @rows > 38;
 
             my @columns = qw/flight session description number pro/;
             my ( $assignment_handle, $result )
