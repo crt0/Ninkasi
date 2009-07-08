@@ -266,30 +266,46 @@ sub print_table_card {
 
     my $division = $flight->{pro} ? 'Professional' : 'Homebrew';
 
-    my $fetch_judge = select_assigned_judges $flight;
-    my @judges = ();
-    while ( my $judge = &$fetch_judge ) {
-        push @judges, $judge;
+    my $judge_table = Ninkasi::Judge->new();
+    my ( $sth, $result ) = $judge_table->bind_hash( {
+        bind_values => [ $flight->{number} ],
+        columns     => [ qw/first_name last_name session/ ],
+        join        => 'Ninkasi::Assignment',
+        order       => 'rank DESC, competitions_judged DESC',
+        where       => 'judge.rowid = assignment.judge'
+                       . ' AND assignment.flight = ?'
+    } );
+
+    $sth->fetch();
+    my $head_judge = join ' ', @$result{ qw/first_name last_name/ };
+    my $session = $result->{session} == 1 ? 'Friday PM'
+                : $result->{session} == 2 ? 'Saturday AM'
+                :                           'Saturday PM'
+                ;
+
+    my @other_judges_list = ();
+    while ( $sth->fetch() ) {
+        push @other_judges_list, join ' ', @$result{ qw/first_name last_name/ };
     }
-    my ($head_judge, $other_judges) = ('', '');
-    if (@judges) {
-        my @judge_strings = map { join ' ', @$_{ qw/first_name last_name/ } }
-                                @judges;
-        $head_judge = $judge_strings[0];
-        $other_judges = join "\n", @judge_strings[1..$#judge_strings];
-    }
+    my $other_judges = join "\n.brp\n", @other_judges_list;
 
     groff_to_pdf <<EOF;
 .fam H
-.ce 100
+.nh
+.ad c
+.ps 32
+.vs 38
+.sp
+$session
+.sp
 .ps 96
 .vs 115
-.sp
 Table $flight->{number}
 .ps 48
 .vs 58
 .sp
 $flight->{description}
+.brp
 $division Division
 .sp
 .ps 32
@@ -297,6 +313,7 @@ $division Division
 .ft I
 $head_judge
 .ft
+.brp
 $other_judges
 EOF
 
