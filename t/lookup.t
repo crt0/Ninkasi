@@ -549,7 +549,8 @@ $mech->content_unlike(
 );
 
 # test unassignment
-$mech->submit_form_ok( { with_fields => { unassign => 'judge-2_session-3' } } );
+$mech->tick( unassign => 'judge-2_session-3', 1 );
+$mech->submit_form_ok();
 $mech->content_like(
     qr{<a\ href="/manage/judge/\d+">\s+
        Mayers,\ Liam\s+
