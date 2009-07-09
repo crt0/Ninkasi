@@ -17,15 +17,15 @@ EOF
 
 our @CONSTRAINTS = (
     {
-        name   => 'entry',
+        name   => 'prefer not',
         number => 10,
     },
     {
-        name   => 'prefer not',
+        name   => 'whatever',
         number => 20,
     },
     {
-        name   => 'whatever',
+        name   => 'entry',
         number => 30,
     },
     {
