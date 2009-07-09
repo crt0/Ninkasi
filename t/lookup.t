@@ -18,7 +18,6 @@ my $dbh = Ninkasi::Table->new()->Database_Handle();
 eval {
     $dbh->{PrintError} = 0;
     $dbh->do('DELETE FROM judge'       );
-    $dbh->do('DELETE FROM category'    );
     $dbh->do("DELETE FROM 'constraint'");
     $dbh->do("DELETE FROM assignment");
     $dbh->do("DELETE FROM flight");
