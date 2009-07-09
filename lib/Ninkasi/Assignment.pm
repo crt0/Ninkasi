@@ -11,6 +11,7 @@ use Ninkasi::Constraint;
 use Ninkasi::Flight;
 use Ninkasi::Judge;
 use Ninkasi::Template;
+use Readonly;
 
 __PACKAGE__->Table_Name('assignment');
 __PACKAGE__->Column_Names(qw/flight judge session/);
@@ -21,6 +22,8 @@ CREATE TABLE assignment (
     session INTEGER
 )
 EOF
+
+Readonly our $REPORT_LINES_PER_PAGE => 39;
 
 # return a list of assignments for a specified judge
 sub fetch {
@@ -209,8 +212,6 @@ sub print_roster {
                 last;
             }
 
-            last if @rows > 38;
-
             my @columns = qw/flight session description number pro/;
             my ( $assignment_handle, $result )
                 = $assignment_table->bind_hash( {
@@ -230,6 +231,8 @@ sub print_roster {
             push @rows,
                 join ';', "$judge->{last_name}, $judge->{first_name}",
                           map { defined $_ ? $_ : '' } @assignments[1..3];
+
+            last if @rows >= $REPORT_LINES_PER_PAGE;
         }
 
         # draw a horizonal line every three rows for legibility
