@@ -15,7 +15,7 @@ __PACKAGE__->Table_Name('judge');
 __PACKAGE__->Column_Names(qw/first_name last_name address city state zip
                              phone_evening phone_day email rank bjcp_id
                              competitions_judged pro_brewer when_created/);
-__PACKAGE__->Create_Sql(<<'EOF');
+__PACKAGE__->Schema(<<'EOF');
 CREATE TABLE judge (
     first_name          TEXT,
     last_name           TEXT,

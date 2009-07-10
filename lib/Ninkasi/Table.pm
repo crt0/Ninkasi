@@ -12,32 +12,24 @@ use Ninkasi::Config;
 __PACKAGE__->mk_classdata('Database_Handle');
 __PACKAGE__->mk_classdata('_Column_Names');
 __PACKAGE__->mk_classdata('Table_Name');
-__PACKAGE__->mk_classdata('Create_Sql');
+__PACKAGE__->mk_classdata('Schema');
 
 sub import {
     my ($class) = @_;
 
-    my $config = Ninkasi::Config->new();
-    my $database_file = $config->database_file();
-    my $dbh = DBI->connect("dbi:SQLite:dbname=$database_file", '', '',
-                           { HandleError => sub { confess shift },
-                             RaiseError  => 1 });
-    $class->Database_Handle($dbh);
+    if ( !$class->Database_Handle() ) {
+        my $config = Ninkasi::Config->new();
+        my $database_file = $config->database_file();
+        my $dbh = DBI->connect( "dbi:SQLite:dbname=$database_file", '', '',
+                                { HandleError => sub { confess shift },
+                                  RaiseError  => 1 } );
+        $class->Database_Handle($dbh);
 
-    # enable tracing during testing
-    if ( $ENV{NINKASI_TEST_SERVER_ROOT} ) {
-        $dbh->trace( 1, File::Spec->catfile($ENV{NINKASI_TEST_SERVER_ROOT},
-                                            'dbi.log') );
-    }
-
-    # create table in case it doesn't already exist
-    my $create_sql = $class->Create_Sql();
-    if ($create_sql) {
-        eval {
-            local $dbh->{PrintError};
-            $dbh->do($create_sql);
-        };
-        die $@ if $@ && $@ !~ /already exists/;
+        # enable tracing during testing
+        if ( $ENV{NINKASI_TEST_SERVER_ROOT} ) {
+            $dbh->trace( 1, File::Spec->catfile( $ENV{NINKASI_TEST_SERVER_ROOT},
+                                                 'dbi.log' ) );
+        }
     }
 }
 
@@ -125,12 +117,6 @@ sub columns_to_update {
     my $column_names = $self->_Column_Names();
 
     return grep { exists $column_names->{$_} } keys %$input_column;
-}
-
-sub create_table {
-    my ($self) = @_;
-
-    return $self->Database_Handle()->do( $self->Create_Sql() );
 }
 
 1;

@@ -15,7 +15,7 @@ use Readonly;
 
 __PACKAGE__->Table_Name('assignment');
 __PACKAGE__->Column_Names(qw/flight judge session/);
-__PACKAGE__->Create_Sql(<<'EOF');
+__PACKAGE__->Schema(<<'EOF');
 CREATE TABLE assignment (
     flight  TEXT,
     judge   INTEGER,

@@ -9,7 +9,7 @@ use Ninkasi::Template;
 
 __PACKAGE__->Table_Name('flight');
 __PACKAGE__->Column_Names(qw/category description pro number/);
-__PACKAGE__->Create_Sql(<<'EOF');
+__PACKAGE__->Schema(<<'EOF');
 CREATE TABLE flight (
     category    INTEGER,
     description INTEGER,

@@ -7,7 +7,7 @@ use base 'Ninkasi::Table';
 
 __PACKAGE__->Table_Name("'constraint'");
 __PACKAGE__->Column_Names(qw/category judge type/);
-__PACKAGE__->Create_Sql(<<'EOF');
+__PACKAGE__->Schema(<<'EOF');
 CREATE TABLE "constraint" (
     category      INTEGER,
     judge         INTEGER,
