@@ -142,7 +142,11 @@ sub render_page {
 
     # format parameter determines content type
     my $format = $cgi_object->param('format') || 'html';
-    print $cgi_object->header( $format eq 'html' ? 'text/html' : 'text/plain' );
+    print $cgi_object->header(
+        -type    => $format eq 'csv'    ? 'text/plain'
+                  :                       'text/html',
+        -charset => 'utf-8'
+    );
 
     # create template object for output
     my $template_object = Ninkasi::Template->new();

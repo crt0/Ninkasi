@@ -1,8 +1,9 @@
-DirectoryIndex index index.html
-ErrorDocument  403 /403
-ErrorDocument  404 /404
-ErrorDocument  500 /500
-Options        ExecCGI SymLinksIfOwnerMatch
+AddDefaultCharset  UTF-8
+DirectoryIndex     index index.html
+ErrorDocument      403 /403
+ErrorDocument      404 /404
+ErrorDocument      500 /500
+Options            ExecCGI SymLinksIfOwnerMatch
 
 RewriteEngine on
 

@@ -1,6 +1,6 @@
 [% USE date -%]
 [% PROCESS html.tt -%]
-[% judge_name = "$judge.first_name $judge.last_name" | html_entity -%]
+[% judge_name = "$judge.first_name $judge.last_name" | html -%]
 [% PROCESS header title = judge_name -%]
 [% PROCESS manage_navbar -%]
 [% WRAPPER body_text -%]
@@ -11,24 +11,24 @@
 <tr>
 <th>Address:</th>
 <td>
-[% judge.address | html_entity %]
+[% judge.address | html %]
 <br>
-[% judge.city | html_entity %],
-[% judge.state | html_entity %]
-[% judge.zip | html_entity %]
+[% judge.city | html %],
+[% judge.state | html %]
+[% judge.zip | html %]
 </td>
 </tr>
 <tr>
   <th>Phone (day):</th>
-  <td>[% judge.phone_day | html_entity %]</td>
+  <td>[% judge.phone_day | html %]</td>
 </tr>
 <tr>
   <th>Phone (eve):</th>
-  <td>[% judge.phone_evening | html_entity %]</td>
+  <td>[% judge.phone_evening | html %]</td>
 </tr>
 <tr>
   <th>E-mail:</th>
-  <td>[% judge.email | html_entity %]</td>
+  <td>[% judge.email | html %]</td>
 </tr>
 <tr>
   <th>BJCP Rank:</th>
@@ -36,11 +36,11 @@
 </tr>
 <tr>
   <th>BJCP ID:</th>
-  <td>[% judge.bjcp_id | html_entity %]</td>
+  <td>[% judge.bjcp_id | html %]</td>
 </tr>
 <tr>
   <th>Competitions Judged:</th>
-  <td>[% judge.competitions_judged | html_entity %]</td>
+  <td>[% judge.competitions_judged | html %]</td>
 </tr>
 <tr>
   <th>Pro Brewer?</th>

@@ -12,7 +12,7 @@ sub new {
     my $cgi_object = CGI->new();
 
     # transmit CGI header
-    print $cgi_object->header(-charset => 'utf-8', @_);
+    print $cgi_object->header( -charset => 'utf-8', @_ );
 
     # if app is disabled, display error card and exit
     my $config = Ninkasi::Config->new();

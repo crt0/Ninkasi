@@ -19,7 +19,7 @@
 [% MACRO text_field(name, size) BLOCK -%]
 [% mark_field("$name") -%]
 <input type="text" name="[% name %]" size="[% size %]"
-       value="[% form.$name | html_entity %]">
+       value="[% form.$name | html %]">
 [% END ~%]
 
 [% PROCESS header.html,
@@ -34,7 +34,7 @@
   site maintainer has been notified and is working to correct the
   problem.  Your information has NOT been recorded; please try
   resubmitting this form later.  Sorry for the inconvenience.  The
-  error was: [% system_error | html_entity %]
+  error was: [% system_error | html %]
 [% ELSE -%]
   We're having trouble understanding your form submission.  Please
   correct the following and try again.  If you feel you submitted the
@@ -42,7 +42,7 @@
   site maintainer</a>.
   <ul>
   [% FOREACH error_message IN user_errors -%]
-  <li>[% error_message | html_entity %]</li>
+  <li>[% error_message | html %]</li>
   [% END -%]
   </ul>
 [% END -%]
