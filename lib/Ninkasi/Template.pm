@@ -7,14 +7,11 @@ use base qw/Class::Singleton Template/;
 
 use Class::Singleton;
 use Ninkasi::Config;
-use Template::Filters;
 
 sub new { shift->instance(@_) }
 
 sub _new_instance {
     my ($class, $template_config) = @_;
-
-    Template::Filters->use_html_entities();
 
     my $config = Ninkasi::Config->new();
     $template_config->{INCLUDE_PATH} = $config->get('template_path');
