@@ -164,6 +164,7 @@ sub render_judge {
     my ($sth, $result) = $judge->bind_hash( {
         bind_values => [$judge_id],
         columns     => \@judge_columns,
+        limit       => 1,
         where       => 'rowid = ?',
     } );
     $sth->fetch();

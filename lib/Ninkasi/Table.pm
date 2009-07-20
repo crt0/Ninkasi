@@ -90,6 +90,10 @@ EOF
         $sql .= " ORDER BY $argument->{order}";
     }
 
+    if ( exists $argument->{limit} ) {
+        $sql .= " LIMIT $argument->{limit}";
+    }
+
     my $sth = $self->Database_Handle()->prepare($sql);
     $sth->execute(@bind_values);
 

@@ -335,6 +335,7 @@ sub render_page {
     my ($sth, $flight) = $flight_table->bind_hash( {
         bind_values => [$flight_number],
         columns     => [qw/category description pro number/],
+        limit       => 1,
         where       => 'number = ?',
     } );
 
