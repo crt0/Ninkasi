@@ -133,7 +133,7 @@ sub mail_confirmation {
         'confirmation.tt',
         {
             form  => $column,
-            title => 'Brewers Cup Judge Volunteer Confirmation',
+            title => "Brewers' Cup Judge Volunteer Confirmation",
             type  => 'mail',
         },
         \$message,
