@@ -18,6 +18,7 @@ my $build = MyBuilder->new(
         'DBD::SQLite'              => '1.13',
         'Data::Dumper'             => '2.121_08',
         'Date::Format'             => '2.22',
+        'Email::Address'           => '1.889',
         'Module::Build'            => '0.2808',
         'Readonly'                 => '1.03',
         'Taint::Util'              => '0.06',

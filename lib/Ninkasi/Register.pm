@@ -5,6 +5,7 @@ use warnings;
 
 use Data::Dumper;
 use Date::Format qw/time2str/;
+use Email::Address;
 use File::Spec;
 use Ninkasi::Assignment;
 use Ninkasi::CSV;
@@ -17,6 +18,16 @@ use Taint::Util;
 
 our @REQUIRED_FIELDS = qw/first_name last_name address city state zip
                           phone_evening phone_day email1 email2/;
+
+sub create_rfc2822_address {
+    my ($column) = @_;
+
+    my $address = Email::Address->new( join( ' ', @$column{ qw/first_name
+                                                               last_name/ } ),
+                                       => $column->{email1} );
+
+    return $address->format();
+}
 
 sub _send_mail {
     my ($message) = @_;
@@ -132,9 +143,10 @@ sub mail_confirmation {
     $template_object->process(
         'confirmation.tt',
         {
-            form  => $column,
-            title => "Brewers' Cup Judge Volunteer Confirmation",
-            type  => 'mail',
+            form       => $column,
+            title      => "Brewers' Cup Judge Volunteer Confirmation",
+            to_address => create_rfc2822_address($column),
+            type       => 'mail',
         },
         \$message,
     ) or warn $template_object->error();

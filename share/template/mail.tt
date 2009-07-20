@@ -17,7 +17,7 @@
 [% BLOCK body_text -%]
 From:    "Brewers' Cup Judge Coordinator" <judgecoordinator@brewerscup.org>
 Subject: [% title %]
-To:      "[% form.first_name | html_entity %] [% form.last_name | html_entity %]" <[% form.email1 | html_entity %]>
+To:      [% to_address %]
 
 [% content -%]
 
