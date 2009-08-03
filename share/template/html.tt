@@ -66,15 +66,6 @@
    [% END ~%]
 [% END ~%]
 
-[% BLOCK assignment_table -%]
-<form method="post">
-[% PROCESS judges_table.tt -%]
-[% IF row ~%]
-<input name="save" type="submit" value="[% button_value %]" />
-[% END ~%]
-</form>
-[% END ~%]
-
 [% BLOCK flight_table %]
 <form name="flight" method="post">
 [% PROCESS table ~%]
@@ -94,22 +85,6 @@
      [% row %] [% IF row == 1 %]judge[% ELSE %]judges[% END %].
    </p>
 [% END ~%]      
-
-[% BLOCK assigned_judges_table -%]
-<p>
-Judges assigned to [% flight_string %]
-[<a href="/manage/assignment/[% flight.number %]?format=csv">csv</a>,
-<a href="/manage/assignment/[% flight.number %]?format=card">card</a>]:
-</p>
-[% PROCESS assignment_table -%]
-[% END ~%]
-
-[% BLOCK unassigned_judges_table -%]
-<p>
-Judges available for Flight [% flight.number %], [% flight.description %]:
-</p>
-[% PROCESS assignment_table -%]
-[% END ~%]
 
 [% BLOCK body_text -%]
 <div id="body_text">
