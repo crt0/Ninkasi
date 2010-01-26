@@ -19,10 +19,10 @@ BEGIN {
     }
 }
 
-use CGI ();
+use Ninkasi::CGI;
 use Ninkasi::Flight;
 
 MAIN: {
-    Ninkasi::Flight->render_page( CGI->new() );
+    Ninkasi::Flight->render_page( Ninkasi::CGI->new() );
     exit;
 }

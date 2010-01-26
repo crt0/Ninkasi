@@ -19,10 +19,10 @@ BEGIN {
     }
 }
 
-use CGI ();
+use Ninkasi::CGI;
 use Ninkasi::Assignment;
 
 MAIN: {
-    Ninkasi::Assignment->render_page( CGI->new() );
+    Ninkasi::Assignment->render_page( Ninkasi::CGI->new() );
     exit;
 }

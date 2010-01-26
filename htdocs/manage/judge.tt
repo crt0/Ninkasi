@@ -19,10 +19,10 @@ BEGIN {
     }
 }
 
-use CGI ();
+use Ninkasi::CGI;
 use Ninkasi::Judge;
 
 MAIN: {
-    Ninkasi::Judge->render_page( CGI->new() );
+    Ninkasi::Judge->render_page( Ninkasi::CGI->new() );
     exit;
 }
