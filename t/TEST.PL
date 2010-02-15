@@ -9,5 +9,14 @@ use File::Spec;
 
 $ENV{NINKASI_TEST_SERVER_ROOT} = File::Spec->catfile(getcwd(), 't');
 
+my $database_file = File::Spec->catfile( $ENV{NINKASI_TEST_SERVER_ROOT},
+                                         'database' );
+unlink $database_file;
+my @init_command = ( File::Spec->catfile( getcwd(), 'ninkasi-init' ),
+                     $database_file );
+my $init_command_log = join( ' ', @init_command );
+warn "$init_command_log\n";
+system(@init_command) == 0 or die "$init_command_log: $?";
+
 use Apache::TestRunPerl ();
 Apache::TestRunPerl->new->run(@ARGV);
