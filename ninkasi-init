@@ -1,0 +1,28 @@
+#!/usr/bin/perl
+
+use blib;
+use strict;
+use warnings;
+
+use DBI;
+use Ninkasi::Config;
+use Readonly;
+
+Readonly my @CLASS_SUFFIXES => qw/Assignment Constraint Flight Judge/;
+
+MAIN: {
+    my $database_file = $ARGV[0];
+    if ( !defined $database_file ) {
+        my $config = Ninkasi::Config->new();
+        $database_file = $config->database_file();
+    }
+    die "$database_file: file exists\n" if -e $database_file;
+    my $dbh = DBI->connect( "dbi:SQLite:dbname=$database_file", '', '',
+                            { RaiseError  => 1 } );
+
+    foreach my $class_suffix (@CLASS_SUFFIXES) {
+        my $class = "Ninkasi::$class_suffix";
+        eval "require $class";
+        $dbh->do( $class->Schema() );
+    }
+}
