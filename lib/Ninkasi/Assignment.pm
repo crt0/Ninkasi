@@ -352,8 +352,7 @@ sub render_page {
     # format parameter determines content type
     my $format = $cgi_object->param('format') || 'html';
     print $cgi_object->header(
-        -type    => $format eq 'csv'    ? 'text/plain'
-                  : $format eq 'roster' ? 'application/pdf'
+        -type    => $format eq 'roster' ? 'application/pdf'
                   :                       'text/html',
         -charset => 'utf-8'
     );
@@ -373,7 +372,7 @@ sub render_page {
     }
 
     # process the template, passing it a function to fetch judge data
-    $template_object->process( 'assignment.tt', {
+    $template_object->process( 'assignment.html', {
         assigned_judges_func   => sub { select_assigned_judges $flight },
         constraint_name        => \%Ninkasi::Constraint::NAME,
         escape_quotes          => sub { \&escape_quotes },
@@ -389,3 +388,148 @@ sub render_page {
 }
 
 1;
+__END__
+
+=head1 NAME
+
+Ninkasi::Assignment - mapping of judges to their assigned flights and sessions
+
+=head1 SYNOPSIS
+
+    use Ninkasi::Assignment;
+
+    # render a web page displaying all assignments
+    Ninkasi::Assignment->render_page( Ninkasi::CGI->new() );
+
+    # look up a judge in the assignment table; display that judge's assignments
+    my $assignment_table = Ninkasi::Assignment->new();
+    my ( $assignment_handle, $assignment ) = $assignment_table->bind_hash( {
+        bind_values => [ $judge_id ],
+        columns     => [ qw/flight session/ ],
+        order       => 'session',
+        where       => 'judge = ?',
+    } );
+    print "Judge: $judge_id\n";
+    while ( $assignment_handle->fetch() ) {
+        print <<EOF;
+  Session $assignment->{session}: Flight $assignment->{flight}
+EOF
+    }
+
+=head1 DESCRIPTION
+
+Ninkasi::Assignment provides an interface to a database table of
+assignments of judges (see L<Ninkasi::Judge>) to flights (see
+L<Ninkasi::Flight>) for each session (see L<Ninkasi::Session>).
+
+=head1 METHODS
+
+=over 4
+
+=item Ninkasi::Assignment->render_page($cgi_object)
+
+Render a web page using the F<assignment.html> template (see
+L<Ninkasi::Template>) to display the assignments for all judges in a
+form that allows competition organizers to edit these assignments.
+Uses the Ninkasi::CGI(3) object C<$cgi_object>.
+
+=item $hash_ref = select_assigned_judges $flight_object
+
+Given a Ninkasi::Flight object C<$flight_object>, return an iterator
+that fetches data corresponding to each successive assigned judge,
+returned as a reference to a hash containing the following entries:
+
+ Attribute            Class
+ =========            =====
+
+ rowid                Judge attribute
+ first_name                 "
+ last_name                  "
+ rank                       "
+ competitions_judged        "
+ pro_brewer                 "
+ type                 Constraint attribute
+ fetch_assignments    reference to subroutine that returns list of
+                      flight numbers (or the string 'N/A' if not
+                      assigned) to which this judge is assigned, in
+                      session order
+
+=item $hash_ref = select_unassigned_judges $flight_object
+
+Given a Ninkasi::Flight object C<$flight_object>, return an iterator
+that fetches data corresponding to each successive judge not assigned
+but available to judge that flight, returned as a reference to a hash
+containing the following entries:
+
+ Attribute            Class
+ =========            =====
+
+ rowid                Judge attribute
+ first_name                 "
+ last_name                  "
+ rank                       "
+ competitions_judged        "
+ pro_brewer                 "
+ constraint           Constraint attribute
+ type                       "
+ fetch_assignments    reference to subroutine that returns list of
+                      flight numbers (or the string 'N/A' if not
+                      assigned) to which this judge is assigned, in
+                      session order
+
+=item $string = serialize $hash_ref
+
+Serialize hash referenced by I<$hash_ref> into a string of the form
+C<key1-value1_key2-value2...>.  Used in passing assignment data via
+HTTP query parameters.
+
+=item $hash_ref = deserialize $string
+
+Reverse of I<serialize>, above.
+
+=item update_assignment $assignments, $flight_number
+
+Update stored list of assignments for I<$flight_number> according to
+the serialized list of assignments in I<$assignments> (see
+L</serialize>).
+
+=item print_roster
+
+Produce a PDF of the entire judge roster on C<STDOUT>.
+
+=item print_table_card $flight
+
+Produce a PDF of the table card for $flight on C<STDOUT>.
+
+=back
+
+=head1 DIAGNOSTICS
+
+The I<print_*> routines produce warnings on C<STDERR> when problems
+are encountered running groff(1) to generate the PDF output.
+
+If this module encounters an error while rendering a template,
+I<Ninkasi::Template->error()> is called to generate a warning message
+that is printed on C<STDERR>.
+
+=head1 CONFIGURATION
+
+No Ninkasi::Config(3) variables are used by this module.
+
+=head1 BUGS AND LIMITATIONS
+
+There are no known bugs in this module.  Please report problems to
+Andrew Korty <ajk@iu.edu>.  Patches are welcome.
+
+=head1 AUTHOR
+
+Andrew Korty <ajk@iu.edu>
+
+=head1 LICENSE AND COPYRIGHT
+
+This software is in the public domain.
+
+=head1 SEE ALSO
+
+groff(1), Ninkasi::CGI(3), Ninkasi::Constraint(3), Ninkasi::Flight(3),
+Ninkasi::Judge(3), Ninkasi::Session(3), Ninkasi::Template(3)
