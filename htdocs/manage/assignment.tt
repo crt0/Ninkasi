@@ -19,8 +19,8 @@ BEGIN {
     }
 }
 
-use Ninkasi::CGI;
 use Ninkasi::Assignment;
+use Ninkasi::CGI;
 
 MAIN: {
     Ninkasi::Assignment->render_page( Ninkasi::CGI->new() );

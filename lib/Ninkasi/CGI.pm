@@ -3,34 +3,42 @@ package Ninkasi::CGI;
 use strict;
 use warnings;
 
-use CGI ();
+use base 'CGI';
+
 use Ninkasi::Config;
 
 sub new {
     my $class = shift;
 
-    my $cgi_object = CGI->new();
-
-    # set content type based on format parameter
-    my @content_type = ();
-    if ( $cgi_object->param('format') eq 'card' ) {
-        my @content_type = ( -type => 'application/pdf' );
-    }
-
-    # transmit CGI header
-    print $cgi_object->header( -charset => 'utf-8', @content_type, @_ );
+    my $self = $class->SUPER::new();
 
     # if app is disabled, display error card and exit
     my $config = Ninkasi::Config->new();
     my $disabled_template = $config->disabled();
     if ($disabled_template) {
+        $self->transmit_header();
         my $template_object = Ninkasi::Template->new();
         $template_object->process("$disabled_template.html")
             or warn $template_object->error();
         exit;
     }
 
-    return $cgi_object;
+    return $self;
+}
+
+sub transmit_header {
+    my ($self) = shift;
+
+    # set content type based on format parameter
+    my $format = $self->param('format') || 'html';
+    my @content_type = (
+        -type    => $format eq 'card'   ? 'application/pdf'
+                  : $format eq 'csv'    ? 'text/plain'
+                  :                       'text/html'
+    );
+
+    # transmit CGI header
+    print $self->header( -charset => 'utf-8', @content_type, @_ );
 }
 
 1;

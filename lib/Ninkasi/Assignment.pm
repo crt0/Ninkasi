@@ -340,7 +340,7 @@ sub render_page {
     } );
 
     if ( !$sth->fetch() ) {
-        print $cgi_object->header(-status => '404 Not Found');
+        $cgi_object->transmit_header( -status => '404 Not Found' );
         $template_object->process( 'flight_404.html',
                                    {flight_number => $flight_number} )
             or warn $template_object->error();

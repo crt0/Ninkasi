@@ -261,6 +261,7 @@ sub render_page {
         }
     }
 
+    $cgi_object->transmit_header();
     my $template_object = Ninkasi::Template->new();
     $template_object->process($template_name, \%template_variable)
         or warn $template_object->error();

@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 53;
+use Test::More tests => 55;
 
 use Apache::TestConfig;
 use IPC::Open2;
@@ -602,3 +602,41 @@ print $file_writer $mech->content();
 close $file_writer;
 like <$file_reader>, qr/PDF/;
 close $file_reader;
+
+# add flights with multiple categories
+$mech->submit_form_ok( {
+    button => 'save',
+    with_fields => {
+        category_9    => '20, 21',
+        number_9      => 26,
+        pro_9         => 0,
+        description_9 => 'Fruit Beer / SHV',
+    },
+} );
+$mech->content_like(
+    qr{<tr\ class="odd">\s+
+       <td>\s+
+       <input\ name="number_9"\s+
+               size="10"\s+
+               value="26"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="category_9"\s+
+               size="3"\s+
+               value="20, 21"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="pro_9"\s+
+               type="checkbox"\s+
+               value="1"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="description_9"\s+
+               size="40"\s+
+               value="Fruit\ Beer\ /\ SHV"\ />\s+
+       </td>\s+
+       <td>\s+
+       <a\ href="/manage/assignment/26">view</a>\s+
+       </td>\s+
+       </tr>}msx
+);
