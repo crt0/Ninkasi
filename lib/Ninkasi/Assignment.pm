@@ -351,11 +351,7 @@ sub render_page {
 
     # format parameter determines content type
     my $format = $cgi_object->param('format') || 'html';
-    print $cgi_object->header(
-        -type    => $format eq 'roster' ? 'application/pdf'
-                  :                       'text/html',
-        -charset => 'utf-8'
-    );
+    $cgi_object->transmit_header();
 
     # process table card
     if ( $format eq 'card' ) {

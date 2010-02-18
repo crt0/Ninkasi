@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 55;
+use Test::More tests => 58;
 
 use Apache::TestConfig;
 use IPC::Open2;
@@ -357,6 +357,7 @@ $mech->html_lint_ok('HTML validation');
 
 # test CSV format for view of all judges
 $mech->follow_link_ok( { text_regex => qr/csv/ } );
+is $mech->ct(), 'text/plain';
 $mech->content_is(<<EOF);
 "Name","Rank","Fri. PM","Sat. AM","Sat. PM","Comps Judged","Pro Brewer?","Entries","Prefers Not","Whatever","Prefers"
 "Carrera, Lyndsey","Certified","","N/A","","10","N","10, 15, 21","20","08, 14a, 14b","02"
@@ -369,6 +370,7 @@ EOF
 # test roster
 $mech->back();
 $mech->follow_link_ok( { text_regex => qr/roster/ } );
+is $mech->ct(), 'application/pdf';
 my $file_pid = IPC::Open2::open2 my $file_reader, my $file_writer, qw/file -/;
 print $file_writer $mech->content();
 close $file_writer;
@@ -596,6 +598,7 @@ $mech->content_unlike(
 # test table card (just make sure it's a PDF)
 $mech->back();
 $mech->follow_link_ok( { text_regex => qr/card/ } );
+is $mech->ct(), 'application/pdf';
 ($file_pid, $file_reader, $file_writer) = ();
 $file_pid = IPC::Open2::open2 $file_reader, $file_writer, qw/file -/;
 print $file_writer $mech->content();

@@ -34,6 +34,7 @@ sub transmit_header {
     my @content_type = (
         -type    => $format eq 'card'   ? 'application/pdf'
                   : $format eq 'csv'    ? 'text/plain'
+                  : $format eq 'roster' ? 'application/pdf'
                   :                       'text/html'
     );
 
