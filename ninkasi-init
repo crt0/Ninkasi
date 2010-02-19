@@ -8,7 +8,8 @@ use DBI;
 use Ninkasi::Config;
 use Readonly;
 
-Readonly my @CLASS_SUFFIXES => qw/Assignment Constraint Flight Judge/;
+Readonly my @CLASS_SUFFIXES
+         => qw/Assignment Constraint Flight FlightCategory Judge/;
 
 MAIN: {
     my $database_file = $ARGV[0];

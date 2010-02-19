@@ -8,13 +8,12 @@ use base 'Ninkasi::Table';
 use Ninkasi::Template;
 
 __PACKAGE__->Table_Name('flight');
-__PACKAGE__->Column_Names(qw/category description pro number/);
+__PACKAGE__->Column_Names(qw/description pro number/);
 __PACKAGE__->Schema(<<'EOF');
 CREATE TABLE flight (
-    category    INTEGER,
-    description INTEGER,
-    pro         INTEGER DEFAULT 0,
-    number      TEXT UNIQUE
+    description        INTEGER,
+    pro                INTEGER DEFAULT 0,
+    number             TEXT UNIQUE
 )
 EOF
 
@@ -30,20 +29,23 @@ sub fetch {
 
     # fetch flights of each constraint type
     my $sql = <<EOF;
-judge.rowid = 'constraint'.judge
-    AND 'constraint'.judge = ?
-    AND 'constraint'.category = flight.category
-    AND (type != ? OR judge.pro_brewer = flight.pro)
+SELECT number, MAX(type)
+FROM flight, 'constraint', flight_category, judge
+WHERE judge.rowid = 'constraint'.judge
+      AND 'constraint'.judge = ?
+      AND flight_category.category = 'constraint'.category
+GROUP BY flight_category.flight
+HAVING MAX(type) != ? OR judge.pro_brewer = flight.pro
+ORDER BY number
 EOF
-    my $entry = $Ninkasi::Constraint::NUMBER{entry};
-    my ( $flight_handle, $flight ) = $flight_table->bind_hash( {
-        bind_values => [ $judge_id, $entry ],
-        columns     => [ qw/flight.category number type/ ],
-        join        => [ qw/Ninkasi::Constraint Ninkasi::Judge/ ],
-        order       => 'number',
-        where       => $sql,
-    } );
-    $flight_handle->bind_col( 1, \$flight->{category} );
+    my $flight_handle = $flight_table->Database_Handle()->prepare($sql);
+    $flight_handle->execute( $judge_id, $Ninkasi::Constraint::NUMBER{entry} );
+
+    # bind the values of a hash to column values
+    my %flight;
+    my @columns = qw/number type/;
+    @flight{@columns} = ();
+    $flight_handle->bind_columns( \(@flight{@columns}) );
 
     # intialize a hash to store the constraint lists (indexed by type name)
     my %constraint = ();
@@ -52,11 +54,11 @@ EOF
     while ( $flight_handle->fetch() ) {
 
         # add this flight to the appropriate constraint list
-        push @{ $constraint{ $Ninkasi::Constraint::NAME{ $flight->{type} } } },
-             $flight->{number};
+        push @{ $constraint{ $Ninkasi::Constraint::NAME{ $flight{type} } } },
+             $flight{number};
 
-        # we found a constraint for this category, so delete it from $not_found
-        delete $not_found->{ $flight->{number} };
+        # we found a constraint for this flight, so delete it from %$not_found
+        delete $not_found->{ $flight{number} };
     }
 
     # add any missing rows to the 'whatever' list
@@ -77,8 +79,9 @@ sub update_flights {
     # disable autocommit to perform this operation as one transaction
     $dbh->{AutoCommit} = 0;
 
-    # clear the table
+    # clear the tables
     $dbh->do('DELETE FROM flight');
+    $dbh->do('DELETE FROM flight_category');
 
     # build table of input data
     my %input_table = ();
@@ -89,16 +92,29 @@ sub update_flights {
         $input_table{$row}{$column} = $cgi_object->param($name);
     }
 
-    # add the flights as submitted
-    my $column_list = join ', ', keys %$permitted_column;
-    my $sql = <<EOF;
-INSERT INTO flight ($column_list) VALUES (?, ?, ?, ?)
+    # prepare statement handle for flight table
+    my @columns = keys %$permitted_column;
+    my $column_list = join ', ', @columns;
+    my $flight_handle = $dbh->prepare(<<EOF);
+INSERT INTO flight ($column_list) VALUES (?, ?, ?)
 EOF
-    my $sth = $dbh->prepare($sql);
+
+    # prepare statement handle for flight-category mapping table
+    my $flight_category_handle = $dbh->prepare(<<EOF);
+INSERT INTO flight_category (category, flight) VALUES (?, ?)
+EOF
+
+    # update tables row by row
     while ( my ( $row_number, $flight ) = each %input_table ) {
+
+        # sanity check row number
         next if !defined $flight->{number} || $flight->{number} eq '';
+
+        # default to homebrew
         $flight->{pro} ||= 0;
-        eval { $sth->execute( @$flight{ keys %$permitted_column } ) };
+
+        # update flight table and trap error on flight number clash
+        eval { $flight_handle->execute(@$flight{@columns}) };
         if ($@) {
             $dbh->rollback();
             $dbh->{AutoCommit} = 1;
@@ -108,6 +124,13 @@ EOF
                         ;
             return { row => $flight->{number}, message => $message };
         }
+
+        # parse categories and add to mapping table
+        foreach my $category
+                ( split /[, ]+/, $input_table{$row_number}{category} ) {
+            $flight_category_handle->execute( $category, $row_number );
+        }
+
     }
 
     # commit this transaction & re-enable autocommit
@@ -168,7 +191,7 @@ sub render_page {
     my $flight = Ninkasi::Flight->new();
     my ($sth, $result) = $flight->bind_hash( {
         columns => [ keys %{ $self->_Column_Names() } ],
-        order   => 'category, number',
+        order   => 'number',
     } );
 
     # process the template, passing it a function to fetch flight data

@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 58;
+use Test::More tests => 64;
 
 use Apache::TestConfig;
 use IPC::Open2;
@@ -206,7 +206,7 @@ $mech->submit_form_ok( {
         category14          => 'prefer',
         category15          => 'entry',
         category20          => 'prefer not',
-        category21          => 'entry',
+        category21          => 'prefer',
         city                => 'Boise',
         competitions_judged => 10,
         email1              => 'ninkasi@ajk.name',
@@ -363,7 +363,7 @@ $mech->content_is(<<EOF);
 "Carrera, Lyndsey","Certified","","N/A","","10","N","10, 15, 21","20","08, 14a, 14b","02"
 "Mayers, Liam","Novice","","","","2","Y","","","02, 08, 10, 14a, 14b, 15, 20, 21",""
 "Reynoso, Greggory","Certified","","N/A","","10","Y","08","20","10, 14a, 14b, 15, 21","02"
-"Underhill, Leann","Certified","","","N/A","10","N","10, 15, 21","20","08","02, 14a, 14b"
+"Underhill, Leann","Certified","","","N/A","10","N","10, 15","20","08","02, 14a, 14b, 21"
 "|<iefer, Angelina","Certified","","N/A","","10","N","10, 15, 21","20","08, 14a, 14b","02"
 EOF
 
@@ -607,12 +607,13 @@ like <$file_reader>, qr/PDF/;
 close $file_reader;
 
 # add flights with multiple categories
+$lookup_url = "$url_base/manage/flight/";
+$mech->get_ok($lookup_url);
 $mech->submit_form_ok( {
     button => 'save',
     with_fields => {
         category_9    => '20, 21',
         number_9      => 26,
-        pro_9         => 0,
         description_9 => 'Fruit Beer / SHV',
     },
 } );
@@ -626,7 +627,7 @@ $mech->content_like(
        <td>\s+
        <input\ name="category_9"\s+
                size="3"\s+
-               value="20, 21"\ />\s+
+               value="20,\ 21"\ />\s+
        </td>\s+
        <td>\s+
        <input\ name="pro_9"\s+
@@ -643,3 +644,56 @@ $mech->content_like(
        </td>\s+
        </tr>}msx
 );
+
+# check assignments page for Fruit Beer / SHV flight
+$lookup_url = "$url_base/manage/assignment/26";
+$mech->get_ok($lookup_url);
+$mech->content_like(
+    qr{<a\ href="/manage/judge/\d+">\s+
+       Mayers,\ Liam\s+
+       </a>\s+
+       </td>\s+
+       <td>Novice</td>\s+
+       <td>\s+
+       <input\ name="assign"\s+
+               type="checkbox"\s+
+               value="judge-2_session-1"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="assign"\s+
+               type="checkbox"\s+
+               value="judge-2_session-2"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="assign"\s+
+               type="checkbox"\s+
+               value="judge-2_session-3"\ />\s+
+       </td>\s+
+       <td>2</td>\s+
+       <td>Y</td>\s+
+       <td>whatever</td>}msx
+);
+$mech->content_like(
+    qr{<a\ href="/manage/judge/\d+">\s+
+       Underhill,\ Leann\s+
+       </a>\s+
+       </td>\s+
+       <td>Certified</td>\s+
+       <td>\s+
+       <input\ name="assign"\s+
+               type="checkbox"\s+
+               value="judge-1_session-1"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="assign"\s+
+               type="checkbox"\s+
+               value="judge-1_session-2"\ />\s+
+       </td>\s+
+       <td>\s+
+       N/A</td>\s+
+       <td>10</td>\s+
+       <td>N</td>\s+
+       <td>prefer not</td>}msx
+);
+$mech->content_unlike(qr/Carrera/);
+$mech->content_unlike(qr/Reynoso/);

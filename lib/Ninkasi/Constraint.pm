@@ -16,22 +16,10 @@ CREATE TABLE "constraint" (
 EOF
 
 our @CONSTRAINTS = (
-    {
-        name   => 'prefer not',
-        number => 10,
-    },
-    {
-        name   => 'whatever',
-        number => 20,
-    },
-    {
-        name   => 'entry',
-        number => 30,
-    },
-    {
-        name   => 'prefer',
-        number => 40,
-    },
+    { name => 'whatever',   number => 0b0001 },
+    { name => 'prefer',     number => 0b0010 },
+    { name => 'prefer not', number => 0b0100 },
+    { name => 'entry',      number => 0b1000 },
 );
 
 our (%NAME, %NUMBER);
