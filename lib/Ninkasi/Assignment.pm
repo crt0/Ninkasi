@@ -6,7 +6,6 @@ use warnings;
 use base 'Ninkasi::Table';
 
 use IPC::Open2 ();
-use Ninkasi::Category;
 use Ninkasi::Constraint;
 use Ninkasi::Flight;
 use Ninkasi::Judge;
@@ -56,7 +55,7 @@ sub select_assigned_judges {
 
     my $judge = Ninkasi::Judge->new();
     my ($sth, $result) = $judge->bind_hash( {
-        bind_values => [ @$flight{ qw/category number/ } ],
+        bind_values => [$flight{number}],
         columns     => [@judge_columns],
         order       => 'rank DESC, competitions_judged DESC, type DESC',
         where       => join( ' ', 'AND judge.rowid IN (SELECT DISTINCT judge',
@@ -330,7 +329,7 @@ sub render_page {
     my $flight_table = Ninkasi::Flight->new();
     my ($sth, $flight) = $flight_table->bind_hash( {
         bind_values => [$flight_number],
-        columns     => [qw/category description pro number/],
+        columns     => [qw/description pro number/],
         limit       => 1,
         where       => 'number = ?',
     } );
