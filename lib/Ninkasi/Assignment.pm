@@ -51,21 +51,17 @@ sub fetch {
 sub select_assigned_judges {
     my ($flight) = @_;
 
-    my @judge_columns      = qw/judge.rowid first_name last_name rank
-                                competitions_judged pro_brewer/;
-    my @constraint_columns = qw/type/;
+    my @judge_columns = qw/judge.rowid first_name last_name rank
+                           competitions_judged pro_brewer/;
 
     my $judge = Ninkasi::Judge->new();
     my ($sth, $result) = $judge->bind_hash( {
         bind_values => [ @$flight{ qw/category number/ } ],
-        columns     => [@judge_columns, @constraint_columns],
-        join        => 'Ninkasi::Constraint',
+        columns     => [@judge_columns],
         order       => 'rank DESC, competitions_judged DESC, type DESC',
-        where       => join(' ', "judge.rowid = 'constraint'.judge",
-                                 "AND 'constraint'.category = ?",
-                                 'AND judge.rowid IN (SELECT DISTINCT judge',
-                                                 'FROM assignment',
-                                                 'WHERE flight = ?)'),
+        where       => join( ' ', 'AND judge.rowid IN (SELECT DISTINCT judge',
+                                                      'FROM assignment',
+                                                      'WHERE flight = ?)' ),
     } );
     $sth->bind_col(1, \$result->{rowid});
 
