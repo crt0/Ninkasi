@@ -36,18 +36,6 @@
 <td>[% content | html -%]</td>
 [% END ~%]
 
-[% BLOCK input ~%]
-[% name = "judge${judge.rowid}_$column_name" -%]
-[% name_old = "${name}_old" %]
-<input name="[% name_old %]" type="hidden" value="[% content %]" />
-[% IF cgi.save && cgi.$name_old != cgi.$name -%]
-[% CALL queue_update(judge.rowid, flight, cgi.$name) -%]
-<input name="[% name %]" size="5" value="[% cgi.$name %]" />
-[% ELSE -%]
-<input name="[% name %]" size="5" value="[% content %]" />
-[% END -%]  
-[% END ~%]
-
 [% BLOCK judge -%]
 [% WRAPPER column %]
 <a href="/manage/judge/[% judge.rowid %]">

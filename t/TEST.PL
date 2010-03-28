@@ -7,6 +7,7 @@ use lib qw(
 use Cwd;
 use File::Spec;
 
+$ENV{APACHE_TEST_PORT} = 8530;
 $ENV{NINKASI_TEST_SERVER_ROOT} = File::Spec->catfile(getcwd(), 't');
 
 my $database_file = File::Spec->catfile( $ENV{NINKASI_TEST_SERVER_ROOT},

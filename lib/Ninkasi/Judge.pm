@@ -94,8 +94,8 @@ sub render_all_judges {
     # select whole table & order by last name
     my $judge = Ninkasi::Judge->new();
     my ($sth, $result) = $judge->bind_hash( {
-        columns => \@judge_columns,
-        order   => 'last_name',
+        columns  => \@judge_columns,
+        order_by => 'last_name',
     } );
 
     # initialize queue for updates we'll find when rendering page
@@ -115,35 +115,12 @@ sub render_all_judges {
                     => sub { Ninkasi::Flight::fetch $result->{rowid} },
             };
         },
-        queue_update          => sub { push @update_queue, [@_] },
         rank_name             => \%Ninkasi::Judge::NAME,
         remove_trailing_comma => sub { \&Ninkasi::CSV::remove_trailing_comma },
         title                 => 'Registered Judges',
         type                  => $format,
     } ) or warn $template_object->error();
     $sth->finish();
-
-    # process queue of updates collected while rendering page
-    my $category = Ninkasi::Category->new();
-    my $table_name = $category->Table_Name();
-    my $dbh = $category->Database_Handle();
-    foreach my $update (@update_queue) {
-        my ($judge_id, $flight_number, $category_numbers) = @$update;
-
-        # remove old categories
-        $dbh->do(<<EOF, {}, $judge_id, $flight_number);
-DELETE FROM $table_name WHERE judge = ? AND flight = ?
-EOF
-
-        # insert new ones
-        foreach my $category_number (split /[^\d]+/, $category_numbers) {
-            $category->add( {
-                flight => $flight_number,
-                judge  => $judge_id,
-                number => $category_number,
-            } );
-        }
-    }
 
     return;
 }

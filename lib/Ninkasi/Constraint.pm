@@ -36,7 +36,7 @@ sub fetch {
     my ($sth, $result) = $constraint->bind_hash( {
         bind_values => [$judge_id],
         columns     => [qw/category type/],
-        order       => 'category',
+        order_by    => 'category',
         where       => 'judge = ?',
     } );
 

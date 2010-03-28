@@ -5,6 +5,7 @@ use warnings;
 
 use base 'Ninkasi::Table';
 
+use Ninkasi::FlightCategory;
 use Ninkasi::Template;
 
 __PACKAGE__->Table_Name('flight');
@@ -28,24 +29,23 @@ sub fetch {
                                             'number' );
 
     # fetch flights of each constraint type
-    my $sql = <<EOF;
-SELECT number, MAX(type)
-FROM flight, 'constraint', flight_category, judge
-WHERE judge.rowid = 'constraint'.judge
-      AND 'constraint'.judge = ?
-      AND flight_category.category = 'constraint'.category
-GROUP BY flight_category.flight
-HAVING MAX(type) != ? OR judge.pro_brewer = flight.pro
-ORDER BY number
+    my $where_clause = <<EOF;
+judge.rowid = 'constraint'.judge
+    AND 'constraint'.category = flight_category.category
+    AND flight.rowid = flight_category.flight
+    AND 'constraint'.judge = ?
 EOF
-    my $flight_handle = $flight_table->Database_Handle()->prepare($sql);
-    $flight_handle->execute( $judge_id, $Ninkasi::Constraint::NUMBER{entry} );
-
-    # bind the values of a hash to column values
-    my %flight;
-    my @columns = qw/number type/;
-    @flight{@columns} = ();
-    $flight_handle->bind_columns( \(@flight{@columns}) );
+    my ( $flight_handle, $flight ) = $flight_table->bind_hash( {
+        bind_values => [ $judge_id, $Ninkasi::Constraint::NUMBER{entry} ],
+        columns     => [ qw/ number MAX(type) / ],
+        join        => [ qw/ Ninkasi::Constraint Ninkasi::FlightCategory
+                             Ninkasi::Judge / ],
+        where       => $where_clause,
+        group_by    => 'judge.rowid, flight_category.flight',
+        having      => 'MAX(type) != ? OR judge.pro_brewer != flight.pro',
+        order_by    => 'number',
+    } );
+    $flight_handle->bind_col( 2, \$flight->{type} );
 
     # intialize a hash to store the constraint lists (indexed by type name)
     my %constraint = ();
@@ -54,11 +54,11 @@ EOF
     while ( $flight_handle->fetch() ) {
 
         # add this flight to the appropriate constraint list
-        push @{ $constraint{ $Ninkasi::Constraint::NAME{ $flight{type} } } },
-             $flight{number};
+        push @{ $constraint{ $Ninkasi::Constraint::NAME{ $flight->{type} } } },
+             $flight->{number};
 
         # we found a constraint for this flight, so delete it from %$not_found
-        delete $not_found->{ $flight{number} };
+        delete $not_found->{ $flight->{number} };
     }
 
     # add any missing rows to the 'whatever' list
@@ -88,7 +88,7 @@ sub update_flights {
     my $permitted_column = __PACKAGE__->_Column_Names();
     foreach my $name ( $cgi_object->param() ) {
         my ( $column, $row ) = split /_/, $name;
-        next if !exists $permitted_column->{$column};
+        next if !exists $permitted_column->{$column} && $column ne 'category';
         $input_table{$row}{$column} = $cgi_object->param($name);
     }
 
@@ -125,10 +125,12 @@ EOF
             return { row => $flight->{number}, message => $message };
         }
 
+        # get flight rowid
+        my $flight_id = $dbh->last_insert_id( (undef) x 4 );
+
         # parse categories and add to mapping table
-        foreach my $category
-                ( split /[, ]+/, $input_table{$row_number}{category} ) {
-            $flight_category_handle->execute( $category, $row_number );
+        foreach my $category ( split /[, ]+/, $flight->{category} ) {
+            $flight_category_handle->execute( $category, $flight_id );
         }
 
     }
@@ -190,8 +192,10 @@ sub render_page {
     # select whole table & order by category, then number
     my $flight = Ninkasi::Flight->new();
     my ($sth, $result) = $flight->bind_hash( {
-        columns => [ keys %{ $self->_Column_Names() } ],
-        order   => 'number',
+        columns  => [ keys %{ $self->_Column_Names() }, 'category' ],
+        join     => 'Ninkasi::FlightCategory',
+        order_by => 'number',
+        where    => 'flight.rowid = flight_category.flight',
     } );
 
     # process the template, passing it a function to fetch flight data

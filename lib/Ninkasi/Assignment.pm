@@ -50,19 +50,26 @@ sub fetch {
 sub select_assigned_judges {
     my ($flight) = @_;
 
-    my @judge_columns = qw/judge.rowid first_name last_name rank
-                           competitions_judged pro_brewer/;
+    my @columns = qw/judge.rowid first_name last_name rank
+                     competitions_judged pro_brewer type/;
 
     my $judge = Ninkasi::Judge->new();
+    my $where_clause = <<EOF;
+judge.rowid = 'constraint'.judge
+    AND 'constraint'.category = flight_category.category
+    AND flight.rowid = flight_category.flight
+    AND flight.number = ?
+    AND judge.rowid IN (SELECT DISTINCT judge FROM assignment WHERE flight = ?)
+EOF
     my ($sth, $result) = $judge->bind_hash( {
-        bind_values => [$flight{number}],
-        columns     => [@judge_columns],
-        order       => 'rank DESC, competitions_judged DESC, type DESC',
-        where       => join( ' ', 'AND judge.rowid IN (SELECT DISTINCT judge',
-                                                      'FROM assignment',
-                                                      'WHERE flight = ?)' ),
+        bind_values => [ ( $flight->{number} ) x 2 ],
+        columns     => [@columns],
+        join        => [ qw/Ninkasi::Constraint Ninkasi::Flight
+                            Ninkasi::FlightCategory/ ],
+        order_by    => 'rank DESC, competitions_judged DESC, type DESC',
+        where       => $where_clause,
     } );
-    $sth->bind_col(1, \$result->{rowid});
+    $sth->bind_col( 1, \$result->{rowid} );
 
     return sub {
         return $sth->fetch() && {
@@ -76,32 +83,36 @@ sub select_unassigned_judges {
     my ($flight) = @_;
 
     my @columns = qw/judge.rowid 'constraint'.category first_name last_name
-                     rank competitions_judged pro_brewer type/;
-
-    my $entry = $Ninkasi::Constraint::NUMBER{entry};
+                     rank competitions_judged pro_brewer/;
 
     my $where_clause = <<EOF;
 judge.rowid = 'constraint'.judge
-AND flight.number = ?
-AND flight.category = 'constraint'.category
-AND (type != $entry OR judge.pro_brewer != flight.pro)
-AND judge.rowid IN (SELECT DISTINCT judge FROM assignment WHERE flight = 0)
-AND judge.rowid NOT IN (SELECT DISTINCT judge FROM assignment WHERE flight = ?)
+    AND flight.rowid = flight_category.flight
+    AND 'constraint'.category = flight_category.category
+    AND flight.number = ?
+    AND judge.rowid IN (SELECT DISTINCT judge FROM assignment
+                                              WHERE flight = 0)
+    AND judge.rowid NOT IN (SELECT DISTINCT judge FROM assignment
+                                                  WHERE flight = ?)
 EOF
-
-    my $judge = Ninkasi::Judge->new();
-    my ($sth, $result) = $judge->bind_hash( {
-        bind_values => [ ( $flight->{number} ) x 2 ],
-        columns     => \@columns,
-        join        => [ qw/Ninkasi::Constraint Ninkasi::Flight/ ],
-        order       => 'type DESC, rank DESC, competitions_judged DESC',
+    my $flight_table = Ninkasi::Flight->new();
+    my ( $handle, $result ) = $flight_table->bind_hash( {
+        bind_values => [ ( $flight->{number} ) x 2,
+                         $Ninkasi::Constraint::NUMBER{entry} ],
+        columns     => [ @columns, 'MAX(type)' ],
+        join        => [ qw/Ninkasi::Constraint Ninkasi::FlightCategory
+                            Ninkasi::Judge/ ],
         where       => $where_clause,
+        group_by    => 'judge.rowid, flight_category.flight',
+        having      => 'MAX(type) != ? OR judge.pro_brewer != flight.pro',
+        order_by    => 'type DESC, rank DESC, competitions_judged DESC',
     } );
-    $sth->bind_col( 1, \$result->{rowid   } );
-    $sth->bind_col( 2, \$result->{category} );
+    $handle->bind_col( 1, \$result->{rowid   } );
+    $handle->bind_col( 2, \$result->{category} );
+    $handle->bind_col( 8, \$result->{type    } );
 
     return sub {
-        return $sth->fetch() && {
+        return $handle->fetch() && {
             %$result,
             fetch_assignments => sub { fetch $result->{rowid} },
         };
@@ -190,8 +201,8 @@ sub print_roster {
     # select whole judge table & order by last name
     my $judge_table = Ninkasi::Judge->new();
     my ( $judge_handle, $judge ) = $judge_table->bind_hash( {
-        columns => [ qw/rowid first_name last_name/ ],
-        order   => 'last_name',
+        columns  => [ qw/rowid first_name last_name/ ],
+        order_by => 'last_name',
     } );
 
     my $assignment_table = Ninkasi::Assignment->new();
@@ -269,7 +280,7 @@ sub print_table_card {
         bind_values => [ $flight->{number} ],
         columns     => [ qw/first_name last_name session/ ],
         join        => 'Ninkasi::Assignment',
-        order       => 'rank DESC, competitions_judged DESC',
+        order_by    => 'rank DESC, competitions_judged DESC',
         where       => 'judge.rowid = assignment.judge'
                        . ' AND assignment.flight = ?'
     } );
@@ -397,7 +408,7 @@ Ninkasi::Assignment - mapping of judges to their assigned flights and sessions
     my ( $assignment_handle, $assignment ) = $assignment_table->bind_hash( {
         bind_values => [ $judge_id ],
         columns     => [ qw/flight session/ ],
-        order       => 'session',
+        order_by    => 'session',
         where       => 'judge = ?',
     } );
     print "Judge: $judge_id\n";

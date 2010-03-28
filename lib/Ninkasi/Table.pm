@@ -50,6 +50,10 @@ EOF
     return $self->Database_Handle()->last_insert_id( (undef) x 4 );
 }
 
+
+# supported SQL clauses in the order we want them to appear in queries
+my @CLAUSES = qw/where limit group_by having order_by/;
+
 # thank you chromatic
 sub bind_hash {
     my ($self, $argument) = @_;
@@ -82,16 +86,15 @@ sub bind_hash {
 SELECT $column_list FROM $table_list
 EOF
 
-    if ( exists $argument->{where} ) {
-        $sql .= " WHERE $argument->{where}";
-    }
+    # add clauses
+    foreach my $clause (@CLAUSES) {
+        if ( exists $argument->{$clause} ) {
 
-    if ( exists $argument->{order} ) {
-        $sql .= " ORDER BY $argument->{order}";
-    }
+            # e.g., order_by -> 'ORDER BY'
+            ( my $keyword = $clause ) =~ tr/_/ /;
 
-    if ( exists $argument->{limit} ) {
-        $sql .= " LIMIT $argument->{limit}";
+            $sql = join ' ', $sql, uc $keyword, $argument->{$clause};
+        }
     }
 
     my $sth = $self->Database_Handle()->prepare($sql);
