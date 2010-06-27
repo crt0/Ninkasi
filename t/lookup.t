@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 64;
+use Test::More tests => 65;
 
 use Apache::TestConfig;
 use IPC::Open2;
@@ -472,6 +472,7 @@ $mech->content_unlike(
        <td>Y</td>\s+
        <td>whatever</td>}msx
 );
+$mech->content_lacks('Underhill, Leann');
 $mech->content_like( qr{<title>Flight 08, English Pale Ale</title>} );
 
 # test judge link
