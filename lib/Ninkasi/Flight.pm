@@ -37,7 +37,7 @@ judge.rowid = 'constraint'.judge
 EOF
     my ( $flight_handle, $flight ) = $flight_table->bind_hash( {
         bind_values => [ $judge_id, $Ninkasi::Constraint::NUMBER{entry} ],
-        columns     => [ qw/ number MAX(type) / ],
+        columns     => [ qw/ number MAX(type) pro_brewer pro / ],
         join        => [ qw/ Ninkasi::Constraint Ninkasi::FlightCategory
                              Ninkasi::Judge / ],
         where       => $where_clause,
@@ -53,8 +53,15 @@ EOF
     # walk the rows, building constraint lists
     while ( $flight_handle->fetch() ) {
 
+        # adjust for entries in the other division
+        my $type = $flight->{type} == $Ninkasi::Constraint::NUMBER{entry}
+                   && $flight->{pro_brewer} != $flight->{pro}
+                 ? $Ninkasi::Constraint::NUMBER{whatever}
+                 : $flight->{type}
+                 ;
+
         # add this flight to the appropriate constraint list
-        push @{ $constraint{ $Ninkasi::Constraint::NAME{ $flight->{type} } } },
+        push @{ $constraint{ $Ninkasi::Constraint::NAME{ $type } } },
              $flight->{number};
 
         # we found a constraint for this flight, so delete it from %$not_found
