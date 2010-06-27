@@ -72,7 +72,14 @@ EOF
     $sth->bind_col( 1, \$result->{rowid} );
 
     return sub {
-        return $sth->fetch() && {
+        return if !$sth->fetch();
+
+        # display entries in other divisions as "whatever"
+        if ( $result->{type} == $Ninkasi::Constraint::NUMBER{entry} ) {
+            $result->{type} = $Ninkasi::Constraint::NUMBER{whatever};
+        }
+
+        return {
             %$result,
             fetch_assignments => sub { fetch $result->{rowid} },
         };
@@ -95,16 +102,19 @@ judge.rowid = 'constraint'.judge
     AND judge.rowid NOT IN (SELECT DISTINCT judge FROM assignment
                                                   WHERE flight = ?)
 EOF
+    my $having_clause = <<EOF;
+MAX(type) != $Ninkasi::Constraint::NUMBER{entry}
+    OR judge.pro_brewer != flight.pro
+EOF
     my $flight_table = Ninkasi::Flight->new();
     my ( $handle, $result ) = $flight_table->bind_hash( {
-        bind_values => [ ( $flight->{number} ) x 2,
-                         $Ninkasi::Constraint::NUMBER{entry} ],
+        bind_values => [ ( $flight->{number} ) x 2 ],
         columns     => [ @columns, 'MAX(type)' ],
         join        => [ qw/Ninkasi::Constraint Ninkasi::FlightCategory
                             Ninkasi::Judge/ ],
         where       => $where_clause,
         group_by    => 'judge.rowid, flight_category.flight',
-        having      => 'MAX(type) != ? OR judge.pro_brewer != flight.pro',
+        having      => $having_clause,
         order_by    => 'type DESC, rank DESC, competitions_judged DESC',
     } );
     $handle->bind_col( 1, \$result->{rowid   } );
@@ -112,7 +122,14 @@ EOF
     $handle->bind_col( 8, \$result->{type    } );
 
     return sub {
-        return $handle->fetch() && {
+        return if !$handle->fetch();
+
+        # display entries in other divisions as "whatever"
+        if ( $result->{type} == $Ninkasi::Constraint::NUMBER{entry} ) {
+            $result->{type} = $Ninkasi::Constraint::NUMBER{whatever};
+        }
+
+        return {
             %$result,
             fetch_assignments => sub { fetch $result->{rowid} },
         };
