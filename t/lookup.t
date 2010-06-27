@@ -343,12 +343,12 @@ $mech->content_like(
        <td></td>\s+
        <td>10</td>\s+
        <td>N</td>\s+
-       <td><a\ href="/manage/assignment/08">08</a>,\s+
-       <a\ href="/manage/assignment/10">10</a>,\s+
+       <td><a\ href="/manage/assignment/10">10</a>,\s+
        <a\ href="/manage/assignment/15">15</a>,\s+
        <a\ href="/manage/assignment/21">21</a></td>\s+
        <td><a\ href="/manage/assignment/20">20</a></td>\s+
-       <td><a\ href="/manage/assignment/14a">14a</a>,\s+
+       <td><a\ href="/manage/assignment/08">08</a>,\s+
+       <a\ href="/manage/assignment/14a">14a</a>,\s+
        <a\ href="/manage/assignment/14b">14b</a></td>\s+
        <td><a\ href="/manage/assignment/02">02</a></td>}msx
 );
@@ -364,7 +364,7 @@ $mech->content_is(<<EOF);
 "Mayers, Liam","Novice","","","","2","Y","","","02, 08, 10, 14a, 14b, 15, 20, 21",""
 "Reynoso, Greggory","Certified","","N/A","","10","Y","08","20","10, 14a, 14b, 15, 21","02"
 "Underhill, Leann","Certified","","","N/A","10","N","10, 15","20","08","02, 14a, 14b, 21"
-"|<iefer, Angelina","Certified","","N/A","","10","N","08, 10, 15, 21","20","14a, 14b","02"
+"|<iefer, Angelina","Certified","","N/A","","10","N","10, 15, 21","20","08, 14a, 14b","02"
 EOF
 
 # test roster
