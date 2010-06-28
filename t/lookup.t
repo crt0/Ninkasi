@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 65;
+use Test::More tests => 64;
 
 use Apache::TestConfig;
 use IPC::Open2;
@@ -694,7 +694,6 @@ $mech->content_like(
        N/A</td>\s+
        <td>10</td>\s+
        <td>N</td>\s+
-       <td>prefer not</td>}msx
+       <td>prefer\ not</td>}msx
 );
-$mech->content_unlike(qr/Carrera/);
-$mech->content_unlike(qr/Reynoso/);
+$mech->content_lacks('Carrera');
