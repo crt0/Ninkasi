@@ -472,7 +472,7 @@ $mech->content_unlike(
        <td>Y</td>\s+
        <td>whatever</td>}msx
 );
-$mech->content_lacks('Underhill, Leann');
+$mech->content_lacks('Reynoso, Greggory');
 $mech->content_like( qr{<title>Flight 08, English Pale Ale</title>} );
 
 # test judge link
