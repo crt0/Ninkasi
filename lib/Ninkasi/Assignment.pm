@@ -59,7 +59,7 @@ judge.rowid = 'constraint'.judge
     AND 'constraint'.category = flight_category.category
     AND flight.rowid = flight_category.flight
     AND flight.number = ?
-    AND judge.rowid IN (SELECT DISTINCT judge FROM assignment WHERE flight = ?)
+    AND judge.rowid IN (SELECT judge FROM assignment WHERE flight = ?)
 EOF
     my ($sth, $result) = $judge->bind_hash( {
         bind_values => [ ( $flight->{number} ) x 2 ],
@@ -97,10 +97,8 @@ judge.rowid = 'constraint'.judge
     AND flight.rowid = flight_category.flight
     AND 'constraint'.category = flight_category.category
     AND flight.number = ?
-    AND judge.rowid IN (SELECT DISTINCT judge FROM assignment
-                                              WHERE flight = 0)
-    AND judge.rowid NOT IN (SELECT DISTINCT judge FROM assignment
-                                                  WHERE flight = ?)
+    AND judge.rowid IN (SELECT judge FROM assignment WHERE flight = 0)
+    AND judge.rowid NOT IN (SELECT judge FROM assignment WHERE flight = ?)
 EOF
     my $having_clause = <<EOF;
 MAX(type) != $Ninkasi::Constraint::NUMBER{entry}
