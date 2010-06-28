@@ -1,4 +1,4 @@
-#!/usr/bin/perl -T
+#!/usr/bin/perl -T -C
 
 use strict;
 use warnings;
@@ -23,6 +23,6 @@ use Ninkasi::CGI;
 use Ninkasi::MailingList;
 
 MAIN: {
-    Ninkasi::MailingList->render_signup_page( Ninkasi::CGI->new() );
+    Ninkasi::MailingList->render_management_page( Ninkasi::CGI->new() );
     exit;
 }

@@ -81,7 +81,7 @@ my $test_config = Apache::TestConfig->new();
 my $url_base = join '', $test_config->{vars}{scheme}, '://',
                         $test_config->hostport();
 
-my $mech = Test::WWW::Mechanize->new(cookie_jar => undef);
+my $mech = Test::WWW::Mechanize->new();
 
 # suppress warnings from HTML::Form caused by broken HTML on external sites
 my $html_form_warning

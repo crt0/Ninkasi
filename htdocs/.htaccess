@@ -21,8 +21,14 @@ RewriteRule ^map\.htm$         /maps              [L,R=permanent]
 
 RewriteRule ^[^.]*$ - [T=text/html]
 
+RewriteRule ^newsletter$        - [H=cgi-script]
 RewriteRule ^register-to-judge$ - [H=cgi-script]
 
 # workaround typo in 2009-05-20 mailing
 RewriteRule ^judge\xa0$ /judge [L,R=permanent]
 RewriteRule ^judge\xc2\xa0$ /judge [L,R=permanent]
+
+# cache control
+ExpiresActive On
+ExpiresByType image/jpeg A2592000
+ExpiresDefault M300

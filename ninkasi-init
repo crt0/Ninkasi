@@ -9,7 +9,7 @@ use Ninkasi::Config;
 use Readonly;
 
 Readonly my @CLASS_SUFFIXES
-         => qw/Assignment Constraint Flight FlightCategory Judge/;
+         => qw/Assignment Constraint Flight FlightCategory Judge MailingList/;
 
 MAIN: {
     my $database_file = $ARGV[0];

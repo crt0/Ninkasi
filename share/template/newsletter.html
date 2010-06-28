@@ -1,0 +1,48 @@
+[%# -*- html -*- -%]
+[% PROCESS header.html,
+   title => 'Brewers&#8217; Cup Newsletter' -%]
+[% PROCESS navbar.html -%]
+<div id="body_text">
+  <h2>Brewers&#8217; Cup Newsletter</h2>
+[% IF system_error || user_error -%]
+<div class="error">
+[% IF system_error -%]
+  The newsletter sign-up system is experiencing technical
+  difficulties.  The site maintainer has been notified and is working
+  to correct the problem.  Your information has NOT been recorded;
+  please try resubmitting your e-mail address later.  Sorry for the
+  inconvenience.  The error was: [% system_error | html %]
+[% ELSE -%]
+  [% user_error | html %] Please correct and try again.  If you feel
+  you submitted your e-mail address correctly,
+  please <a href="mailto:public@ajk.name">notify the site
+  maintainer</a>.
+[% END -%]
+</div>
+[% END -%]
+[% IF success -%]
+  <p><strong>Your e-mail address was stored successfully.  We'll be in
+      touch!</strong></p>
+[% END -%]
+  <form method="post">
+    <p>
+      Enter your e-mail address to sign up to receive the latest news
+      about the Brewers&#8217; Cup.
+    </p>
+    <table>
+      <tr>
+        <td><label for="email_1">Your e-mail address:</label></td>
+        <td><input name="email_1" size="25" value="[% email_1 | html %]" /></td>
+      </tr>
+      <tr>
+        <td>
+          <label for="email_2">Your e-mail address again for
+            verification:</label>
+        </td>
+        <td><input name="email_2" size="25" value="[% email_2 | html %]" /></td>
+      </tr>
+    </table>
+    <input type="submit" value="Submit" />
+  </form>
+</div>
+[% PROCESS footer.html -%]

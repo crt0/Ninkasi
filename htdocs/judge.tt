@@ -15,34 +15,19 @@
 </div>
 [% PROCESS navbar.html -%]
 <div id="body_text">
-<h2>Invitation to Judge at the Indiana State Fair Brewers&#8217; Cup</h2>
+<h2>Judge Beer ... Get Paid</h2>
 <div id="top_ten">
   <h3>Top Ten Reasons You Should Judge at the Brewers&#8217; Cup</h3>
 <ol>
-  <li value="10">
-    We pay money, more depending on how far away you are.
-  </li>
-  <li value="9">
-    Indianapolis is a great craft-beer and fine-dining town.
-  </li>
-  <li value="8"> Special brewers&#8217; dinner on Saturday night.</li>
-  <li value="7">
-    Home brew and commercial entries in separate divisions.
-  </li>
-  <li value="6"> Commercial entries greatly increased.</li>
-  <li value="5"> Extraordinary attention to detail.</li>
-  <li value="4">
-    Plenty of
-    <a href="http://www.indy.org/indianapolis/web/jsp/index.jsp?p=1&amp;x=1233677098405">cool activities</a>
-    to keep the family busy.
-  </li>
-  <li value="3">
-    Good food and plenty of it at breakfast, lunch, and awards
-    ceremony.
-  </li>
-  <li value="2">
-    <a href="http://bjcp.org/">BJCP</a> points will be awarded.
-  </li>
+  <li value="10"> We need your expertise.</li>
+  <li value="9"> Come back and visit with all your friends.</li>
+  <li value="8"> Indianapolis is a hopping town.</li>
+  <li value="7"> The energy at this competition is palpable.</li>
+  <li value="6"> Darn good food and lots of it.</li>
+  <li value="5"> BJCP points.</li>
+  <li value="4"> We treat our judges well.</li>
+  <li value="3"> BJCP points.</li>
+  <li value="2"> We pay a small stipend.</li>
   <li value="1"> This competition is a well-oiled machine!</li>
 </ol>
 </div>
@@ -53,39 +38,37 @@
 </em>
 </p>
 <p>
-The Brewers&#8217; Cup beer competition has cultivated a reputation as
-a well-run competition, and we are looking for good judges to join us
-at this year&#8217;s competition. <a href="http://bjcp.org/">BJCP</a>
-judges, BJCP apprentices, and professional brewers are welcomed and
-encouraged to judge at the [% year %] Brewers&#8217; Cup.
-</p>
-<p>
-Judging will take place on Friday, July 10th, and Saturday, July 11th,
-at the Farm Bureau building on the grounds of the Indiana State Fair.
-This is a <a href="http://bjcp.org/">BJCP</a>-sanctioned competition,
-so points will be awarded.  We also pay a small stipend to offset some
-of the expenses of BJCP judges and professional brewers at the
-following rates: $25 for local judges and $100 for judges traveling
-more than 50 miles one way to the competition.  We provide meals
-during the judging, and you are welcome to stay for the Awards
-Reception that will feature the [% year - 1 %] Best of Show beers
-(re-brewed, of course) and sumptuous buffet of heavy appetizers on
-Saturday night.
+The Indiana State Fair Brewers Cup is one of the largest competitions
+in the country with approximately 1000 professional and amateur
+entries.  BJCP judges, professional brewers and BJCP apprentices
+(those who have taken the test) are welcomed and encouraged to judge
+at this year&#8217;s competition.  Judging will take place
+on <strong>Friday, July 9th,</strong> and <strong>Saturday, July
+10th,</strong> at the Farm Bureau Building on the Indiana State
+Fairgrounds.  This is a BJCP-sanctioned competition, so points will be
+awarded.  We also pay a small stipend to offset travel expenses to
+professional brewers and BJCP judges.  Judges who travel at least 50
+miles one way and judge at least two sessions will receive a $100
+stipend.  Local judges will be paid $12.50 per session.  We provide
+meals during the judging and you are welcome to stay for the Awards
+Reception on Saturday evening.
 </p>
 <p>
 We have arranged for a special rate of $69/night at
 the <a href="http://martenhousehotel.com/">Marten House Hotel</a>.
-You may also want to consider the
-<a href="http://www.hamptoninn.com/">Hampton Inn</a> downtown.  The
-Hampton is located in Indianapolis&#8217; safe and vibrant downtown,
-conveniently located within walking distance of the
-<a href="http://www.theram.com/indiana/indianapolis.shtml">RAM</a>,
-<a href="http://www.rockbottom.com/DisplayLocationRBR.php?FKLocationID=10067">Rock
-Bottom</a>,
-and <a href="http://www.alcatrazbrewing.com/indianapolis.php">Alcatraz</a>
-brewpubs.  If you&#8217;re bringing family or guests, you might consider
-<a href="http://www.homewood-suites.com/">Homewood Suites</a>
-(apartment-style accommodations with a shuttle to the Fairgrounds).
+You may also want to consider one of our downtown hotels.  The
+Indianapolis downtown is safe, vibrant, and home to three brewpubs
+(<a href="http://www.theram.com/indiana/indianapolis.shtml">RAM</a>,
+<a href="http://www.alcatrazbrewing.com/indianapolis.php">Alcatraz</a>,
+and <a href="http://www.rockbottom.com/indianapolis-downtown">Rock
+Bottom</a>), a brewery (<a href="http://www.sunkingbrewing.com/">Sun
+King</a>), and many good beer bars.  Indianapolis has many
+family-friendly venues, including a fantastic <a href="http://www.indyzoo.com/">zoo</a> and a wonderful
+<a href="http://www.childrensmuseum.org/">children's museum</a>.
+</p>
+<p>
+The Brewers&#8217; Cup is a pre-fair event.  The fair takes place a
+few weeks later.
 </p>
 <h3>To find out what is happening in Indianapolis during your
 visit, check out:</h3>
@@ -139,6 +122,7 @@ visit, check out:</h3>
   </li>
 </ul>
 <h2>Schedule of Events</h2>
+<p>
 <table>
   <caption>Friday, July 10th</caption>
   <tr>
@@ -149,10 +133,11 @@ visit, check out:</h3>
       </em>
     </td>
   </tr>
-<tr><td class="time">6:00 pm</td><td>&#8211;</td><td>7:00 pm:</td><td>Check-in, Buffet Dinner (provided)</td></tr>
-<tr><td class="time">7:15 pm</td><td>&#8211;</td><td>7:30 pm:</td><td>Calibration beer</td></tr>
-<tr><td class="time">7:30 pm</td><td>&#8211;</td><td>9:00 pm:</td><td>First Session of Judging</td></tr>
+<tr><td class="time">6:00 pm</td><td>&#8211;</td><td>7:00 pm:</td><td>Check-in, buffet dinner (provided)</td></tr>
+<tr><td class="time">7:15 pm</td><td>&#8211;</td><td>9:00 pm:</td><td>First Session of Judging</td></tr>
 </table>
+</p>
+<p>
 <table>
   <caption>Saturday, July 11th</caption>
   <tr>
@@ -161,13 +146,21 @@ visit, check out:</h3>
       Fairgrounds</a></em>
     </td>
   </tr>
-<tr><td class="time">9:00 am</td><td>&#8211;</td><td class="time">9:45 am:</td><td>Check-in, continental breakfast (provided)</td></tr>
-<tr><td class="time">9:45 am</td><td>&#8211;</td><td class="time">10:00 am:</td><td>Calibration Beer</td></tr>
+  <tr>
+<td class="time">9:00 am</td><td>&#8211;</td><td class="time">9:45 am:</td><td>Check-in, continental breakfast (provided)</td></tr>
 <tr><td class="time">10:00 am</td><td>&#8211;</td><td class="time">12:00 pm:</td><td>First Session of Judging</td></tr>
 <tr><td class="time">12:00 pm</td><td>&#8211;</td><td class="time">12:45 pm:</td><td>Lunch (provided)</td></tr>
-<tr><td class="time">1:00 pm</td><td>&#8211;</td><td class="time">3:00 pm:</td><td>Second Session of Judging</td></tr>
-<tr><td class="time">6:00 pm</td><td>&#8211;</td><td class="time">8:00 pm:</td><td>Awards Presentation</td></tr>
+<tr><td class="time">1:00 pm</td><td>&#8211;</td><td class="time">3:00
+    pm:</td><td>Second Session of Judging</td></tr>
+  <tr>
+    <td colspan="4">
+      <em>Building to be determined, <a href="map.htm">Indiana State
+      Fairgrounds</a></em>
+    </td>
+  </tr>
+<tr><td class="time">6:00 pm</td><td>&#8211;</td><td class="time">8:00 pm:</td><td>Awards Reception (heavy appetizers and libations provided)</td></tr>
 </table>
+</p>
 <p>
 If you are willing to judge, please use
 our <a href="register-to-judge">online judge registration</a> so

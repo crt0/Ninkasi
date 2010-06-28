@@ -199,11 +199,14 @@ sub render_page {
     # select whole table & order by category, then number
     my $flight = Ninkasi::Flight->new();
     my ($sth, $result) = $flight->bind_hash( {
-        columns  => [ keys %{ $self->_Column_Names() }, 'category' ],
+        columns  => [ # 'group_concat("category", " ")',
+                      keys %{ $self->_Column_Names() }, 'category' ],
         join     => 'Ninkasi::FlightCategory',
         order_by => 'number',
         where    => 'flight.rowid = flight_category.flight',
+#       group_by => 'number',
     } );
+#    $sth->bind_col( 1, \$result->{category} );
 
     # process the template, passing it a function to fetch flight data
     $template_object->process( 'flight.tt', {
