@@ -23,7 +23,7 @@ sub new {
         exit;
     }
 
-    return $self;
+    return bless $self, $class;
 }
 
 sub transmit_header {
