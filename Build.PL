@@ -13,6 +13,7 @@ our %RELPATH = (
 
 my $build = MyBuilder->new(
     build_requires     => {
+        'AppConfig'                => 0,
         'Class::Data::Inheritable' => '0.02',
         'Class::Singleton'         => '1.4',
         'DBD::SQLite'              => '1.13',
