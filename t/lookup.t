@@ -522,7 +522,7 @@ $mech->content_like(
        </td>\s+
        <td>10</td>\s+
        <td>N</td>\s+
-       <td>entry</td>}msx
+       <td>whatever</td>}msx
 );
 $mech->content_unlike(
     qr{<a\ href="\d+">\s+
