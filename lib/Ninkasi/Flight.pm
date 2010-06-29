@@ -126,7 +126,7 @@ EOF
             $dbh->rollback();
             $dbh->{AutoCommit} = 1;
             my $message = $@ =~ /column number is not unique/
-                        ? 'Flight numbers must be unique.'
+                        ? 'Flight names must be unique.'
                         : $@
                         ;
             return { row => $flight->{number}, message => $message };

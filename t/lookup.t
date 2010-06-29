@@ -78,8 +78,8 @@ $mech->submit_form_ok( {
     }
 } );
 $mech->content_contains( '<div class="error">', 'error <div>' );
-$mech->content_contains( 'Flight numbers must be unique.',
-                         'flight number uniqueness error' );
+$mech->content_contains( 'Flight names must be unique.',
+                         'flight name uniqueness error' );
 
 # add flights
 my %data = (
