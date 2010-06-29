@@ -118,7 +118,7 @@
    [% END -%]
    [% WRAPPER column %]
       <input name="category_[% row %]"
-             size="3"
+             size="10"
              value="[% flight.category | html  %]" />
    [% END -%]
    [% WRAPPER column %]

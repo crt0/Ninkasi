@@ -45,7 +45,7 @@ $mech->content_like(
        </td>\s+
        <td>\s+
        <input\ name="category_1"\s+
-               size="3"\s+
+               size="10"\s+
                value=""\ />\s+
        </td>\s+
        <td>\s+
@@ -109,7 +109,7 @@ $mech->content_like(
        </td>\s+
        <td>\s+
        <input\ name="category_5"\s+
-               size="3"\s+
+               size="10"\s+
                value="14"\ />\s+
        </td>\s+
        <td>\s+
@@ -136,7 +136,7 @@ $mech->content_like(
        </td>\s+
        <td>\s+
        <input\ name="category_2"\s+
-               size="3"\s+
+               size="10"\s+
                value="8"\ />\s+
        </td>\s+
        <td>\s+
@@ -174,7 +174,7 @@ $mech->content_like(
        </td>\s+
        <td>\s+
        <input\ name="category_8"\s+
-               size="3"\s+
+               size="10"\s+
                value="21"\ />\s+
        </td>\s+
        <td>\s+
@@ -627,7 +627,7 @@ $mech->content_like(
        </td>\s+
        <td>\s+
        <input\ name="category_9"\s+
-               size="3"\s+
+               size="10"\s+
                value="20,\ 21"\ />\s+
        </td>\s+
        <td>\s+
