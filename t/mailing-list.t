@@ -31,8 +31,9 @@ $mech->submit_form_ok( {
         email_2 => 'a',
     },
 } );
-$mech->content_contains('<div class="error">');
-$mech->content_contains("We don't recognize the format of your e-mail address.");
+$mech->content_contains( '<div class="error">', 'error <div>' );
+$mech->content_contains( "We don't recognize the format of your e-mail "
+                         . "address.", 'e-mail format error message' );
 
 # test unmatched addresses
 $mech->submit_form_ok( {
@@ -41,8 +42,9 @@ $mech->submit_form_ok( {
         email_2 => 'd@b.c',
     },
 } );
-$mech->content_contains('<div class="error">');
-$mech->content_contains('e-mail addresses did not match.');
+$mech->content_contains( '<div class="error">', 'error <div>' );
+$mech->content_contains( 'e-mail addresses did not match.',
+                         'e-mail mismatch error message' );
 
 # test matching addresses in correct format
 $mech->submit_form_ok( {
@@ -51,7 +53,8 @@ $mech->submit_form_ok( {
         email_2 => 'a@b.c',
     },
 } );
-$mech->content_contains('Your e-mail address was stored successfully.');
+$mech->content_contains( 'Your e-mail address was stored successfully.',
+                         'e-mail success' );
 
 # shouldn't be an error to resubmit the same address
 $mech->submit_form_ok( {
@@ -60,12 +63,13 @@ $mech->submit_form_ok( {
         email_2 => 'a@b.c',
     },
 } );
-$mech->content_contains('Your e-mail address was stored successfully.');
+$mech->content_contains( 'Your e-mail address was stored successfully.',
+                         'e-mail success' );
 
 # check management page for correct addresses
 $mech->get_ok('/manage/mailing_list');
-$mech->content_lacks('<li>a</li>');
-$mech->content_lacks('<li>a@b</li>');
-$mech->content_lacks('<li>d@b.c</li>');
-$mech->content_contains('<li>a@b.c</li>');
+$mech->content_lacks( '<li>a</li>', '<a> did not succeed' );
+$mech->content_lacks( '<li>a@b</li>', '<a@b> did not succeed' );
+$mech->content_lacks( '<li>d@b.c</li>', 'mismatched <d@b.c> did not succeed' );
+$mech->content_contains('<li>a@b.c</li>', '<a@b.c> succeeded' );
 

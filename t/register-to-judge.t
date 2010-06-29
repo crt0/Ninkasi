@@ -55,12 +55,13 @@ ok $assignment->add( {flight => 0, session => 3, judge => 1} );
 
 my $mech = Test::WWW::Mechanize->new();
 $mech->get_ok($form_url);
-$mech->content_contains('Experienced but not in the BJCP');
+$mech->content_contains( 'Experienced but not in the BJCP',
+                         'BJCP rank description' );
 
 $mech->submit_form_ok( { with_fields => { first_name => 'Andrew' } } );
 
-$mech->content_contains('<div class="error">');
-$mech->content_contains('Looks like you left');
+$mech->content_contains( '<div class="error">', 'error <div>' );
+$mech->content_contains( 'Looks like you left', 'blank field error message' );
 
 ## test complete & correct input
 
@@ -108,12 +109,12 @@ $mech->submit_form_ok( {
     },
 } );
 
-if ( !$mech->content_lacks('<div class="error">') ) {
+if ( !$mech->content_lacks( '<div class="error">', 'error <div>' ) ) {
     $mech->content() =~ /<div class="error">([^<]*)/s;
     warn $1;
 }
 
-$mech->content_is(<<'EOF');
+$mech->content_is( <<'EOF', 'header' );
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE html
      PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -266,90 +267,90 @@ $mech->submit_form_ok( {
 # test the filled in fields
 $mech->content_like(qr{name="address"\s+
                        size="\d+"\s+
-                       value="123\ Fake\ Street"}msx);
+                       value="123\ Fake\ Street"}msx, 'address');
 $mech->content_like(qr{name="bjcp_id"\s+
                        size="\d+"\s+
-                       value="Z9999"}msx);
+                       value="Z9999"}msx, 'BJCP id');
 $mech->content_like(qr{checked="checked"\s+
                        name="category01"\s+
                        type="radio"\s+
-                       value="whatever"}msx);
+                       value="whatever"}msx, 'category 1 checked');
 $mech->content_like(qr{checked="checked"\s+
                        name="category02"\s+
                        type="radio"\s+
-                       value="prefer"}msx);
+                       value="prefer"}msx, 'category 2 checked');
 $mech->content_like(qr{checked="checked"\s+
                        name="category08"\s+
                        type="radio"\s+
-                       value="entry"}msx);
+                       value="entry"}msx, 'category 8 checked');
 $mech->content_like(qr{checked="checked"\s+
                        name="category10"\s+
                        type="radio"\s+
-                       value="entry"}msx);
+                       value="entry"}msx, 'category 10 checked');
 $mech->content_like(qr{checked="checked"\s+
                        name="category15"\s+
                        type="radio"\s+
-                       value="entry"}msx);
+                       value="entry"}msx, 'category 15 checked');
 $mech->content_like(qr{checked="checked"\s+
                        name="category20"\s+
                        type="radio"\s+
-                       value="prefer\ not"}msx);
+                       value="prefer\ not"}msx, 'category 20 checked');
 $mech->content_like(qr{checked="checked"\s+
                        name="category21"\s+
                        type="radio"\s+
-                       value="entry"}msx);
+                       value="entry"}msx, 'category 21 checked');
 $mech->content_like(qr{checked="checked"\s+
                        name="category24"\s+
                        type="radio"\s+
-                       value="prefer"}msx);
+                       value="prefer"}msx, 'category 24 checked');
 $mech->content_like(qr{name="city"\s+
                        size="\d+"\s+
-                       value="Springfield"}msx);
+                       value="Springfield"}msx, 'city');
 $mech->content_like(qr{name="competitions_judged"\s+
                        size="\d+"\s+
-                       value="10"}msx);
+                       value="10"}msx, 'competitions judged');
 $mech->content_like(qr{<span\ class="field_marker">\*\ </span>\s+
                        <input\s+
                        type="text"\s+
                        name="email1"\s+
                        size="\d+"\s+
-                       value="ninkasi\@ajk\.name"}msx);
+                       value="ninkasi\@ajk\.name"}msx, 'e-mail');
 $mech->content_like(qr{<span\ class="field_marker">\*\ </span>\s+
                        <input\s+
                        type="text"\s+
                        name="email2"\s+
                        size="\d+"\s+
-                       value="Xninkasi\@ajk\.name"}msx);
+                       value="Xninkasi\@ajk\.name"}msx, 'e-mail confirmation');
 $mech->content_like(qr{name="first_name"\s+
                        size="\d+"\s+
-                       value="Andrew"}msx);
+                       value="Andrew"}msx, 'first name');
 $mech->content_like(qr{name="last_name"\s+
                        size="\d+"\s+
-                       value="Korty"}msx);
+                       value="Korty"}msx, 'last name');
 $mech->content_like(qr{checked="checked"\s+
                        name="session1"\s+
                        type="checkbox"\s+
-                       value="1"}msx);
+                       value="1"}msx, 'session 1 checked');
 $mech->content_like(qr{name="session2"\s+
                        type="checkbox"\s+
-                       value="1"}msx);
+                       value="1"}msx, 'session 2 unchecked');
 $mech->content_like(qr{checked="checked"\s+
                        name="session3"\s+
                        type="checkbox"\s+
-                       value="1"}msx);
+                       value="1"}msx, 'session 3 checked');
 $mech->content_like(qr{name="phone_day"\s+
                        size="\d+"\s+
-                       value="123-456-7890"}msx);
+                       value="123-456-7890"}msx, 'daytime phone');
 $mech->content_like(qr{name="phone_evening"\s+
                        size="\d+"\s+
-                       value="123-456-7890"}msx);
+                       value="123-456-7890"}msx, 'evening phone');
 $mech->content_like(qr{selected="selected"\s+
-                       value="50"}msx);
+                       value="50"}msx, '50 competitions judged');
 $mech->content_like(qr{selected="selected"\s+
-                       value="--"}msx);
+                       value="--"}msx, 'no state specified');
 $mech->content_like(qr{name="zip"\s+
                        size="\d+"\s+
-                       value="12345"}msx);
+                       value="12345"}msx, 'zip code');
 
 # test table names in class data
 is(Ninkasi::Judge->Table_Name(),      'judge'       );

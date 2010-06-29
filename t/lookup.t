@@ -30,8 +30,9 @@ my $mech = Test::WWW::Mechanize->new();
 my $lookup_url = "$url_base/manage/assignment/08";
 $mech->get($lookup_url);
 is $mech->status(), 404;
-$mech->content_like( qr{<title>Flight 08 Not Found</title>} );
-$mech->content_like( qr/Flight 08 not found\./ );
+$mech->content_like( qr{<title>Flight 08 Not Found</title>},
+                     'Flight 08 404 title' );
+$mech->content_like( qr/Flight 08 not found\./, 'Flight 08 404 content' );
 
 # test empty flight table
 $lookup_url = "$url_base/manage/flight/";
@@ -60,7 +61,8 @@ $mech->content_like(
        </td>\s+
        <td>\s+
        </td>\s+
-       </tr>}msx
+       </tr>}msx,
+    'empty flight table',
 );
 
 # adding flights with duplicate numbers should fail
@@ -75,8 +77,9 @@ $mech->submit_form_ok( {
         description_2 => 'Light Lager Duplicate',
     }
 } );
-$mech->content_contains('<div class="error">');
-$mech->content_contains('Flight numbers must be unique.');
+$mech->content_contains( '<div class="error">', 'error <div>' );
+$mech->content_contains( 'Flight numbers must be unique.',
+                         'flight number uniqueness error' );
 
 # add flights
 my %data = (
@@ -125,7 +128,8 @@ $mech->content_like(
        <td>\s+
        <a\ href="/manage/assignment/14b">view</a>\s+
        </td>\s+
-       </tr>}msx
+       </tr>}msx,
+    'flight 14b got added',
 );
 $mech->content_like(
     qr{<tr\ class="even">\s+
@@ -153,7 +157,8 @@ $mech->content_like(
        <td>\s+
        <a\ href="/manage/assignment/08">view</a>\s+
        </td>\s+
-       </tr>}msx
+       </tr>}msx,
+    'flight 08 got added',
 );
 
 # add another row
@@ -190,7 +195,8 @@ $mech->content_like(
        <td>\s+
        <a\ href="/manage/assignment/21">view</a>\s+
        </td>\s+
-       </tr>}msx
+       </tr>}msx,
+    'flight 21 got added',
 );
 
 my $signup_url = "$url_base/register-to-judge";
@@ -350,15 +356,16 @@ $mech->content_like(
        <td><a\ href="/manage/assignment/08">08</a>,\s+
        <a\ href="/manage/assignment/14a">14a</a>,\s+
        <a\ href="/manage/assignment/14b">14b</a></td>\s+
-       <td><a\ href="/manage/assignment/02">02</a></td>}msx
+       <td><a\ href="/manage/assignment/02">02</a></td>}msx,
+    'judge view',
 );
-$mech->content_like( qr{<title>Registered Judges</title>} );
+$mech->content_like( qr{<title>Registered Judges</title>}, 'judge view title' );
 $mech->html_lint_ok('HTML validation');
 
 # test CSV format for view of all judges
 $mech->follow_link_ok( { text_regex => qr/csv/ } );
 is $mech->ct(), 'text/plain';
-$mech->content_is(<<EOF);
+$mech->content_is( <<EOF, 'CSV judge view' );
 "Name","Rank","Fri. PM","Sat. AM","Sat. PM","Comps Judged","Pro Brewer?","Entries","Prefers Not","Whatever","Prefers"
 "Carrera, Lyndsey","Certified","","N/A","","10","N","10, 15, 21","20","08, 14a, 14b","02"
 "Mayers, Liam","Novice","","","","2","Y","","","02, 08, 10, 14a, 14b, 15, 20, 21",""
@@ -419,14 +426,18 @@ $mech->content_like(qr{<h2>Liam\ Mayers</h2>\s+
                        <tr>\s+
                        <th>Pro\ Brewer\?</th>\s+
                        <td>yes</td>\s+
-                       </tr>}msx);
-$mech->content_like( qr{<title>Liam Mayers</title>} );
+                       </tr>}msx,
+                'individual judge view');
+$mech->content_like( qr{<title>Liam Mayers</title>},
+                     'individual judge view title' );
 
 # test view of individual judge information with html encoding
 $mech->back();
 $mech->follow_link_ok( { text_regex => qr/iefer, Angelina/ } );
-$mech->content_like( qr{<h2>Angelina |&lt;iefer</h2>} );
-$mech->content_like( qr{<title>Angelina \|&lt;iefer</title>} );
+$mech->content_like( qr{<h2>Angelina |&lt;iefer</h2>},
+                     'HTML-encoded judge view' );
+$mech->content_like( qr{<title>Angelina \|&lt;iefer</title>},
+                     'HTML-encoded judge view title' );
 
 # test category view
 $lookup_url = "$url_base/manage/assignment/08";
@@ -454,7 +465,8 @@ $mech->content_like(
        </td>\s+
        <td>2</td>\s+
        <td>Y</td>\s+
-       <td>whatever</td>}msx
+       <td>whatever</td>}msx,
+    'flight 08 assignment view',
 );
 $mech->content_unlike(
     qr{<a\ href="\d+">\s+
@@ -470,15 +482,20 @@ $mech->content_unlike(
        </td>\s+
        <td>2</td>\s+
        <td>Y</td>\s+
-       <td>whatever</td>}msx
+       <td>whatever</td>}msx,
+    'pro judge ineligible for flight 08',
 );
-$mech->content_lacks('Reynoso, Greggory');
-$mech->content_like( qr{<title>Flight 08, English Pale Ale</title>} );
+$mech->content_lacks( 'Reynoso, Greggory',
+                      'pro judge ineligible for flight 08' );
+$mech->content_like( qr{<title>Flight 08, English Pale Ale</title>},
+                     'flight 08 assignment view title' );
 
 # test judge link
 $mech->follow_link_ok( { text_regex => qr/Mayers, Liam/ } );
-$mech->content_like( qr{<h2>Liam Mayers</h2>} );
-$mech->content_like( qr{<title>Liam Mayers</title>} );
+$mech->content_like( qr{<h2>Liam Mayers</h2>},
+                     'individual judge view heading' );
+$mech->content_like( qr{<title>Liam Mayers</title>},
+                     'individual judge view title' );
 $mech->back();
 
 # test assignment
@@ -503,7 +520,8 @@ $mech->content_like(
        </td>\s+
        <td>2</td>\s+
        <td>Y</td>\s+
-       <td>whatever</td>}msx
+       <td>whatever</td>}msx,
+    'assigned judge moved to top',
 );
 $mech->content_like(
     qr{<a\ href="/manage/judge/\d+">\s+
@@ -522,7 +540,8 @@ $mech->content_like(
        </td>\s+
        <td>10</td>\s+
        <td>N</td>\s+
-       <td>whatever</td>}msx
+       <td>whatever</td>}msx,
+    'assigned judge moved to top',
 );
 $mech->content_unlike(
     qr{<a\ href="\d+">\s+
@@ -547,7 +566,8 @@ $mech->content_unlike(
        </td>\s+
        <td>2</td>\s+
        <td>Y</td>\s+
-       <td>whatever</td>}msx
+       <td>whatever</td>}msx,
+    "assigned judge didn't stay on bottom",
 );
 
 # test unassignment
@@ -576,7 +596,8 @@ $mech->content_like(
        </td>\s+
        <td>2</td>\s+
        <td>Y</td>\s+
-       <td>whatever</td>}msx
+       <td>whatever</td>}msx,
+    'unassigned judge moved to bottom',
 );
 $mech->content_unlike(
     qr{<a\ href="\d+">\s+
@@ -593,7 +614,8 @@ $mech->content_unlike(
        </td>\s+
        <td>2</td>\s+
        <td>Y</td>\s+
-       <td>whatever</td>}msx
+       <td>whatever</td>}msx,
+    "unassigned judge didn't stay at top",
 );
 
 # test table card (just make sure it's a PDF)
@@ -618,33 +640,38 @@ $mech->submit_form_ok( {
         description_9 => 'Fruit Beer / SHV',
     },
 } );
-$mech->content_like(
-    qr{<tr\ class="odd">\s+
-       <td>\s+
-       <input\ name="number_9"\s+
-               size="10"\s+
-               value="26"\ />\s+
-       </td>\s+
-       <td>\s+
-       <input\ name="category_9"\s+
-               size="10"\s+
-               value="20,\ 21"\ />\s+
-       </td>\s+
-       <td>\s+
-       <input\ name="pro_9"\s+
-               type="checkbox"\s+
-               value="1"\ />\s+
-       </td>\s+
-       <td>\s+
-       <input\ name="description_9"\s+
-               size="40"\s+
-               value="Fruit\ Beer\ /\ SHV"\ />\s+
-       </td>\s+
-       <td>\s+
-       <a\ href="/manage/assignment/26">view</a>\s+
-       </td>\s+
-       </tr>}msx
-);
+TODO: {
+    local $TODO = 'waiting for SQLite to be upgraded';
+
+    $mech->content_like(
+        qr{<tr\ class="odd">\s+
+           <td>\s+
+           <input\ name="number_9"\s+
+                   size="10"\s+
+                   value="26"\ />\s+
+           </td>\s+
+           <td>\s+
+           <input\ name="category_9"\s+
+                   size="10"\s+
+                   value="20,\ 21"\ />\s+
+           </td>\s+
+           <td>\s+
+           <input\ name="pro_9"\s+
+                   type="checkbox"\s+
+                   value="1"\ />\s+
+           </td>\s+
+           <td>\s+
+           <input\ name="description_9"\s+
+                   size="40"\s+
+                   value="Fruit\ Beer\ /\ SHV"\ />\s+
+           </td>\s+
+           <td>\s+
+           <a\ href="/manage/assignment/26">view</a>\s+
+           </td>\s+
+           </tr>}msx,
+           'flight with multiple categories',
+    );
+}
 
 # check assignments page for Fruit Beer / SHV flight
 $lookup_url = "$url_base/manage/assignment/26";
@@ -672,7 +699,8 @@ $mech->content_like(
        </td>\s+
        <td>2</td>\s+
        <td>Y</td>\s+
-       <td>whatever</td>}msx
+       <td>whatever</td>}msx,
+    'available judge on flight 26',
 );
 $mech->content_like(
     qr{<a\ href="/manage/judge/\d+">\s+
@@ -694,6 +722,7 @@ $mech->content_like(
        N/A</td>\s+
        <td>10</td>\s+
        <td>N</td>\s+
-       <td>prefer\ not</td>}msx
+       <td>prefer\ not</td>}msx,
+    'available judge on flight 26',
 );
-$mech->content_lacks('Carrera');
+$mech->content_lacks( 'Carrera', 'homebrewer ineligible to judge flight 26' );
