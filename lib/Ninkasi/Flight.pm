@@ -84,67 +84,75 @@ sub update_flights {
     my $dbh = __PACKAGE__->Database_Handle();
 
     # disable autocommit to perform this operation as one transaction
-    $dbh->{AutoCommit} = 0;
-
+    $dbh->begin_work();
+    eval {
     # clear the tables
-    $dbh->do('DELETE FROM flight');
-    $dbh->do('DELETE FROM flight_category');
+        $dbh->do('DELETE FROM flight');
+        $dbh->do('DELETE FROM flight_category');
 
-    # build table of input data
-    my %input_table = ();
-    my $permitted_column = __PACKAGE__->_Column_Names();
-    foreach my $name ( $cgi_object->param() ) {
-        my ( $column, $row ) = split /_/, $name;
-        next if !exists $permitted_column->{$column} && $column ne 'category';
-        $input_table{$row}{$column} = $cgi_object->param($name);
-    }
+        # build table of input data
+        my %input_table = ();
+        my $permitted_column = __PACKAGE__->_Column_Names();
+        foreach my $name ( $cgi_object->param() ) {
+            my ( $column, $row ) = split /_/, $name;
+            next if !exists $permitted_column->{$column} && $column ne 'category';
+            $input_table{$row}{$column} = $cgi_object->param($name);
+        }
 
-    # prepare statement handle for flight table
-    my @columns = keys %$permitted_column;
-    my $column_list = join ', ', @columns;
-    my $flight_handle = $dbh->prepare(<<EOF);
+        # prepare statement handle for flight table
+        my @columns = keys %$permitted_column;
+        my $column_list = join ', ', @columns;
+        my $flight_handle = $dbh->prepare(<<EOF);
 INSERT INTO flight ($column_list) VALUES (?, ?, ?)
 EOF
 
-    # prepare statement handle for flight-category mapping table
-    my $flight_category_handle = $dbh->prepare(<<EOF);
+        # prepare statement handle for flight-category mapping table
+        my $flight_category_handle = $dbh->prepare(<<EOF);
 INSERT INTO flight_category (category, flight) VALUES (?, ?)
 EOF
 
-    # update tables row by row
-    while ( my ( $row_number, $flight ) = each %input_table ) {
+        # update tables row by row
+        while ( my ( $row_number, $flight ) = each %input_table ) {
 
-        # sanity check row number
-        next if !defined $flight->{number} || $flight->{number} eq '';
+            # sanity check row number
+            next if !defined $flight->{number} || $flight->{number} eq '';
 
-        # default to homebrew
-        $flight->{pro} ||= 0;
+            # default to homebrew
+            $flight->{pro} ||= 0;
 
-        # update flight table and trap error on flight number clash
-        eval { $flight_handle->execute(@$flight{@columns}) };
-        if ($@) {
-            $dbh->rollback();
-            $dbh->{AutoCommit} = 1;
-            my $message = $@ =~ /column number is not unique/
-                        ? 'Flight names must be unique.'
+            # update flight table and trap error on flight number clash
+            eval { $flight_handle->execute(@$flight{@columns}) };
+            if ($@) {
+                $dbh->rollback();
+                $dbh->{AutoCommit} = 1;
+                my $message = $@ =~ /column number is not unique/
+                    ? 'Flight names must be unique.'
                         : $@
-                        ;
-            return { row => $flight->{number}, message => $message };
+                            ;
+                return { row => $flight->{number}, message => $message };
+            }
+
+            # get flight rowid
+            my $flight_id = $dbh->last_insert_id( (undef) x 4 );
+
+            # parse categories and add to mapping table
+            foreach my $category ( split /[, ]+/, $flight->{category} ) {
+                $flight_category_handle->execute( $category, $flight_id );
+            }
+
         }
+    };
 
-        # get flight rowid
-        my $flight_id = $dbh->last_insert_id( (undef) x 4 );
-
-        # parse categories and add to mapping table
-        foreach my $category ( split /[, ]+/, $flight->{category} ) {
-            $flight_category_handle->execute( $category, $flight_id );
-        }
-
+    # on error, rollback, re-enable autocommit, & propagate the error
+    if ($@) {
+        $dbh->rollback();
+        die;
     }
 
-    # commit this transaction & re-enable autocommit
-    $dbh->commit();
-    $dbh->{AutoCommit} = 1;
+    # on success, commit, & re-enable autocommit
+    else {
+        $dbh->commit();
+    }
 
     return;
 }

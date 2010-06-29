@@ -176,46 +176,54 @@ sub store {
     my $dbh = Ninkasi::Table->Database_Handle();
 
     # disable autocommit to perform this operation as one transaction
-    $dbh->{AutoCommit} = 0;
-
-    # create a judge row
-    my $judge_id = $judge_table->add( {
-        %$column,
-        email => $column->{email1},
-        when_created => time(),
-    } );
-
-    # walk through the categories and create a row for each constraint
-    foreach my $category (@Ninkasi::Category::CATEGORIES) {
-
-        # skip if no constraint was specified
-        next if !exists $column->{ $category->{field_name} };
-
-        # skip if we don't know the constraint type
-        my $type_name = $column->{ $category->{field_name} };
-        next if !exists $Ninkasi::Constraint::NUMBER{$type_name};
-
-        # create a row for the constraint
-        $constraint_table->add({
-            category => $category->{number},
-            judge    => $judge_id,
-            type     => $Ninkasi::Constraint::NUMBER{$type_name},
-        });
-    }
-
-    # create a row for each session the judge is available
-    while (my ($name, $value) = each %$column) {
-        my ($session) = $name =~ /^session(\d+)$/ or next;
-        $assignment_table->add( {
-            flight  => $value ? 0 : -1,
-            session => $session,
-            judge   => $judge_id,
+    $dbh->begin_work();
+    eval {
+        # create a judge row
+        my $judge_id = $judge_table->add( {
+            %$column,
+            email => $column->{email1},
+            when_created => time(),
         } );
+
+        # walk through the categories and create a row for each constraint
+        foreach my $category (@Ninkasi::Category::CATEGORIES) {
+
+            # skip if no constraint was specified
+            next if !exists $column->{ $category->{field_name} };
+
+            # skip if we don't know the constraint type
+            my $type_name = $column->{ $category->{field_name} };
+            next if !exists $Ninkasi::Constraint::NUMBER{$type_name};
+
+            # create a row for the constraint
+            $constraint_table->add({
+                category => $category->{number},
+                judge    => $judge_id,
+                type     => $Ninkasi::Constraint::NUMBER{$type_name},
+            });
+        }
+
+        # create a row for each session the judge is available
+        while (my ($name, $value) = each %$column) {
+            my ($session) = $name =~ /^session(\d+)$/ or next;
+            $assignment_table->add( {
+                flight  => $value ? 0 : -1,
+                session => $session,
+                judge   => $judge_id,
+            } );
+        }
+    };
+
+    # on error, rollback, re-enable autocommit, & propagate the error
+    if ($@) {
+        $dbh->rollback();
+        die $@;
     }
 
-    # commit this transaction & re-enable autocommit
-    $dbh->commit();
-    $dbh->{AutoCommit} = 1;
+    # on success, commit this transaction & re-enable autocommit
+    else {
+        $dbh->commit();
+    }
 
     return;
 }
