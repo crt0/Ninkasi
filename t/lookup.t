@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 66;
+use Test::More tests => 67;
 
 use Apache::TestConfig;
 use IPC::Open2;
@@ -345,6 +345,7 @@ $mech->submit_form_ok( {
         category02          => 'prefer',
         category08          => 'entry',
         category10          => 'entry',
+        category14          => 'prefer not',
         category15          => 'entry',
         category20          => 'prefer not',
         category21          => 'entry',
@@ -396,7 +397,7 @@ $mech->follow_link_ok( { text_regex => qr/csv/ } );
 is $mech->ct(), 'text/plain';
 $mech->content_is( <<EOF, 'CSV judge view' );
 "Name","Rank","Fri. PM","Sat. AM","Sat. PM","Comps Judged","Pro Brewer?","Entries","Prefers Not","Whatever","Prefers"
-"Carrera, Lyndsey","Certified","","N/A","","10","N","10, 15, 21","20","08, 14a, 14b","02"
+"Carrera, Lyndsey","Certified","","N/A","","10","N","10, 15, 21","14a, 14b, 20","08","02"
 "Mayers, Liam","Novice","","","","2","Y","","","02, 08, 10, 14a, 14b, 15, 20, 21",""
 "Reynoso, Greggory","Certified","","N/A","","10","Y","08","20","10, 14a, 14b, 15, 21","02"
 "Underhill, Leann","Certified","","","N/A","10","N","10, 15","20","08","02, 14a, 14b, 21"
@@ -661,8 +662,8 @@ close $file_reader;
 # test ordering by preference
 $lookup_url = "$url_base/manage/assignment/14a";
 $mech->get_ok($lookup_url);
-$mech->content_like( qr{Underhill.*Reynoso}msx,
-                     'prefer comes before whatever' );
+$mech->content_like( qr{Underhill.*Reynoso.*Carrera}msx,
+                     '"prefer" precedes "whatever" precedes "prefer not"' );
 
 # add flights with multiple categories
 $lookup_url = "$url_base/manage/flight/";

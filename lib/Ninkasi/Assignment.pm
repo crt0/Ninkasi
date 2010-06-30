@@ -113,7 +113,7 @@ EOF
         where       => $where_clause,
         group_by    => 'judge.rowid, flight_category.flight',
         having      => $having_clause,
-        order_by    => 'MAX(type) DESC, rank DESC, competitions_judged DESC',
+        order_by    => 'MAX(type), rank DESC, competitions_judged DESC',
     } );
     $handle->bind_col( 1, \$result->{rowid   } );
     $handle->bind_col( 2, \$result->{category} );
