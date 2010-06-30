@@ -83,10 +83,13 @@ sub update_flights {
     # get a database handle
     my $dbh = __PACKAGE__->Database_Handle();
 
+    # keep track of flight names to ensure uniqueness
+    my %names_seen = ();
+
     # disable autocommit to perform this operation as one transaction
     $dbh->begin_work();
     eval {
-    # clear the tables
+        # clear the tables
         $dbh->do('DELETE FROM flight');
         $dbh->do('DELETE FROM flight_category');
 
@@ -95,7 +98,8 @@ sub update_flights {
         my $permitted_column = __PACKAGE__->_Column_Names();
         foreach my $name ( $cgi_object->param() ) {
             my ( $column, $row ) = split /_/, $name;
-            next if !exists $permitted_column->{$column} && $column ne 'category';
+            next if !exists $permitted_column->{$column}
+                    && $column ne 'category';
             $input_table{$row}{$column} = $cgi_object->param($name);
         }
 
@@ -114,23 +118,27 @@ EOF
         # update tables row by row
         while ( my ( $row_number, $flight ) = each %input_table ) {
 
-            # sanity check row number
+            # sanity check flight name (still called "number" in database)
             next if !defined $flight->{number} || $flight->{number} eq '';
+
+            # check for uniqueness of flight names
+            if ( exists $names_seen{ $flight->{number} } ) {
+                die {
+                    message => 'Flight names must be unique.',
+                    row     => $flight->{number},
+                };
+            }
+
+            # else remember this one
+            else {
+                $names_seen{ $flight->{number} } = 1;
+            }
 
             # default to homebrew
             $flight->{pro} ||= 0;
 
-            # update flight table and trap error on flight number clash
-            eval { $flight_handle->execute(@$flight{@columns}) };
-            if ($@) {
-                $dbh->rollback();
-                $dbh->{AutoCommit} = 1;
-                my $message = $@ =~ /column number is not unique/
-                    ? 'Flight names must be unique.'
-                        : $@
-                            ;
-                return { row => $flight->{number}, message => $message };
-            }
+            # execute query
+            $flight_handle->execute( @$flight{@columns} );
 
             # get flight rowid
             my $flight_id = $dbh->last_insert_id( (undef) x 4 );
@@ -146,6 +154,7 @@ EOF
     # on error, rollback, re-enable autocommit, & propagate the error
     if ($@) {
         $dbh->rollback();
+        return $@ if ref $@;
         die;
     }
 
@@ -170,7 +179,7 @@ sub fake_flight {
         my $hashref = __PACKAGE__->_Column_Names();
 
         my %row = map { $_ => scalar $cgi_object->param("${_}_$iteration") }
-                      keys %{ __PACKAGE__->_Column_Names() };
+                      keys %{ __PACKAGE__->_Column_Names() }, 'category';
         ++$iteration;
 
         return \%row;
@@ -207,14 +216,14 @@ sub render_page {
     # select whole table & order by category, then number
     my $flight = Ninkasi::Flight->new();
     my ($sth, $result) = $flight->bind_hash( {
-        columns  => [ # 'group_concat("category", " ")',
-                      keys %{ $self->_Column_Names() }, 'category' ],
+        columns  => [ 'group_concat("category", " ")',
+                      keys %{ $self->_Column_Names() } ],
         join     => 'Ninkasi::FlightCategory',
         order_by => 'number',
         where    => 'flight.rowid = flight_category.flight',
-#       group_by => 'number',
+        group_by => 'number',
     } );
-#    $sth->bind_col( 1, \$result->{category} );
+    $sth->bind_col( 1, \$result->{category} );
 
     # process the template, passing it a function to fetch flight data
     $template_object->process( 'flight.tt', {

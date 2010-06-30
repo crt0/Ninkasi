@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 64;
+use Test::More tests => 65;
 
 use Apache::TestConfig;
 use IPC::Open2;
@@ -80,6 +80,35 @@ $mech->submit_form_ok( {
 $mech->content_contains( '<div class="error">', 'error <div>' );
 $mech->content_contains( 'Flight names must be unique.',
                          'flight name uniqueness error' );
+$mech->content_like(
+    qr{<tr\ class="odd">\s+
+       <td>\s+
+       <span\ class="error">\*</span>\s+
+       <input\ name="number_1"\s+
+               size="10"\s+
+               value="1"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="category_1"\s+
+               size="10"\s+
+               value="1"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="pro_1"\s+
+               type="checkbox"\s+
+               value="1"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="description_1"\s+
+               size="40"\s+
+               value="Light\ Lager"\ />\s+
+       </td>\s+
+       <td>\s+
+       <a\ href="/manage/assignment/1">view</a>\s+
+       </td>\s+
+       </tr>}msx,
+    'fields in flight table after error',
+);
 
 # add flights
 my %data = (
@@ -640,38 +669,34 @@ $mech->submit_form_ok( {
         description_9 => 'Fruit Beer / SHV',
     },
 } );
-TODO: {
-    local $TODO = 'waiting for SQLite to be upgraded';
-
-    $mech->content_like(
-        qr{<tr\ class="odd">\s+
-           <td>\s+
-           <input\ name="number_9"\s+
-                   size="10"\s+
-                   value="26"\ />\s+
-           </td>\s+
-           <td>\s+
-           <input\ name="category_9"\s+
-                   size="10"\s+
-                   value="20,\ 21"\ />\s+
-           </td>\s+
-           <td>\s+
-           <input\ name="pro_9"\s+
-                   type="checkbox"\s+
-                   value="1"\ />\s+
-           </td>\s+
-           <td>\s+
-           <input\ name="description_9"\s+
-                   size="40"\s+
-                   value="Fruit\ Beer\ /\ SHV"\ />\s+
-           </td>\s+
-           <td>\s+
-           <a\ href="/manage/assignment/26">view</a>\s+
-           </td>\s+
-           </tr>}msx,
-           'flight with multiple categories',
-    );
-}
+$mech->content_like(
+    qr{<tr\ class="odd">\s+
+       <td>\s+
+       <input\ name="number_9"\s+
+               size="10"\s+
+               value="26"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="category_9"\s+
+               size="10"\s+
+               value="20\ 21"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="pro_9"\s+
+               type="checkbox"\s+
+               value="1"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="description_9"\s+
+               size="40"\s+
+               value="Fruit\ Beer\ /\ SHV"\ />\s+
+       </td>\s+
+       <td>\s+
+       <a\ href="/manage/assignment/26">view</a>\s+
+       </td>\s+
+       </tr>}msx,
+       'flight with multiple categories',
+);
 
 # check assignments page for Fruit Beer / SHV flight
 $lookup_url = "$url_base/manage/assignment/26";
