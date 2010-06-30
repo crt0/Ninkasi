@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 65;
+use Test::More tests => 66;
 
 use Apache::TestConfig;
 use IPC::Open2;
@@ -657,6 +657,12 @@ print $file_writer $mech->content();
 close $file_writer;
 like <$file_reader>, qr/PDF/;
 close $file_reader;
+
+# test ordering by preference
+$lookup_url = "$url_base/manage/assignment/14a";
+$mech->get_ok($lookup_url);
+$mech->content_like( qr{Underhill.*Reynoso}msx,
+                     'prefer comes before whatever' );
 
 # add flights with multiple categories
 $lookup_url = "$url_base/manage/flight/";
