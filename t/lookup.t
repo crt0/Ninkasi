@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 67;
+use Test::More tests => 74;
 
 use Apache::TestConfig;
 use IPC::Open2;
@@ -758,3 +758,106 @@ $mech->content_like(
     'available judge on flight 26',
 );
 $mech->content_lacks( 'Carrera', 'homebrewer ineligible to judge flight 26' );
+
+# test assignment of a multi-category flight
+$mech->form_number(2);
+$mech->tick( assign => 'judge-2_session-1', 1 );
+$mech->submit_form_ok();
+$mech->content_like(
+    qr{<a\ href="/manage/judge/\d+">\s+
+       Mayers,\ Liam\s+
+       </a>\s+
+       </td>\s+
+       <td>Novice</td>\s+
+       <td>\s+
+       <input\ name="unassign"\s+
+               type="checkbox"\s+
+               value="judge-2_session-1"\ />\s+
+       </td>\s+
+       <td>\s+
+       </td>\s+
+       <td>\s+
+       </td>\s+
+       <td>2</td>\s+
+       <td>Y</td>\s+
+       <td>whatever</td>}msx,
+    'assigned judge moved to top',
+);
+$mech->content_unlike(
+    qr{<a\ href="\d+">\s+
+       Mayers,\ Liam\s+
+       </a>\s+
+       </td>\s+
+       <td>Novice</td>\s+
+       <td>\s+
+       <input\ name="assign"\s+
+               type="checkbox"\s+
+               value="judge-2_session-1"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="assign"\s+
+               type="checkbox"\s+
+               value="judge-2_session-2"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="assign"\s+
+               type="checkbox"\s+
+               value="judge-2_session-3"\ />\s+
+       </td>\s+
+       <td>2</td>\s+
+       <td>Y</td>\s+
+       <td>whatever</td>}msx,
+    "assigned judge didn't stay on bottom",
+);
+$mech->content_unlike( qr{Mayers,\ Liam.*Mayers,\ Liam}msx,
+                       'assigned judge not duplicated' );
+
+# test unassignment in a multi-category flight
+$mech->tick( unassign => 'judge-2_session-1', 1 );
+$mech->submit_form_ok();
+$mech->content_like(
+    qr{<a\ href="/manage/judge/\d+">\s+
+       Mayers,\ Liam\s+
+       </a>\s+
+       </td>\s+
+       <td>Novice</td>\s+
+       <td>\s+
+       <input\ name="assign"\s+
+               type="checkbox"\s+
+               value="judge-2_session-1"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="assign"\s+
+               type="checkbox"\s+
+               value="judge-2_session-2"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="assign"\s+
+               type="checkbox"\s+
+               value="judge-2_session-3"\ />\s+
+       </td>\s+
+       <td>2</td>\s+
+       <td>Y</td>\s+
+       <td>whatever</td>}msx,
+    'unassigned judge moved to bottom',
+);
+$mech->content_unlike(
+    qr{<a\ href="\d+">\s+
+       Mayers,\ Liam\s+
+       </a>\s+
+       </td>\s+
+       <td>Novice</td>\s+
+       <td>\s+
+       <input\ name="unassign"\s+
+               type="checkbox"\s+
+               value="judge-2_session-3"\ />\s+
+       </td>\s+
+       <td>\s+
+       </td>\s+
+       <td>\s+
+       </td>\s+
+       <td>2</td>\s+
+       <td>Y</td>\s+
+       <td>whatever</td>}msx,
+    "unassigned judge didn't stay at top",
+);

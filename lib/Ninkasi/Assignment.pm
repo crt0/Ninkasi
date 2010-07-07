@@ -63,13 +63,15 @@ judge.rowid = 'constraint'.judge
 EOF
     my ($sth, $result) = $judge->bind_hash( {
         bind_values => [ ( $flight->{number} ) x 2 ],
-        columns     => [@columns],
+        columns     => [ 'MAX(type)', @columns ],
         join        => [ qw/Ninkasi::Constraint Ninkasi::Flight
                             Ninkasi::FlightCategory/ ],
-        order_by    => 'rank DESC, competitions_judged DESC, type DESC',
         where       => $where_clause,
+        group_by    => 'judge.rowid, flight_category.flight',
+        order_by    => 'rank DESC, competitions_judged DESC, type DESC',
     } );
-    $sth->bind_col( 1, \$result->{rowid} );
+    $sth->bind_col( 1, \$result->{type } );
+    $sth->bind_col( 2, \$result->{rowid} );
 
     return sub {
         return if !$sth->fetch();
