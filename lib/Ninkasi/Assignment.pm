@@ -265,9 +265,9 @@ sub print_roster {
             push @triplets, join "\n", @three;
         }
         $rows = join "\n_\n", @triplets;
-
         push @groff, <<EOF;
 .fam H
+.ps 8
 .sp 2
 .TS
 tab(;);
