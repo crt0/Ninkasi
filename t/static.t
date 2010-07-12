@@ -102,7 +102,7 @@ $mech->content_contains(<<EOF, 'navigation bar');
   <div><a accesskey="e" href="enter">Submit Entries</a></div>
   <div><a accesskey="j" href="judge">Register to Judge</a></div>
   <div><a accesskey="m" href="maps">Find the Fairgrounds</a></div>
-  <div><a accesskey="r" href="results">View 2009 Results</a></div>
+  <div><a accesskey="r" href="results">View 2010 Results</a></div>
   <div><a accesskey="n" href="newsletter">Get the Newsletter</a></div>
   <div><a accesskey="c" href="contacts">Contact Us</a></div>
   <div><form action="http://www.google.com/cse" id="cse-search-box">
