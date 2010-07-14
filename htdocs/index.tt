@@ -264,5 +264,15 @@
 </a>
 </td>
 </tr>
+<tr>
+<td>
+<a href="http://www.homebrewit.com/">
+<img alt="Quality Wine and Ale Supply"
+     height="185"
+     src="/image/quality.jpg"
+     width="320" />
+</a>
+</td>
+</tr>
 </table>
 [% PROCESS footer.html -%]
