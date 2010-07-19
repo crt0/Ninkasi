@@ -21,16 +21,8 @@ htdocs/entry-form-interactive.pdf
 htdocs/entry-form.pdf
 htdocs/favicon.ico
 htdocs/image/.htaccess
-htdocs/image/aaron.jpg
 htdocs/image/anita.jpg
-htdocs/image/barnhart1-small.jpg
-htdocs/image/barnhart1.jpg
-htdocs/image/barnhart2-small.jpg
-htdocs/image/barnhart2.jpg
-htdocs/image/bill-small.jpg
 htdocs/image/bill.jpg
-htdocs/image/boilermaker.jpg
-htdocs/image/boilermaker_small.jpg
 htdocs/image/brewers-art-supply.jpg
 htdocs/image/brewers-guild.jpg
 htdocs/image/commercial_bos.jpg
@@ -43,8 +35,6 @@ htdocs/image/homebrew_champion.jpg
 htdocs/image/judging.jpg
 htdocs/image/lbc.jpg
 htdocs/image/ron_bos.jpg
-htdocs/image/sahara_mart.png
-htdocs/image/shipping.jpg
 htdocs/image/state-fair.jpg
 htdocs/image/stewards.jpg
 htdocs/image/tasting.jpg
