@@ -77,113 +77,66 @@ our @RANKS = (
     },
 );
 
-our (%NAME, %NUMBER);
+our ( %NAME, %NUMBER );
 foreach my $rank (@RANKS) {
     $NAME  { $rank->{number} } = $rank->{name  };
     $NUMBER{ $rank->{name  } } = $rank->{number};
 }
 
 # display big table of all judges
-sub render_all_judges {
-    my ($cgi_object, $format) = @_;
-
-    # columns to display
-    my @judge_columns = qw/rowid first_name last_name rank competitions_judged
-                           pro_brewer/;
+sub get_all_judges {
+    my ($argument) = @_;
 
     # select whole table & order by last name
-    my $judge = Ninkasi::Judge->new();
-    my ($sth, $result) = $judge->bind_hash( {
-        columns  => \@judge_columns,
+    my ( $judge_handle, $judge_row ) = __PACKAGE__->new()->bind_hash( {
+        columns  => [ qw/rowid first_name last_name rank competitions_judged
+                         pro_brewer/ ],
         order_by => 'last_name',
     } );
 
-    # initialize queue for updates we'll find when rendering page
-    my @update_queue = ();
-
-    # process the template, passing it a function to fetch judge data
-    my $template_object = Ninkasi::Template->new();
-    $template_object->process( 'view_judges.tt', {
-        cgi                   => scalar $cgi_object->Vars(),
-        escape_quotes         => sub { \&Ninkasi::CSV::escape_quotes },
+    # return callback to fetch judge data and some helper functions
+    return {
+        argument              => $argument,
         fetch_judge           => sub {
-            return $sth->fetch() && {
-                %$result,
+            return $judge_handle->fetch() && {
+                %$judge_row,
                 fetch_assignments
-                    => sub { Ninkasi::Assignment::fetch $result->{rowid} },
+                    => sub { Ninkasi::Assignment::fetch $judge_row->{rowid} },
                 fetch_flights
-                    => sub { Ninkasi::Flight::fetch $result->{rowid} },
+                    => sub { Ninkasi::Flight::fetch $judge_row->{rowid} },
             };
         },
-        rank_name             => \%Ninkasi::Judge::NAME,
-        remove_trailing_comma => sub { \&Ninkasi::CSV::remove_trailing_comma },
         title                 => 'Registered Judges',
-        type                  => $format,
-    } ) or warn $template_object->error();
-    $sth->finish();
-
-    return;
+    };
 }
 
-sub render_judge {
-    my ($cgi_object, $format, $judge_id) = @_;
+sub transform {
+    my ( $class, $argument ) = @_;
+
+    my $judge_id = $argument->{-nonoption}[0];
 
     # show all judges if no id is specified
-    return render_all_judges $cgi_object, $format if !$judge_id;
+    if (!$judge_id) {
+        return get_all_judges $argument;
+    }
 
-    # columns to display
-    my @judge_columns = qw/rowid first_name last_name address city state zip
-                           phone_evening phone_day email rank bjcp_id
-                           competitions_judged pro_brewer when_created/;
-
-    # fetch the judge object from the database
-    my $judge = Ninkasi::Judge->new();
-    my ($sth, $result) = $judge->bind_hash( {
+    # fetch the row for this judge from the database
+    my ( $judge_handle, $judge_row ) = $class->new()->bind_hash( {
         bind_values => [$judge_id],
-        columns     => \@judge_columns,
+        columns     => [ qw/rowid first_name last_name address city state zip
+                            phone_evening phone_day email rank bjcp_id
+                            competitions_judged pro_brewer when_created/ ],
         limit       => 1,
         where       => 'rowid = ?',
     } );
-    $sth->fetch();
+    $judge_handle->fetch();
+    $judge_handle->finish();
 
-    # process the template to display this judge's information
-    my $template_object = Ninkasi::Template->new();
-    $template_object->process( 'view_judge.html', {
-        judge     => $result,
+    return {
+        judge     => $judge_row,
         rank_name => \%Ninkasi::Judge::NAME,
-        title     => join( ' ', @$result{qw/first_name last_name/} ),
-    } ) or warn $template_object->error();
-
-    # ignore remaining rows
-    $sth->finish();
-
-    return;
-}
-
-sub render_page {
-    my ($class, $cgi_object) = @_;
-
-    # parse path_info to get object id
-    my ($id) = ( split '/', $cgi_object->path_info(), 3 )[1];
-
-    # redirect if trailing slash is missing
-    my $url = $cgi_object->url(-path_info => 1);
-    if (!$id && $url !~ m{/$}) {
-        print $cgi_object->redirect("$url/");
-        exit;
-    }
-
-    # format paramter determines content type
-    my $format = $cgi_object->param('format') || 'html';
-    $cgi_object->transmit_header();
-
-    if ( $format eq 'roster' ) {
-        &Ninkasi::Assignment::print_roster;
-        return;
-    }
-
-    # build & display selected view
-    render_judge $cgi_object, $format, $id;
+        title     => join( ' ', @$judge_row{qw/first_name last_name/} ),
+    };
 }
 
 1;

@@ -50,6 +50,21 @@ EOF
     return $self->Database_Handle()->last_insert_id( (undef) x 4 );
 }
 
+sub get_one_row {
+    my ( $self, $argument ) = @_;
+
+    # run the query and get one row
+    my ( $statement_handle, $result ) = $self->bind_hash($argument);
+    $statement_handle->fetch();
+
+    # get results in order requested
+    my @results = @$result{ @{ $argument->{columns} } };
+
+    # release the statement handle
+    $statement_handle->finish();
+
+    return @results;
+}
 
 # supported SQL clauses in the order we want them to appear in queries
 my @CLAUSES = qw/where limit group_by having order_by/;

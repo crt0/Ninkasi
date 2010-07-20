@@ -3,7 +3,7 @@ package Ninkasi::CGI;
 use strict;
 use warnings;
 
-use base 'CGI';
+use base 'CGI::Simple';
 
 use Ninkasi::Config;
 
@@ -26,11 +26,21 @@ sub new {
     return bless $self, $class;
 }
 
+sub get_arguments {
+    my ($self) = @_;
+
+    my @path_components = split '/', $self->path_info();
+
+    return [ $path_components[0],
+             ( map { "--$_=" . $self->param($_) } $self->param() ),
+             @path_components[ 1..$#path_components ] ];
+}
+
 sub transmit_header {
-    my ($self) = shift;
+    my $self   = shift;
+    my $format = shift || 'html';
 
     # set content type based on format parameter
-    my $format = $self->param('format') || 'html';
     my @content_type = (
         -type    => $format eq 'card'   ? 'application/pdf'
                   : $format eq 'csv'    ? 'text/plain'
@@ -40,6 +50,8 @@ sub transmit_header {
 
     # transmit CGI header
     print $self->header( -charset => 'utf-8', @content_type, @_ );
+
+    return;
 }
 
 1;

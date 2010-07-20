@@ -18,39 +18,31 @@ CREATE TABLE "$table_name" (
 EOF
 
 sub render_management_page {
-    my ( $self, $cgi_object ) = @_;
-
-    # format parameter determines content type
-    my $format = $cgi_object->param('format') || 'html';
-    $cgi_object->transmit_header();
+    my ( $class, $argument ) = @_;
 
     # fetch e-mail addresses from database
-    my ( $mailing_list_handle, $mailing_list_row ) = $self->new()->bind_hash( {
+    my ( $mailing_list_handle, $mailing_list_row ) = $class->new()->bind_hash( {
         columns => ['email'],
         order   => 'email',
     } );
 
     # render page
-    Ninkasi::Template->new()->process( 'mailing_list.tt', {
+    return {
         fetch_email => sub { $mailing_list_handle->fetch()
                                  && $mailing_list_row },
-        type        => $format,
-    } );
-
-    return;
+    };
 }
 
 sub render_signup_page {
-    my ( $self, $cgi_object ) = @_;
+    my ( $class, $argument ) = @_;
 
     # create template object for output
-    my $template_object = Ninkasi::Template->new();
     my %template_variable = ();
 
-    my $email_1 = $cgi_object->param('email_1');
-    my $email_2 = $cgi_object->param('email_2');
+    if ( exists $argument->{email_1} ) {
 
-    if ( defined $email_1 ) {
+        my $email_1 = $argument->{email_1};
+        my $email_2 = $argument->{email_2};
 
         # make sure the address match
         if ( $email_1 ne $email_2 ) {
@@ -80,11 +72,7 @@ sub render_signup_page {
         }
     }
 
-    # render template
-    $cgi_object->transmit_header();
-    $template_object->process( 'newsletter.html', \%template_variable );
-
-    return;
+    return \%template_variable;
 }
 
 1;
