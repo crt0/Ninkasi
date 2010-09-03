@@ -52,8 +52,8 @@ sub process_tt_files {
 
     # determine paths
     my %install_base_relpath = ();
-    while (my ($type, $path_components)
-               = each %{ $self->install_base_relpaths() }) {
+    my $mb_relpaths = $self->install_base_relpaths();
+    while ( my ( $type, $path_components ) = each %$mb_relpaths ) {
         $install_base_relpath{$type} = File::Spec->catfile(@$path_components);
     }
 
