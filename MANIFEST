@@ -1,6 +1,8 @@
+.gitignore
 Build.PL
 Changes
 MANIFEST
+Makefile
 Makefile.PL
 MyBuilder.pm
 README
@@ -12,6 +14,8 @@ htdocs/2008-hb-winners.html
 htdocs/2008-pb-winners.html
 htdocs/2009-hb-winners.pdf
 htdocs/2009-pb-winners.pdf
+htdocs/2010-hb-winners.pdf
+htdocs/2010-pb-winners.pdf
 htdocs/403.tt
 htdocs/404.tt
 htdocs/500.tt
@@ -34,6 +38,7 @@ htdocs/image/homebrew_bos.jpg
 htdocs/image/homebrew_champion.jpg
 htdocs/image/judging.jpg
 htdocs/image/lbc.jpg
+htdocs/image/quality.jpg
 htdocs/image/ron_bos.jpg
 htdocs/image/state-fair.jpg
 htdocs/image/stewards.jpg
@@ -68,6 +73,7 @@ lib/Ninkasi/Register.pm
 lib/Ninkasi/Table.pm
 lib/Ninkasi/Template.pm
 ninkasi-init
+pm_to_blib
 share/htpasswd
 share/template/assigned_column.html
 share/template/assignment.html
@@ -97,5 +103,6 @@ t/Ninkasi.t
 t/TEST.PL
 t/conf/extra.conf.in
 t/lookup.t
+t/mailing-list.t
 t/register-to-judge.t
 t/static.t
