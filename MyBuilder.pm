@@ -3,6 +3,7 @@ package MyBuilder;
 use strict;
 use warnings;
 
+use Config;
 use File::Spec;
 
 BEGIN {
@@ -36,6 +37,7 @@ sub find_tt_files {
     my ($self) = @_;
 
     my %tt_files = (
+        %{ $self->_find_file_by_type('tt', 'bin'   ) },
         %{ $self->_find_file_by_type('tt', 'htdocs') },
         %{ $self->_find_file_by_type('tt', 'lib'   ) },
     );
@@ -65,6 +67,7 @@ sub process_tt_files {
     my %template_variables = (
         install_base          => $self->install_base(),
         install_base_relpath  => \%install_base_relpath,
+        scriptdir             => $Config{scriptdir},
         year                  => 1900 + (localtime)[5],
     );
     while ( my ($source, $destination) = each %$tt_files ) {
