@@ -7,99 +7,162 @@ use warnings;
 use Carp;
 use Getopt::Long;
 use Ninkasi::CGI;
-use Ninkasi::CommandLine;
+use Ninkasi::CSV;
 use Ninkasi::Template;
+use Readonly;
+use Taint::Util;
 
 our $VERSION = '0.01';
 
-my %status_message = (
-    403 => 'You are not authorized to access this portion of the site.',
+my %Page;
+@Page{ qw/assignment flight judge mailing_list newsletter register/ } = ();
+
+Readonly my %error_message => (
+    403 => "You don't have permission to access this portion of the site.",
     404 => "We couldn't find the page you requested.",
+    500 => "There's a software error on our end.  Please try back later.",
+);
+Readonly my %error_title => (
+    403 => 'Access Denied',
+    404 => 'Not Found',
+    500 => 'Software Error',
 );
 
-sub die_with_error_page {
-    my ( $environment, $status, $message, $template_input ) = @_;
+# template variables to propagate on error
+Readonly my @error_variables => qw/categories field form ranks title/;
 
-    $environment->transmit_header( 'html', -status => $status );
-    $template_object->new()->process( 'error.tt', {
+sub die_with_error_page {
+    my ( $environment, $error, $template_object, $template_input ) = @_;
+
+    $template_input ||= {};
+    $error->{status} ||= 500;
+
+    # send to browser if not a software error or if running a test server
+    my $send_to_browser = $error->{status} != 500
+                          || $ENV{NINKASI_TEST_SERVER_ROOT};
+
+    # else (or if missing) replace message/title with something innocuous
+    if ( !$send_to_browser || !$error->{message} ) {
+        $error->{message} = $error_message{ $error->{status} };
+        delete $template_input->{is_backtrace};
+    }
+    if ( !$send_to_browser || !$error->{title} ) {
+        $error->{title} = $error_title{ $error->{status} };
+    }
+
+    $environment->transmit_header( 'html', -status => $error->{status} );
+    $template_object->process( 'error.tt', {
         %$template_input,
-        message => $message,
+        %$error
     } );
 
-    croak $message;
+    croak $environment->path_info(), ': ', $error->{message};
 }
 
 sub render {
     my ($class) = @_;
 
-    my $environment
-        = ( exists $ENV{REQUEST_METHOD} ? 'Ninkasi::CGI'
-                                        : 'Ninkasi::CommandLine' )->new();
-    @ARGV = $environment->get_arguments();
+    # determine whether we're a CGI or a command line utility
+    my $environment_class = exists $ENV{REQUEST_METHOD} ? 'Ninkasi::CGI'
+                                                        : 'Ninkasi::CommandLine'
+                                                        ;
+    eval "require $environment_class";
+    die if $@;
+    my $environment = $environment_class->new();
+    my $argument = $environment->get_arguments();
+    my ( $program_name, $positional, $option )
+        = @$argument{ qw/program_name positional option/ };
 
-    my %option = ( format => 'html' );
-    my $program_name = $ARGV[0];
+    my @authorized_pages = ();
     my $template_object = Ninkasi::Template->new();
-    my $template_input;
+    my %template_input;
 
     eval {
 
-        # only allow appropriate modules
-        die { status => 404 } if !exists $Transformer{$program_name};
+        # escape to test backtrace
+        if ( $program_name eq 'die' ) {
 
-        # load module
-        my $module = join '::', __PACKAGE__, ucfirst $program_name;
-        untaint $module;
-        require $module;
+            # hack for testing what errors look like in production
+            if ( exists $option->{to_browser} && !$option->{to_browser} ) {
+                delete $ENV{NINKASI_TEST_SERVER_ROOT};
+            }
 
-        # parse arguments
-        GetOptions \%option, $module->get_argument_schema();
-        $option{-nonoption} = \@ARGV;
-
-        # redirect if trailing slash is missing
-        if ( !$#ARGV && ( my $url = $environment->url( -path_info => 1 ) )
-             && $url !~ m{/$} ) {
-            print $environment->redirect("$url/");
-            exit;
+            # throw backtrace
+            confess;
         }
 
-        # do the actual work, getting back data to pass to template
-        $template_input = $module->transform(
-            \%option,
-            constraint_name => \%Ninkasi::Constraint::NAME,
-            rank_name       => \%Ninkasi::Judge::NAME,
-            type            => $format,
+        # only allow appropriate modules
+        die { status => 404 } if !exists $Page{$program_name};
+
+        # load module
+        my $module = join '::', __PACKAGE__,
+                                join '', map { ucfirst } split '_',
+                                                               $program_name;
+        untaint $module;
+        eval "require $module";
+        die { status => 500, message => $@ } if $@;
+        die { status => 500, message => "$module: can't transform" }
+            if !$module->can('transform');
+
+        # pass page names to appear in navbar & access level to template
+        %template_input = (
+            constraint_name       => \%Ninkasi::Constraint::NAME,
+            escape_quotes         => sub { \&Ninkasi::CSV::escape_quotes },
+            format                => $option->{format},
+            rank_name             => \%Ninkasi::Judge::NAME,
+            remove_trailing_comma => sub {
+                \&Ninkasi::CSV::remove_trailing_comma;
+            },
         );
 
+        # do the actual work, getting back data to pass to template
+        my $transform_results = $module->transform( {
+            %$option,
+            -positional => $positional,
+        } );
+
+        %template_input = ( %template_input, %$transform_results );
     };
     if ( my $error = $@ ) {
 
         # structured data was passed through the exception
         if ( ref $error ) {
 
-            # if not provided, guess the error message
-            my $message = exists $error->{message} ? $error->{message}
-                : $status_message{ $error->{status} };
-
             # if a status is provided, print an error page and die
             if ( exists $error->{status} ) {
-                die_with_error_page $environment, $error->{status}, $message,
-                                    $template_input;
+                die_with_error_page $environment, $error, $template_object,
+                                    \%template_input;
             }
 
-            # else just pass along the error message
-            $template_input{error} = $message;
+            # else just pass along the error message and other fields
+            @template_input{ 'error',   @error_variables }
+                  = @$error{ 'message', @error_variables };
         }
 
         # a plain string was passed -- we don't know what happened, so die
         else {
-            die_with_error_page $environment, 500, $error, $template_input;
+            $template_input{is_backtrace} = 1;
+            die_with_error_page $environment, { message => $error },
+                                $template_object, \%template_input;
         }
     }
 
-    # render page
-    $environment->transmit_header( $option{format} );
-    $template_object->new()->process( "$program_name.tt", $template_input );
+    # send HTTP header
+    $environment->transmit_header( $option->{format} );
+
+    # when PDFs are emitted, send the content directly
+    if ( $option->{format} eq 'print' ) {
+        print $template_input{content};
+        return;
+    }
+
+    # else use Template::Toolkit
+    my $template_name = join '', $program_name,
+                                 ( @$positional ? '' : '_index' ),
+                                 '.tt';
+    $template_object->process( $template_name, \%template_input );
+
+    return;
 }
 
 1;

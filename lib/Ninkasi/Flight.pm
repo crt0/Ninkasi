@@ -9,7 +9,7 @@ use Ninkasi::FlightCategory;
 use Ninkasi::Template;
 
 __PACKAGE__->Table_Name('flight');
-__PACKAGE__->Column_Names(qw/description pro number/);
+__PACKAGE__->Column_Names( [ qw/description pro number/ ] );
 __PACKAGE__->Schema(<<'EOF');
 CREATE TABLE flight (
     description        INTEGER,
@@ -95,7 +95,7 @@ sub update_flights {
 
         # build table of input data
         my %input_table = ();
-        my $permitted_column = __PACKAGE__->_Column_Names();
+        my $permitted_column = __PACKAGE__->Column_Names_Hash();
         while ( my ( $name, $value ) = each %$argument ) {
             my ( $column, $row ) = split /_/, $name;
             next if !exists $permitted_column->{$column}
@@ -176,10 +176,10 @@ sub fake_flight {
         my $flight_number = $argument->{"number_$iteration"};
         return if !defined $flight_number || $flight_number eq '';
 
-        my $hashref = __PACKAGE__->_Column_Names();
+        my $names = __PACKAGE__->Column_Names();
 
         my %row = map { $_ => scalar $argument->{"${_}_$iteration"} }
-                      keys %{ __PACKAGE__->_Column_Names() }, 'category';
+                      @{ __PACKAGE__->Column_Names() }, 'category';
         ++$iteration;
 
         return \%row;
@@ -191,18 +191,18 @@ sub transform {
 
     # process input
     if ( $argument->{save} ) {
-        my $error = update_flights $cgi_object;
+        my $error = update_flights $argument;
 
         return {
             error        => $error,
-            fetch_flight => fake_flight($cgi_object),
+            fetch_flight => fake_flight($argument),
         } if $error;
     }
 
     # select whole table & order by category, then number
     my ( $handle, $result ) = $class->new()->bind_hash( {
         columns  => [ 'group_concat("category", " ")',
-                      keys %{ $class->_Column_Names() } ],
+                      @{ $class->Column_Names() } ],
         join     => 'Ninkasi::FlightCategory',
         order_by => 'number',
         where    => 'flight.rowid = flight_category.flight',

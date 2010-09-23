@@ -12,9 +12,10 @@ use Ninkasi::Constraint;
 use Ninkasi::Template;
 
 __PACKAGE__->Table_Name('judge');
-__PACKAGE__->Column_Names(qw/first_name last_name address city state zip
-                             phone_evening phone_day email rank bjcp_id
-                             competitions_judged pro_brewer when_created/);
+__PACKAGE__->Column_Names( [ qw/first_name last_name address city state zip
+                                phone_evening phone_day email rank bjcp_id
+                                competitions_judged pro_brewer
+                                when_created/ ] );
 __PACKAGE__->Schema(<<'EOF');
 CREATE TABLE judge (
     first_name          TEXT,
@@ -113,7 +114,11 @@ sub get_all_judges {
 sub transform {
     my ( $class, $argument ) = @_;
 
-    my $judge_id = $argument->{-nonoption}[0];
+    my $judge_id = $argument->{-positional}[0];
+
+    # print roster if requested
+    return { content => &Ninkasi::Assignment::print_roster }
+           if $argument->{format} eq 'print';
 
     # show all judges if no id is specified
     if (!$judge_id) {
@@ -132,11 +137,7 @@ sub transform {
     $judge_handle->fetch();
     $judge_handle->finish();
 
-    return {
-        judge     => $judge_row,
-        rank_name => \%Ninkasi::Judge::NAME,
-        title     => join( ' ', @$judge_row{qw/first_name last_name/} ),
-    };
+    return { judge => $judge_row, rank_name => \%Ninkasi::Judge::NAME };
 }
 
 1;

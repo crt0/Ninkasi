@@ -1,4 +1,4 @@
-[% PROCESS "${type}.tt" ~%]
+[% PROCESS "${format}.tt" ~%]
 
 [% PROCESS header title = "Mailing List" -%]
 [% PROCESS manage_navbar -%]

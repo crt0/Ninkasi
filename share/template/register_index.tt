@@ -1,3 +1,8 @@
+[% IF !categories ~%]
+   [% PROCESS confirmation.tt ~%]
+   [% STOP -%]
+[% END -%]
+[% PROCESS html.tt -%]
 [% DEFAULT
     form.bjcp_id             = 'none'
     form.competitions_judged = 0
@@ -11,7 +16,7 @@
 ~%]
 
 [% MACRO mark_field(name) BLOCK -%]
-[% IF error_field.$name -%]
+[% IF field.$name -%]
 <span class="field_marker">* </span>
 [% END -%]
 [% END ~%]
@@ -23,33 +28,33 @@
 [% END ~%]
 
 [% PROCESS header.html,
-   title => 'Brewers&#8217; Cup Judge Registration Form' -%]
+   title => "Brewers$apostrophe Cup Judge Registration Form" -%]
 [% PROCESS navbar.html -%]
 <div id="body_text">
   <h2>Judge Registration Form</h2>
-[% IF system_error || user_errors -%]
+[% IF error -%]
 <div class="error">
-[% IF system_error -%]
+[% IF error.length -%]
   The judge signup system is experiencing technical difficulties.  The
   site maintainer has been notified and is working to correct the
   problem.  Your information has NOT been recorded; please try
   resubmitting this form later.  Sorry for the inconvenience.  The
-  error was: [% system_error | html %]
+  error was: [% error | html %]
 [% ELSE -%]
   We're having trouble understanding your form submission.  Please
   correct the following and try again.  If you feel you submitted the
   form correctly, please <a href="mailto:public@ajk.name">notify the
   site maintainer</a>.
   <ul>
-  [% FOREACH error_message IN user_errors -%]
-  <li>[% error_message | html %]</li>
+  [% FOREACH message IN error -%]
+  <li>[% message | html %]</li>
   [% END -%]
   </ul>
 [% END -%]
 </div>
 [% END -%]
 <div class="form_instructions">All fields are required.</div>
-<form action="register-to-judge" method="post">
+<form action="register" method="post">
   <table border="0">
     <tr>
       <td align="right">First Name:</td>
@@ -293,9 +298,9 @@
 Contact
 <a href="mailto:judgecoordinator@brewerscup.org">the Judge
 Coordinator</a> if you have questions about judging or volunteering.
-If you&#8217;re having a problem with this form, please contact
+If you[% apostrophe %]re having a problem with this form, please contact
 <a href="mailto:public@ajk.name">Andrew Korty</a>.  See the
-<a href="/">Brewers&#8217; Cup web site</a> for more information about
+<a href="/">Brewers[% apostrophe %] Cup web site</a> for more information about
 the competition.
 </p>
 <p>

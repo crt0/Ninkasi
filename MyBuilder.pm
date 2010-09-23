@@ -65,6 +65,7 @@ sub process_tt_files {
         INCLUDE_PATH => File::Spec->catfile(qw/share template/) . ':.' } );
     my $tt_files = $self->find_tt_files();
     my %template_variables = (
+        apostrophe            => '&#8217;',
         install_base          => $self->install_base(),
         install_base_relpath  => \%install_base_relpath,
         scriptdir             => $Config{scriptdir},

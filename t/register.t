@@ -8,13 +8,13 @@ use Test::More tests => 136;
 use Apache::TestConfig;
 use Ninkasi::Constraint;
 use Ninkasi::Judge;
-use Ninkasi::JudgeSignup;
+use Ninkasi::Register;
 use Ninkasi::Table;
 use Test::WWW::Mechanize;
 
 my $config = Apache::TestConfig->new();
 my $url_base = join '', $config->{vars}{scheme}, '://', $config->hostport();
-my $form_url = "$url_base/register-to-judge";
+my $form_url = "$url_base/register";
 
 my $dbh = Ninkasi::Table->new()->Database_Handle();
 eval {
@@ -43,6 +43,7 @@ my $rowid = $judge->add( {
         phone_evening       => '123-456-7890',
         rank                => 50,
         state               => '--',
+        submit              => 1,
         zip                 => '12345',
 } );
 is $rowid, 1;
@@ -353,8 +354,8 @@ $mech->content_like(qr{name="zip"\s+
                        value="12345"}msx, 'zip code');
 
 # test table names in class data
-is(Ninkasi::Judge->Table_Name(),      'judge'       );
-is(Ninkasi::Constraint->Table_Name(), "'constraint'");
+is(Ninkasi::Judge->Table_Name(),      'judge'      );
+is(Ninkasi::Constraint->Table_Name(), 'constraint' );
 
 my ($sth, $result) = $judge->bind_hash(
     {

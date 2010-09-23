@@ -1,0 +1,1 @@
+[% PROCESS mailing_list.tt -%]

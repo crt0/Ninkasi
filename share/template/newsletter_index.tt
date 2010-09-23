@@ -1,9 +1,10 @@
 [%# -*- html -*- -%]
+[% PROCESS html.tt -%]
 [% PROCESS header.html,
-   title => 'Brewers&#8217; Cup Newsletter' -%]
+   title => "Brewers$apostrophe Cup Newsletter" -%]
 [% PROCESS navbar.html -%]
 <div id="body_text">
-  <h2>Brewers&#8217; Cup Newsletter</h2>
+  <h2>Brewers[% apostrophe %] Cup Newsletter</h2>
 [% IF system_error || user_error -%]
 <div class="error">
 [% IF system_error -%]
@@ -27,7 +28,7 @@
   <form method="post">
     <p>
       Enter your e-mail address to sign up to receive the latest news
-      about the Brewers&#8217; Cup.
+      about the Brewers[% apostrophe %] Cup.
     </p>
     <table>
       <tr>

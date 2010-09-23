@@ -9,11 +9,10 @@ use IPC::Open2 ();
 use Ninkasi::Constraint;
 use Ninkasi::Flight;
 use Ninkasi::Judge;
-use Ninkasi::Template;
 use Readonly;
 
 __PACKAGE__->Table_Name('assignment');
-__PACKAGE__->Column_Names(qw/flight judge session/);
+__PACKAGE__->Column_Names( [ qw/flight judge session/ ] );
 __PACKAGE__->Schema(<<'EOF');
 CREATE TABLE assignment (
     flight  TEXT,
@@ -170,47 +169,19 @@ EOF
 sub groff_to_pdf {
     my ($groff, @options) = @_;
 
-    $ENV{PATH} = '/usr/bin';
+    $ENV{PATH} = Ninkasi::Config->new()->path();
     my ($groff_pid, $groff_reader, $groff_writer);
-    eval {
-        $groff_pid = IPC::Open2::open2 $groff_reader, $groff_writer,
-                                       qw/groff -Tps/, @options;
-    };
-    if ($@) {
-        if ($@ =~ /^open2/) {
-            warn "open2: $!\n$@\n";
-            return;
-        }
-        die;
-    }
+    $groff_pid = IPC::Open2::open2 $groff_reader, $groff_writer,
+                                   'pdfroff', @options;
 
     print $groff_writer $groff;
     close $groff_writer;
     local $/;
-    my $postscript = <$groff_reader>;
+    my $pdf = <$groff_reader>;
     close $groff_reader;
     waitpid $groff_pid, 0;
 
-    my ($ps2pdf_pid, $ps2pdf_reader, $ps2pdf_writer);
-    eval {
-        $ps2pdf_pid = IPC::Open2::open2 $ps2pdf_reader, $ps2pdf_writer,
-                                        qw/ps2pdf - -/;
-    };
-    if ($@) {
-        if ($@ =~ /^open2/) {
-            warn "open2: $!\n$@\n";
-            return;
-        }
-        die;
-    }
-
-    print $ps2pdf_writer $postscript;
-    close $ps2pdf_writer;
-    print <$ps2pdf_reader>;
-    close $ps2pdf_reader;
-    waitpid $ps2pdf_pid, 0;
-
-    return;
+    return $pdf;
 }
 
 sub print_roster {
@@ -282,9 +253,7 @@ EOF
         last if $finished;
     }
 
-    groff_to_pdf join("\n.bp\n", @groff), qw/-t -P-l/;
-
-    return;
+    return groff_to_pdf join("\n.bp\n", @groff), qw/-t -P-l/;
 }
 
 sub print_table_card {
@@ -315,7 +284,7 @@ sub print_table_card {
     }
     my $other_judges = join "\n.brp\n", @other_judges_list;
 
-    groff_to_pdf <<EOF;
+    return groff_to_pdf <<EOF;
 .fam H
 .nh
 .ad c
@@ -342,18 +311,24 @@ $head_judge
 .brp
 $other_judges
 EOF
-
-    return;
 }
 
-sub render_page {
-    my ($self, $cgi_object) = @_;
+sub flatten {
+    my ($data) = @_;
 
-    # create template object for output
-    my $template_object = Ninkasi::Template->new();
+    return if !defined $data;
+    return ref $data ? @$data : $data;
+}
+
+sub transform {
+    my ( $self, $argument ) = @_;
+
+    my $flight_number = $argument->{-positional}[0];
+    my $format        = $argument->{format     }   ;
+    my @assign        = flatten $argument->{assign  };
+    my @unassign      = flatten $argument->{unassign};
 
     # parse path_info to get flight number and then flight info from db
-    my $flight_number = ( split '/', $cgi_object->path_info(), 3 )[1];
     my $flight_table = Ninkasi::Flight->new();
     my ($sth, $flight) = $flight_table->bind_hash( {
         bind_values => [$flight_number],
@@ -362,48 +337,36 @@ sub render_page {
         where       => 'number = ?',
     } );
 
-    if ( !$sth->fetch() ) {
-        $cgi_object->transmit_header( -status => '404 Not Found' );
-        $template_object->process( 'flight_404.html',
-                                   {flight_number => $flight_number} )
-            or warn $template_object->error();
-        exit 404;
-    }
+    die {
+        add_flights => 1,
+        message     => "Flight $flight_number not found.",
+        status      => 404,
+        title       => "Flight $flight_number Not Found",
+    } if !$sth->fetch();
 
     $sth->finish();
 
-    # format parameter determines content type
-    my $format = $cgi_object->param('format') || 'html';
-    $cgi_object->transmit_header();
-
     # process table card
-    if ( $format eq 'card' ) {
-        print_table_card $flight;
-        return;
-    }
+    return { content => print_table_card $flight } if $format eq 'print';
 
     # process input
-    if ( my @assign   = $cgi_object->param('assign'  ) ) {
+    if (@assign) {
         update_assignment \@assign  , $flight_number;
     }
-    if ( my @unassign = $cgi_object->param('unassign') ) {
+    if (@unassign) {
         update_assignment \@unassign, 0;
     }
 
     # process the template, passing it a function to fetch judge data
-    $template_object->process( 'assignment.html', {
+    return {
         assigned_judges_func   => sub { select_assigned_judges $flight },
         constraint_name        => \%Ninkasi::Constraint::NAME,
-        escape_quotes          => sub { \&escape_quotes },
         fetch_constraint       => \&Ninkasi::Constraint::fetch,
         flight                 => $flight,
         rank_name              => \%Ninkasi::Judge::NAME,
-        remove_trailing_comma  => sub { \&remove_trailing_comma },
         type                   => $format,
         unassigned_judges_func => sub { select_unassigned_judges $flight },
-    } ) or warn $template_object->error();
-
-    return;
+    };
 }
 
 1;

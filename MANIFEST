@@ -55,7 +55,7 @@ htdocs/manage/mailing_list.tt
 htdocs/maps.tt
 htdocs/newsletter.tt
 htdocs/ninkasi.css
-htdocs/register-to-judge.tt
+htdocs/register.tt
 htdocs/results.tt
 htdocs/rules.pdf
 lib/Ninkasi.pm
@@ -104,5 +104,5 @@ t/TEST.PL
 t/conf/extra.conf.in
 t/lookup.t
 t/mailing-list.t
-t/register-to-judge.t
+t/register.t
 t/static.t

@@ -6,6 +6,6 @@ t/TEST
 t/conf/apache_test_config.pm
 t/conf/*.conf
 t/database
-t/*.log
+t/*log
 t/htdocs/
 t/logs/

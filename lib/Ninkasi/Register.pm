@@ -86,7 +86,8 @@ sub log_request {
                                 my $value = $column->{$_};
                                 $value =~ s/:/%3a/g;
                                 "$_=$value";
-                            } sort keys %$column),
+                            } sort grep { !/^-/ && $_ ne 'format' }
+                                        keys %$column),
                   "\n";
         close LOG;
     }
@@ -122,8 +123,8 @@ sub validate {
     }
 
     die {
-        field    => \%error_field   ,
-        messages => \@error_messages,
+        field   => \%error_field   ,
+        message => \@error_messages,
     } if @error_messages;
 
     foreach my $column_value (values %$column) {
@@ -228,51 +229,36 @@ sub store {
     return;
 }
 
-sub render_page {
-    my ($class, $cgi_object) = @_;
+sub transform {
+    my ( $class, $argument ) = @_;
 
-    my $cgi_param = $cgi_object->Vars();
-
-    my $template_name = 'judge_form.html';
-    my %template_variable = (
+    my @template_defaults = (
         categories => \@Ninkasi::Category::CATEGORIES,
-        form       => $cgi_param,
+        form       => $argument,
         ranks      => \@Ninkasi::Judge::RANKS,
     );
-    if (%$cgi_param) {
-        eval { store $cgi_param };
-        if ($@) {
-            if (ref $@) {
-                $template_variable{user_errors} = $@->{messages};
-                $template_variable{error_field} = $@->{field   };
-            }
-            else {
-                my $error_message = $@;
-                $template_variable{system_error} = $error_message;
-                eval { alert_maintainer $error_message, $cgi_param };
-                if ($@) {
-                    warn $@;
-                }
-            }
-        }
-        else {
-            $template_name = 'confirmation.tt';
-            $template_variable{type} = 'html';
 
-            my $config = Ninkasi::Config->new();
-            # if ( !$config->testing() ) {
-            eval { mail_confirmation $cgi_param };
+    if ( $argument->{-number_of_options} ) {
+
+        # store judge data
+        eval { store $argument };
+        if ( my $error = $@ ) {
+            die ref $error ? { %$error, @template_defaults } : $error;
+        }
+
+        # mail confirmation unless testing
+        my $config = Ninkasi::Config->new();
+        if ( !$config->test_server_root() ) {
+            eval { mail_confirmation $argument };
             if ($@) {
                 warn $@;
             }
-            # }
         }
+
+        return { form => $argument };
     }
 
-    $cgi_object->transmit_header();
-    my $template_object = Ninkasi::Template->new();
-    $template_object->process($template_name, \%template_variable)
-        or warn $template_object->error();
+    return { @template_defaults };
 }
 
 1;
