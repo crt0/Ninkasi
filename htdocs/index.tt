@@ -10,35 +10,23 @@
 </div>
 <div id="photo_bar">
 <span class="photo_bar_slot">
-<img alt="2008 Homebrew Champion" src="image/homebrew_champion.jpg" />
+<img alt="2010 Homebrew Club of the Year" src="image/club_of_year.jpg" />
 </span>
 <span class="photo_bar_slot">
-<img alt="2008 Commercial Champions" src="image/commercial_champion.jpg" />
+<img alt="2010 Commercial Champions" src="image/commercial_champion.jpg" />
 </span>
 <span class="photo_bar_slot">
-<img alt="2008 Homebrew Best-of-Show Winner" src="image/homebrew_bos.jpg" />
+<img alt="2010 Homebrew Champion" src="image/homebrew_champion.jpg" />
 </span>
 <span class="photo_bar_slot">
-<img alt="2008 Commercial Best-of-Show Winner" 
+<img alt="2010 Homebrew Best-of-Show Winner" src="image/homebrew_bos.jpg" />
+</span>
+<span class="photo_bar_slot">
+<img alt="Woodford Reserve Challenge Winners" src="image/wr_challenge.jpg" />
+</span>
+<span class="photo_bar_slot">
+<img alt="2010 Commercial Best-of-Show Winner" 
      src="image/commercial_bos.jpg" />
-</span>
-<span class="photo_bar_slot">
-<img alt="stewards" src="image/stewards.jpg" />
-</span>
-<span class="photo_bar_slot">
-<img alt="Best-of-Show judging" src="image/ron_bos.jpg" />
-</span>
-<span class="photo_bar_slot">
-<img alt="judging" src="image/judging.jpg" />
-</span>
-<span class="photo_bar_slot">
-<img alt="tasting" src="image/tasting.jpg" />
-</span>
-<span class="photo_bar_slot">
-<img alt="Homebrew Club of the Year banner" src="image/homebrew_banner.jpg" />
-</span>
-<span class="photo_bar_slot">
-<img alt="Anita" src="image/anita.jpg" />
 </span>
 </div>
 <div id="body_text">
