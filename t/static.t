@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 44;
+use Test::More tests => 39;
 
 use Apache::TestConfig;
 use Test::WWW::Mechanize;
@@ -60,7 +60,6 @@ sub navbar_ok {
 | <a accesskey="j" href="/judge">Judge</a>
 | <a accesskey="m" href="/maps">Maps</a>
 | <a accesskey="r" href="/results">Results</a>
-| <a accesskey="n" href="/newsletter">Newsletter</a>
 | <a accesskey="c" href="/contacts">Contacts</a>
 </div>
 <form action="http://www.google.com/cse" id="cse-search-box">
@@ -103,7 +102,6 @@ $mech->content_contains(<<EOF, 'navigation bar');
   <div><a accesskey="j" href="judge">Register to Judge</a></div>
   <div><a accesskey="m" href="maps">Find the Fairgrounds</a></div>
   <div><a accesskey="r" href="results">View 2010 Results</a></div>
-  <div><a accesskey="n" href="newsletter">Get the Newsletter</a></div>
   <div><a accesskey="c" href="contacts">Contact Us</a></div>
   <div><form action="http://www.google.com/cse" id="cse-search-box">
   <div>
@@ -156,13 +154,6 @@ $mech->links_ok([grep { $_->url() !~ m{^/photos/} } $mech->find_all_links()],
                 'check non-photo links on /results');
 $mech->get_ok("$url_base/Results.htm");
 $mech->get_ok("$url_base/2006Results.htm");
-$mech->back();
-
-$mech->follow_link_ok( {text => 'Newsletter'} );
-header_ok $mech, 'Brewers&#8217; Cup Newsletter';
-navbar_ok $mech;
-$mech->html_lint_ok('HTML validation of /newsletter');
-$mech->page_links_ok('check all links on /newsletter');
 $mech->back();
 
 $mech->follow_link_ok( {text => 'Contacts'} );

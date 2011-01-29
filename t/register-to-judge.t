@@ -135,7 +135,6 @@ $mech->content_is( <<'EOF', 'header' );
 | <a accesskey="j" href="/judge">Judge</a>
 | <a accesskey="m" href="/maps">Maps</a>
 | <a accesskey="r" href="/results">Results</a>
-| <a accesskey="n" href="/newsletter">Newsletter</a>
 | <a accesskey="c" href="/contacts">Contacts</a>
 </div>
 <form action="http://www.google.com/cse" id="cse-search-box">
