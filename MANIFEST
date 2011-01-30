@@ -41,7 +41,6 @@ htdocs/image/tasting.jpg
 htdocs/index.tt
 htdocs/judge.tt
 htdocs/labels-interactive.pdf
-htdocs/labels.pdf
 htdocs/manage/.htaccess
 htdocs/manage/assignment.tt
 htdocs/manage/flight.tt
