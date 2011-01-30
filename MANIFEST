@@ -46,9 +46,7 @@ htdocs/manage/.htaccess
 htdocs/manage/assignment.tt
 htdocs/manage/flight.tt
 htdocs/manage/judge.tt
-htdocs/manage/mailing_list.tt
 htdocs/maps.tt
-htdocs/newsletter.tt
 htdocs/ninkasi.css
 htdocs/register-to-judge.tt
 htdocs/results.tt
@@ -83,10 +81,8 @@ share/template/html.tt
 share/template/judge_form.html
 share/template/judges_table.tt
 share/template/mail.tt
-share/template/mailing_list.tt
 share/template/manage_navbar.html
 share/template/navbar.html
-share/template/newsletter.html
 share/template/search.html
 share/template/searchbox.html
 share/template/test
