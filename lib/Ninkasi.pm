@@ -15,7 +15,7 @@ use Taint::Util;
 our $VERSION = '0.01';
 
 my %Page;
-@Page{ qw/assignment flight judge mailing_list newsletter register/ } = ();
+@Page{ qw/assignment flight judge register/ } = ();
 
 Readonly my %error_message => (
     403 => "You don't have permission to access this portion of the site.",
