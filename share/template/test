@@ -18,6 +18,6 @@ MAIN: {
             flight2 => 1,
         },
         title => 'Brewers Cup Judge Volunteer Confirmation',
-        type => $ARGV[0],
+        format => $ARGV[0],
     }) or die $template->error();
 }

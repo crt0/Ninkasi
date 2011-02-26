@@ -1,12 +1,15 @@
-Allow from   localhost localhost.localdomain
-AuthName     "Brewers Cup"
-AuthType     Basic
-AuthUserFile /home/httpd/vhosts/brewerscup.org/share/ninkasi/htpasswd
-Order        Allow,Deny
-Require user ajk anita tom
-Satisfy      any
+Action         ninkasi /cgi virtual
+Allow from     localhost localhost.localdomain
+AuthName       "Brewers Cup"
+AuthType       Basic
+AuthUserFile   /home/httpd/vhosts/brewerscup.org/share/ninkasi/htpasswd
+DirectoryIndex judge
+Order          Allow,Deny
+Require        user ajk anita tom
+Satisfy        any
 
 Options ExecCGI SymLinksIfOwnerMatch
 
 RewriteEngine on
-RewriteRule . - [H=cgi-script]
+RewriteRule index - [H=cgi-script,L]
+RewriteRule .     - [H=ninkasi,L]

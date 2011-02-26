@@ -9,7 +9,7 @@ use Ninkasi::FlightCategory;
 use Ninkasi::Template;
 
 __PACKAGE__->Table_Name('flight');
-__PACKAGE__->Column_Names(qw/description pro number/);
+__PACKAGE__->Column_Names( [ qw/description pro number/ ] );
 __PACKAGE__->Schema(<<'EOF');
 CREATE TABLE flight (
     description        INTEGER,
@@ -22,7 +22,7 @@ sub fetch {
     my ($judge_id) = @_;
 
     # build an index of missing rows (we'll remove the flights we find)
-    my $flight_table = Ninkasi::Flight->new();
+    my $flight_table = __PACKAGE__->new();
     my $not_found
         = $flight_table->Database_Handle()
                        ->selectall_hashref( 'SELECT number FROM flight',
@@ -78,7 +78,7 @@ EOF
 }
 
 sub update_flights {
-    my ($cgi_object) = @_;
+    my ($argument) = @_;
 
     # get a database handle
     my $dbh = __PACKAGE__->Database_Handle();
@@ -95,12 +95,12 @@ sub update_flights {
 
         # build table of input data
         my %input_table = ();
-        my $permitted_column = __PACKAGE__->_Column_Names();
-        foreach my $name ( $cgi_object->param() ) {
+        my $permitted_column = __PACKAGE__->Column_Names_Hash();
+        while ( my ( $name, $value ) = each %$argument ) {
             my ( $column, $row ) = split /_/, $name;
             next if !exists $permitted_column->{$column}
                     && $column ne 'category';
-            $input_table{$row}{$column} = $cgi_object->param($name);
+            $input_table{$row}{$column} = $value;
         }
 
         # prepare statement handle for flight table
@@ -168,70 +168,49 @@ EOF
 
 # fake flight data from CGI query
 sub fake_flight {
-    my ($cgi_object) = @_;
+    my ($argument) = @_;
 
     my $iteration = 1;
 
     return sub {
-        my $flight_number = $cgi_object->param("number_$iteration");
+        my $flight_number = $argument->{"number_$iteration"};
         return if !defined $flight_number || $flight_number eq '';
 
-        my $hashref = __PACKAGE__->_Column_Names();
+        my $names = __PACKAGE__->Column_Names();
 
-        my %row = map { $_ => scalar $cgi_object->param("${_}_$iteration") }
-                      keys %{ __PACKAGE__->_Column_Names() }, 'category';
+        my %row = map { $_ => scalar $argument->{"${_}_$iteration"} }
+                      @{ __PACKAGE__->Column_Names() }, 'category';
         ++$iteration;
 
         return \%row;
     };
 }
 
-sub render_page {
-    my ($self, $cgi_object) = @_;
-
-    # format parameter determines content type
-    my $format = $cgi_object->param('format') || 'html';
-
-    # create template object for output
-    my $template_object = Ninkasi::Template->new();
-
-    # transmit HTTP header
-    $cgi_object->transmit_header();
+sub transform {
+    my ( $class, $argument ) = @_;
 
     # process input
-    if ( $cgi_object->param('save') ) {
-        my $error = update_flights $cgi_object;
+    if ( $argument->{save} ) {
+        my $error = update_flights $argument;
 
-        if ($error) {
-            $template_object->process( 'flight.tt', {
-                error        => $error,
-                fetch_flight => fake_flight($cgi_object),
-                type         => $format,
-            } ) or warn $template_object->error();
-
-            return;
-        }
+        return {
+            error        => $error,
+            fetch_flight => fake_flight($argument),
+        } if $error;
     }
 
     # select whole table & order by category, then number
-    my $flight = Ninkasi::Flight->new();
-    my ($sth, $result) = $flight->bind_hash( {
+    my ( $handle, $result ) = $class->new()->bind_hash( {
         columns  => [ 'group_concat("category", " ")',
-                      keys %{ $self->_Column_Names() } ],
+                      @{ $class->Column_Names() } ],
         join     => 'Ninkasi::FlightCategory',
         order_by => 'number',
         where    => 'flight.rowid = flight_category.flight',
         group_by => 'number',
     } );
-    $sth->bind_col( 1, \$result->{category} );
+    $handle->bind_col( 1, \$result->{category} );
 
-    # process the template, passing it a function to fetch flight data
-    $template_object->process( 'flight.tt', {
-        fetch_flight => sub { $sth->fetch() && $result },
-        type         => $format,
-    } ) or warn $template_object->error();
-
-    return;
+    return { fetch_flight => sub { $handle->fetch() && $result } };
 }
 
 1;

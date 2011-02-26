@@ -6,7 +6,7 @@ use warnings;
 use Test::More tests => 74;
 
 use Apache::TestConfig;
-use IPC::Open2;
+use File::LibMagic qw/:easy/;
 use Ninkasi::Table;
 use Test::WWW::Mechanize;
 
@@ -228,7 +228,7 @@ $mech->content_like(
     'flight 21 got added',
 );
 
-my $signup_url = "$url_base/register-to-judge";
+my $signup_url = "$url_base/register";
 $mech->get_ok($signup_url);
 
 $mech->submit_form_ok( {
@@ -406,13 +406,9 @@ EOF
 
 # test roster
 $mech->back();
-$mech->follow_link_ok( { text_regex => qr/roster/ } );
+$mech->follow_link_ok( { text_regex => qr/print/ } );
 is $mech->ct(), 'application/pdf';
-my $file_pid = IPC::Open2::open2 my $file_reader, my $file_writer, qw/file -/;
-print $file_writer $mech->content();
-close $file_writer;
-like <$file_reader>, qr/PDF/;
-close $file_reader;
+like MagicBuffer( $mech->content() ), qr/PDF/;
 
 # test view of individual judge information
 $mech->back();
@@ -551,7 +547,7 @@ $mech->content_like(
        <td>2</td>\s+
        <td>Y</td>\s+
        <td>whatever</td>}msx,
-    'assigned judge moved to top',
+    'Liam moved to top',
 );
 $mech->content_like(
     qr{<a\ href="/manage/judge/\d+">\s+
@@ -571,8 +567,9 @@ $mech->content_like(
        <td>10</td>\s+
        <td>N</td>\s+
        <td>whatever</td>}msx,
-    'assigned judge moved to top',
+    'Angelina moved to top',
 );
+
 $mech->content_unlike(
     qr{<a\ href="\d+">\s+
        Mayers,\ Liam\s+
@@ -650,14 +647,9 @@ $mech->content_unlike(
 
 # test table card (just make sure it's a PDF)
 $mech->back();
-$mech->follow_link_ok( { text_regex => qr/card/ } );
+$mech->follow_link_ok( { text_regex => qr/print/ } );
 is $mech->ct(), 'application/pdf';
-($file_pid, $file_reader, $file_writer) = ();
-$file_pid = IPC::Open2::open2 $file_reader, $file_writer, qw/file -/;
-print $file_writer $mech->content();
-close $file_writer;
-like <$file_reader>, qr/PDF/;
-close $file_reader;
+like MagicBuffer( $mech->content() ), qr/PDF/;
 
 # test ordering by preference
 $lookup_url = "$url_base/manage/assignment/14a";

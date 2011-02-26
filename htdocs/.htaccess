@@ -1,3 +1,4 @@
+Action             ninkasi /cgi virtual
 AddDefaultCharset  UTF-8
 DirectoryIndex     index index.html
 ErrorDocument      403 /403
@@ -19,10 +20,10 @@ RewriteRule ^Results\.htm$     /results           [L,R=permanent]
 RewriteRule ^index\.html$      /                  [L,R=permanent]
 RewriteRule ^map\.htm$         /maps              [L,R=permanent]
 
-RewriteRule ^[^.]*$ - [T=text/html]
+RewriteRule cgi                     - [H=cgi-script,L]
+RewriteRule ^(newsletter|register)$ - [H=ninkasi,L]
 
-RewriteRule ^newsletter$        - [H=cgi-script]
-RewriteRule ^register-to-judge$ - [H=cgi-script]
+RewriteRule ^[^.]*$ - [T=text/html]
 
 # workaround typo in 2009-05-20 mailing
 RewriteRule ^judge\xa0$ /judge [L,R=permanent]

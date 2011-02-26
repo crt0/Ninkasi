@@ -30,9 +30,9 @@
    [% PROCESS assigned_column.html ~%]
    [% fetch_judge = assigned_judges_func() ~%]
    <p>
-   Judges assigned to [% flight_string | html %]
-   [<a href="/manage/assignment/[% flight.number | html %]?format=card">
-       card</a>]:
+   Judges assigned to [% flight_string %]
+   [<a href="/manage/assignment/[% flight.number | html %]?format=print">
+       print</a>]:
    </p>
    [% PROCESS assignment_table button_value = 'Unassign' ~%]
    [% PROCESS unassigned_column.html ~%]

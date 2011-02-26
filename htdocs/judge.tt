@@ -34,7 +34,7 @@
 <div id="invite_body">
 <p>
 <em>
-  <a href="register-to-judge">Sign up to judge on the web!</a>
+  <a href="register">Sign up to judge on the web!</a>
 </em>
 </p>
 <p>
@@ -164,7 +164,7 @@ visit, check out:</h3>
 </p>
 <p>
 If you are willing to judge, please use
-our <a href="register-to-judge">online judge registration</a> so
+our <a href="register">online judge registration</a> so
 we can also capture your judging preferences.
 </p>
 </div>

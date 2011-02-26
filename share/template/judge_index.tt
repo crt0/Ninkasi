@@ -1,4 +1,4 @@
-[% PROCESS "${type}.tt" ~%]
+[% PROCESS "${format}.tt" ~%]
 
 [% BLOCK preference_header %][% END ~%]
 

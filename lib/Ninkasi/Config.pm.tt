@@ -13,8 +13,9 @@ use base qw/AppConfig Class::Singleton/;
 use AppConfig qw/:argcount/;
 
 Readonly our %USER_DEFAULT => (
-    authentication_cgi   => 'authenticate',
-    maintainer_address   => 'ninkasi@ajk.name',
+    authentication_cgi => 'authenticate',
+    maintainer_address => 'ninkasi@ajk.name',
+    path               => '/opt/local/bin:/usr/local/bin:/usr/bin:/bin',
 );
 
 sub new { shift->instance(@_) }
@@ -62,12 +63,13 @@ sub _new_instance {
 
     # set defaults
     my %DEFAULT = (
-        cgi_uri       => $default_cgi_uri,
-        database_file => $default_database_file,
-        disabled      => '',
-        log_file      => $default_log_file,
-        template_path => $default_template_path,
-        testing       => !!$ENV{NINKASI_TEST_SERVER_ROOT},
+        cgi_uri          => $default_cgi_uri,
+        database_file    => $default_database_file,
+        disabled         => '',
+        log_file         => $default_log_file,
+        template_path    => $default_template_path,
+        test_server_root => $ENV{NINKASI_TEST_SERVER_ROOT},
+        testing          => !!$ENV{NINKASI_TEST_SERVER_ROOT},
         %USER_DEFAULT
     );
     $self->define( map { $_ => { DEFAULT => $DEFAULT{$_} } } keys %DEFAULT );

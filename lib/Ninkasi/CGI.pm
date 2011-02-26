@@ -3,7 +3,7 @@ package Ninkasi::CGI;
 use strict;
 use warnings;
 
-use base 'CGI';
+use base 'CGI::Simple';
 
 use Ninkasi::Config;
 
@@ -26,20 +26,68 @@ sub new {
     return bless $self, $class;
 }
 
+sub get_arguments {
+    my ($self) = @_;
+
+    # get path info & remove empty element (before first /)
+    my @positional = split '/', $self->path_info();
+    shift @positional;
+
+    # shift off 'manage'
+    my $manage;
+    if ( $positional[0] eq 'manage' ) {
+        shift @positional;
+        $manage = 1;
+    }
+
+    my $program_name = $positional[0];
+    shift @positional;
+
+    # unpack query string
+    my %option = map {
+        my @values = $self->param($_);
+        $_ => @values > 1 ? \@values : $values[0];
+    } $self->param();
+    $option{-number_of_options} = keys %option;
+    $option{format} ||= 'html';
+
+    # redirect if no arguments and no trailing slash
+    if (!@positional) {
+        my $url = $self->url( -path_info => 1 );
+        if ( $url && $manage && $url !~ m{/$} ) {
+
+            # all requests go through /cgi; remove that from URL
+            $url =~ s{/cgi/}{/};
+
+            my $query_string = $self->query_string();
+            $query_string &&= "?$query_string";
+            print $self->redirect("$url/$query_string");
+            exit;
+        }
+    }
+
+    return {
+        program_name => $program_name,
+        positional   => \@positional,
+        option       => \%option,
+    };
+}
+
 sub transmit_header {
-    my ($self) = shift;
+    my $self   = shift;
+    my $format = shift || 'html';
 
     # set content type based on format parameter
-    my $format = $self->param('format') || 'html';
     my @content_type = (
-        -type    => $format eq 'card'   ? 'application/pdf'
-                  : $format eq 'csv'    ? 'text/plain'
-                  : $format eq 'roster' ? 'application/pdf'
+        -type    => $format eq 'csv'    ? 'text/plain'
+                  : $format eq 'print'  ? 'application/pdf'
                   :                       'text/html'
     );
 
     # transmit CGI header
     print $self->header( -charset => 'utf-8', @content_type, @_ );
+
+    return;
 }
 
 1;

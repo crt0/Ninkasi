@@ -1,0 +1,8 @@
+[% PROCESS header.html -%]
+[% PROCESS manage_navbar.html -%]
+<p[% IF is_backtrace %] class="backtrace"[% END %]>
+  [% message | html %]
+  [% IF add_flights -%]
+     <a href="/manage/flight/">Add flights?</a>
+  [% END -%]
+</p>

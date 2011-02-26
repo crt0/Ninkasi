@@ -11,13 +11,23 @@ use Ninkasi::Config;
 sub new { shift->instance(@_) }
 
 sub _new_instance {
-    my ($class, $template_config) = @_;
+    my ( $class, $template_config ) = @_;
+
+    $template_config ||= {};
+
+    # some tables are larger than the default of 1000
+    $Template::Directive::WHILE_MAX = 10_000;
 
     my $config = Ninkasi::Config->new();
     $template_config->{INCLUDE_PATH} = $config->get('template_path');
-    my $self = $class->SUPER::new($template_config);
 
-    return $self;
+    return $class->SUPER::new($template_config);
+}
+
+sub process {
+    my $self = shift;
+
+    return $self->SUPER::process(@_) || die $self->error();
 }
 
 1;

@@ -85,7 +85,7 @@
       <p>
       All registered judges
       [<a href="/manage/judge/?format=csv">csv</a>,
-      <a href="/manage/judge/?format=roster">roster</a>]:
+      <a href="/manage/judge/?format=print">print</a>]:
       </p>
       [% PROCESS judges_table.tt ~%]
    [% END ~%]

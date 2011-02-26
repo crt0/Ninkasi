@@ -3,6 +3,7 @@ package MyBuilder;
 use strict;
 use warnings;
 
+use Config;
 use File::Spec;
 
 BEGIN {
@@ -36,6 +37,7 @@ sub find_tt_files {
     my ($self) = @_;
 
     my %tt_files = (
+        %{ $self->_find_file_by_type('tt', 'bin'   ) },
         %{ $self->_find_file_by_type('tt', 'htdocs') },
         %{ $self->_find_file_by_type('tt', 'lib'   ) },
     );
@@ -52,8 +54,8 @@ sub process_tt_files {
 
     # determine paths
     my %install_base_relpath = ();
-    while (my ($type, $path_components)
-               = each %{ $self->install_base_relpaths() }) {
+    my $mb_relpaths = $self->install_base_relpaths();
+    while ( my ( $type, $path_components ) = each %$mb_relpaths ) {
         $install_base_relpath{$type} = File::Spec->catfile(@$path_components);
     }
 
@@ -63,8 +65,10 @@ sub process_tt_files {
         INCLUDE_PATH => File::Spec->catfile(qw/share template/) . ':.' } );
     my $tt_files = $self->find_tt_files();
     my %template_variables = (
+        apostrophe            => '&#8217;',
         install_base          => $self->install_base(),
         install_base_relpath  => \%install_base_relpath,
+        scriptdir             => $Config{scriptdir},
         year                  => 1900 + (localtime)[5],
     );
     while ( my ($source, $destination) = each %$tt_files ) {
