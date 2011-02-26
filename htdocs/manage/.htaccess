@@ -1,5 +1,5 @@
 Action         ninkasi /cgi virtual
-Allow from     localhost localhost.localdomain
+Allow from     127.0.0.1 ::1
 AuthName       "Brewers Cup"
 AuthType       Basic
 AuthUserFile   /home/httpd/vhosts/brewerscup.org/share/ninkasi/htpasswd
