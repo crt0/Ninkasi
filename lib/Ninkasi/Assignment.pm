@@ -170,16 +170,25 @@ sub groff_to_pdf {
     my ($groff, @options) = @_;
 
     $ENV{PATH} = Ninkasi::Config->new()->path();
-    my ($groff_pid, $groff_reader, $groff_writer);
+    my ( $groff_pid, $groff_reader, $groff_writer );
     $groff_pid = IPC::Open2::open2 $groff_reader, $groff_writer,
-                                   'pdfroff', @options;
+                                   qw/groff -Tps/, @options;
 
     print $groff_writer $groff;
     close $groff_writer;
     local $/;
-    my $pdf = <$groff_reader>;
+    my $postscript = <$groff_reader>;
     close $groff_reader;
     waitpid $groff_pid, 0;
+
+    my ( $ps2pdf_pid, $ps2pdf_reader, $ps2pdf_writer );
+    $ps2pdf_pid = IPC::Open2::open2 $ps2pdf_reader, $ps2pdf_writer,
+                                    qw/ps2pdf - -/;
+    print $ps2pdf_writer $postscript;
+    close $ps2pdf_writer;
+    my $pdf = <$ps2pdf_reader>;
+    close $ps2pdf_reader;
+    waitpid $ps2pdf_pid, 0;
 
     return $pdf;
 }
