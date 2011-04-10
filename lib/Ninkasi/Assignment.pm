@@ -215,8 +215,20 @@ sub print_roster {
                 last;
             }
 
-            my @columns = qw/flight session description number pro/;
+            # find out for which sessions judge is available
+            my @assignments = ('N/A') x 4;
             my ( $assignment_handle, $result )
+                = $assignment_table->bind_hash( {
+                bind_values => [ $judge->{rowid} ],
+                columns     => ['session'],
+                where       => 'judge = ? AND flight = 0',
+            } );
+            while ( $assignment_handle->fetch() ) {
+                delete $assignments[ $result->{session} ];
+            }
+
+            my @columns = qw/flight session description number pro/;
+            ( $assignment_handle, $result )
                 = $assignment_table->bind_hash( {
                     bind_values => [ $judge->{rowid} ],
                     columns     => \@columns,
@@ -224,13 +236,11 @@ sub print_roster {
                     where       => 'assignment.flight = flight.number' .
                                    ' AND judge = ?',
                 } );
-            my @assignments = '' x 3;
             while ( $assignment_handle->fetch() ) {
                 my $division = $result->{pro} ? 'pro' : 'hb';
                 $assignments[ $result->{session} ] =
                     "$result->{number}: $result->{description} ($division)";
             }
-
             push @rows,
                 join ';', "$judge->{last_name}, $judge->{first_name}",
                           map { defined $_ ? $_ : '' } @assignments[1..3];
