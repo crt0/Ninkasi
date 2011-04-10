@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use lib '[% base %]/lib/perl5';
+use lib '[% install_base %]/lib/perl5';
 
 use File::Spec;
 use Taint::Util;
