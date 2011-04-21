@@ -305,3 +305,8 @@ table.view tbody tr.ruled td {
 .sponsors td img {
     border: 1px solid #ccc;
 }
+
+.backtrace {
+    font-family: monospace;
+    white-space: pre-wrap;
+}
