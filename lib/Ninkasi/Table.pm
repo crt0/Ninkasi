@@ -15,7 +15,7 @@ __PACKAGE__->mk_classdata('Column_Names_Hash');
 __PACKAGE__->mk_classdata('Schema');
 __PACKAGE__->mk_classdata('Table_Name');
 
-__PACKAGE__->Class_Suffixes( [ qw/Assignment Category Constraint Flight
+__PACKAGE__->Class_Suffixes( [ qw/Assignment Constraint Flight
                                   FlightCategory Judge MailingList/ ] );
 
 sub new {

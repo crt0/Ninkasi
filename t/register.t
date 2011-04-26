@@ -12,18 +12,11 @@ use Ninkasi::Register;
 use Ninkasi::Table;
 use Test::WWW::Mechanize;
 
+Ninkasi::Table->initialize_database( { unlink => 1 } );
+
 my $config = Apache::TestConfig->new();
 my $url_base = join '', $config->{vars}{scheme}, '://', $config->hostport();
 my $form_url = "$url_base/register";
-
-my $dbh = Ninkasi::Table->new()->Database_Handle();
-eval {
-    $dbh->{PrintError} = 0;
-    $dbh->do('DELETE FROM judge'       );
-    $dbh->do("DELETE FROM 'constraint'");
-    $dbh->do("DELETE FROM assignment");
-    $dbh->{PrintError} = 1;
-};
 
 my $judge = Ninkasi::Judge->new();
 ok $judge;

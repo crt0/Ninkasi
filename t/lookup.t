@@ -10,19 +10,11 @@ use File::LibMagic qw/:easy/;
 use Ninkasi::Table;
 use Test::WWW::Mechanize;
 
+Ninkasi::Table->initialize_database( { unlink => 1 } );
+
 my $test_config = Apache::TestConfig->new();
 my $url_base = join '', $test_config->{vars}{scheme}, '://',
                         $test_config->hostport();
-
-my $dbh = Ninkasi::Table->new()->Database_Handle();
-eval {
-    $dbh->{PrintError} = 0;
-    $dbh->do('DELETE FROM judge'       );
-    $dbh->do("DELETE FROM 'constraint'");
-    $dbh->do("DELETE FROM assignment");
-    $dbh->do("DELETE FROM flight");
-    $dbh->{PrintError} = 1;
-};
 
 my $mech = Test::WWW::Mechanize->new();
 
