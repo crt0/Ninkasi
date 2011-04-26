@@ -1,55 +1,16 @@
 [% USE date -%]
 [% PROCESS html.tt -%]
-[% judge_name = "$volunteer.first_name $volunteer.last_name" | html -%]
+[% judge_name = "$volunteer_row.first_name $volunteer_row.last_name" | html -%]
 [% PROCESS header title = judge_name -%]
-[% PROCESS manage_navbar -%]
-[% WRAPPER body_text -%]
-[% WRAPPER heading -%]
-[% judge_name -%]
-[% END %]
-<table class="view_judge">
-<tr>
-<th>Address:</th>
-<td>
-[% volunteer.address | html %]
-<br>
-[% volunteer.city | html %],
-[% volunteer.state | html %]
-[% volunteer.zip | html %]
-</td>
-</tr>
-<tr>
-  <th>Phone (day):</th>
-  <td>[% volunteer.phone_day | html %]</td>
-</tr>
-<tr>
-  <th>Phone (eve):</th>
-  <td>[% volunteer.phone_evening | html %]</td>
-</tr>
-<tr>
-  <th>E-mail:</th>
-  <td>[% volunteer.email | html %]</td>
-</tr>
-<tr>
-  <th>BJCP Rank:</th>
-  <td>[% rank_name.${volunteer.rank} %]</td>
-</tr>
-<tr>
-  <th>BJCP ID:</th>
-  <td>[% volunteer.bjcp_id | html %]</td>
-</tr>
-<tr>
-  <th>Competitions Judged:</th>
-  <td>[% volunteer.competitions_judged | html %]</td>
-</tr>
-<tr>
-  <th>Pro Brewer?</th>
-  <td>[% IF volunteer.pro_brewer %]yes[% ELSE %]no[% END %]</td>
-</tr>
-<tr>
-  <th>Date Registered:</th>
-  <td>[% date.format(volunteer.when_created) %]</td>
-</tr>
-</table>
-[% END -%]
-[% PROCESS footer -%]
+[% PROCESS manage_navbar ~%]
+
+[% WRAPPER body_text ~%]
+   [% WRAPPER heading ~%]
+      [% judge_name ~%]
+   [% END %]
+   [% PROCESS view_judge.tt ~%]
+
+   [% judge.individual ~%]
+
+   [% PROCESS footer ~%]
+[% END ~%]

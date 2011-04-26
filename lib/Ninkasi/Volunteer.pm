@@ -111,7 +111,10 @@ sub transform {
     $volunteer_handle->fetch();
     $volunteer_handle->finish();
 
-    return { volunteer => $volunteer_row, rank_name => \%Ninkasi::Judge::NAME };
+    return {
+        rank_name     => \%Ninkasi::Judge::NAME,
+        volunteer_row => $volunteer_row,
+    };
 }
 
 1;

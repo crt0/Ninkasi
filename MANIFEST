@@ -91,11 +91,17 @@ share/template/navbar.html
 share/template/register_index.tt
 share/template/search.html
 share/template/searchbox.html
+share/template/steward.tt
+share/template/steward_index.tt
+share/template/test
 share/template/view_assignment.tt
 share/template/view_judge.tt
+share/template/view_steward.tt
 share/template/view_volunteer.tt
 t/conf/extra.conf.in
+t/judge.t
 t/lookup.t
 t/register.t
 t/static.t
+t/steward.t
 t/TEST.PL

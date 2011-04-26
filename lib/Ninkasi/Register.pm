@@ -169,12 +169,10 @@ sub store {
     # validate the input
     $column = validate $column;
 
-    # default to judge
-    $column->{submit} ||= 'Register to Judge';
-
     # create volunteer & constraint objects
     ( my $role = $column->{submit} ) =~ s/Register to //;
-    my $volunteer_class = "Ninkasi::$role";
+    my $volunteer_class = $role eq 'Steward' ? 'Ninkasi::Steward'
+                                             : 'Ninkasi::Judge';
     eval "require $volunteer_class";
     die if $@;
     my $volunteer_table = $volunteer_class->new();
