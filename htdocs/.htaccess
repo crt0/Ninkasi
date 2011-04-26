@@ -26,8 +26,8 @@ RewriteRule ^(newsletter|register)$ - [H=ninkasi,L]
 RewriteRule ^[^.]*$ - [T=text/html]
 
 # workaround typo in 2009-05-20 mailing
-RewriteRule ^judge\xa0$ /judge [L,R=permanent]
-RewriteRule ^judge\xc2\xa0$ /judge [L,R=permanent]
+RewriteRule ^judge\xa0$ /volunteer [L,R=permanent]
+RewriteRule ^judge\xc2\xa0$ /volunteer [L,R=permanent]
 
 # cache control
 ExpiresActive On

@@ -1,6 +1,6 @@
 [% USE date -%]
 [% PROCESS html.tt -%]
-[% judge_name = "$judge.first_name $judge.last_name" | html -%]
+[% judge_name = "$volunteer.first_name $volunteer.last_name" | html -%]
 [% PROCESS header title = judge_name -%]
 [% PROCESS manage_navbar -%]
 [% WRAPPER body_text -%]
@@ -11,44 +11,44 @@
 <tr>
 <th>Address:</th>
 <td>
-[% judge.address | html %]
+[% volunteer.address | html %]
 <br>
-[% judge.city | html %],
-[% judge.state | html %]
-[% judge.zip | html %]
+[% volunteer.city | html %],
+[% volunteer.state | html %]
+[% volunteer.zip | html %]
 </td>
 </tr>
 <tr>
   <th>Phone (day):</th>
-  <td>[% judge.phone_day | html %]</td>
+  <td>[% volunteer.phone_day | html %]</td>
 </tr>
 <tr>
   <th>Phone (eve):</th>
-  <td>[% judge.phone_evening | html %]</td>
+  <td>[% volunteer.phone_evening | html %]</td>
 </tr>
 <tr>
   <th>E-mail:</th>
-  <td>[% judge.email | html %]</td>
+  <td>[% volunteer.email | html %]</td>
 </tr>
 <tr>
   <th>BJCP Rank:</th>
-  <td>[% rank_name.${judge.rank} %]</td>
+  <td>[% rank_name.${volunteer.rank} %]</td>
 </tr>
 <tr>
   <th>BJCP ID:</th>
-  <td>[% judge.bjcp_id | html %]</td>
+  <td>[% volunteer.bjcp_id | html %]</td>
 </tr>
 <tr>
   <th>Competitions Judged:</th>
-  <td>[% judge.competitions_judged | html %]</td>
+  <td>[% volunteer.competitions_judged | html %]</td>
 </tr>
 <tr>
   <th>Pro Brewer?</th>
-  <td>[% IF judge.pro_brewer %]yes[% ELSE %]no[% END %]</td>
+  <td>[% IF volunteer.pro_brewer %]yes[% ELSE %]no[% END %]</td>
 </tr>
 <tr>
   <th>Date Registered:</th>
-  <td>[% date.format(judge.when_created) %]</td>
+  <td>[% date.format(volunteer.when_created) %]</td>
 </tr>
 </table>
 [% END -%]

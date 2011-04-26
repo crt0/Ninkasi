@@ -7,6 +7,7 @@ use base qw/Class::Singleton Template/;
 
 use Class::Singleton;
 use Ninkasi::Config;
+use Template::Constants ':debug';
 
 sub new { shift->instance(@_) }
 

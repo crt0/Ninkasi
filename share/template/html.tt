@@ -56,39 +56,21 @@
 
 [% BLOCK flight_table %]
 <form name="flight" method="post">
-[% PROCESS table ~%]
+[% PROCESS F_table ~%]
 <input name="save" type="submit" value="Save" />
 </form>
 [% END ~%]
 
-[% BLOCK table -%]
+[% BLOCK F_table -%]
 <table cellspacing="0" class="view">
 [% content -%]
 </table>
 [% END ~%]
 
-[% BLOCK judge_table -%]
-   [% WRAPPER table; content; END ~%]
-   <p>
-     [% row %] [% IF row == 1 %]judge[% ELSE %]judges[% END %].
-   </p>
-[% END ~%]      
-
 [% BLOCK body_text -%]
 <div id="body_text">
 [% content -%]
 </div>
-[% END ~%]
-
-[% BLOCK all_judges_table ~%]   
-   [% WRAPPER body_text ~%]
-      <p>
-      All registered judges
-      [<a href="/manage/judge/?format=csv">csv</a>,
-      <a href="/manage/judge/?format=print">print</a>]:
-      </p>
-      [% PROCESS judges_table.tt ~%]
-   [% END ~%]
 [% END ~%]
 
 [% BLOCK thead -%]
@@ -156,3 +138,19 @@
 [% BLOCK footer %][% PROCESS "footer.html" %][% END ~%]
 
 [% apostrophe = '&#8217;' ~%]
+
+[% BLOCK F_table_caption -%]
+   <p>
+   All registered [% view.role %]s
+   [<a href="/manage/[% view.role %]/?format=csv">csv</a>,
+   <a href="/manage/[% view.role %]/?format=print">print</a>]:
+   </p>
+[% END ~%]
+
+[% BLOCK F_table_tally -%]
+   <p>
+     [% row %] [% IF row == 1 %][% view.role %][% ELSE %][% view.role %]s[% END %].
+   </p>
+[% END ~%]
+
+[% BLOCK F_link %]<a href="[% href %]">[% content | html %]</a>[% END ~%]

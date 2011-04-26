@@ -361,10 +361,7 @@ $mech->submit_form_ok( {
 $lookup_url = "$url_base/manage/judge/";
 $mech->get_ok($lookup_url);
 $mech->content_like(
-    qr{<a\ href="/manage/judge/\d+">\s+
-       \|&lt;iefer,\ Angelina\s+
-       </a>\s+
-       </td>\s+
+    qr{<td><a\ href="/manage/judge/\d+">\|&lt;iefer,\ Angelina</a></td>\s+
        <td>Certified</td>\s+
        <td></td>\s+
        <td>N/A</td>\s+
@@ -461,25 +458,22 @@ $mech->content_like( qr{<title>Angelina \|&lt;iefer</title>},
 $lookup_url = "$url_base/manage/assignment/08";
 $mech->get_ok($lookup_url);
 $mech->content_like(
-    qr{<a\ href="/manage/judge/\d+">\s+
-       Mayers,\ Liam\s+
-       </a>\s+
-       </td>\s+
+    qr{<td><a\ href="/manage/judge/\d+">Mayers,\ Liam</a></td>\s+
        <td>Novice</td>\s+
        <td>\s+
        <input\ name="assign"\s+
                type="checkbox"\s+
-               value="judge-2_session-1"\ />\s+
+               value="volunteer-2_session-1"\ />\s+
        </td>\s+
        <td>\s+
        <input\ name="assign"\s+
                type="checkbox"\s+
-               value="judge-2_session-2"\ />\s+
+               value="volunteer-2_session-2"\ />\s+
        </td>\s+
        <td>\s+
        <input\ name="assign"\s+
                type="checkbox"\s+
-               value="judge-2_session-3"\ />\s+
+               value="volunteer-2_session-3"\ />\s+
        </td>\s+
        <td>2</td>\s+
        <td>Y</td>\s+
@@ -518,14 +512,11 @@ $mech->back();
 
 # test assignment
 $mech->form_number(2);
-$mech->tick( assign => 'judge-2_session-3', 1 );
-$mech->tick( assign => 'judge-4_session-3', 1 );
+$mech->tick( assign => 'volunteer-2_session-3', 1 );
+$mech->tick( assign => 'volunteer-4_session-3', 1 );
 $mech->submit_form_ok();
 $mech->content_like(
-    qr{<a\ href="/manage/judge/\d+">\s+
-       Mayers,\ Liam\s+
-       </a>\s+
-       </td>\s+
+    qr{<td><a\ href="/manage/judge/\d+">Mayers,\ Liam</a></td>\s+
        <td>Novice</td>\s+
        <td>\s+
        </td>\s+
@@ -534,7 +525,7 @@ $mech->content_like(
        <td>\s+
        <input\ name="unassign"\s+
                type="checkbox"\s+
-               value="judge-2_session-3"\ />\s+
+               value="volunteer-2_session-3"\ />\s+
        </td>\s+
        <td>2</td>\s+
        <td>Y</td>\s+
@@ -542,10 +533,7 @@ $mech->content_like(
     'Liam moved to top',
 );
 $mech->content_like(
-    qr{<a\ href="/manage/judge/\d+">\s+
-       \|&lt;iefer,\ Angelina\s+
-       </a>\s+
-       </td>\s+
+    qr{<td><a\ href="/manage/judge/\d+">\|&lt;iefer,\ Angelina</a></td>\s+
        <td>Certified</td>\s+
        <td>\s+
        </td>\s+
@@ -554,7 +542,7 @@ $mech->content_like(
        <td>\s+
        <input\ name="unassign"\s+
                type="checkbox"\s+
-               value="judge-4_session-3"\ />\s+
+               value="volunteer-4_session-3"\ />\s+
        </td>\s+
        <td>10</td>\s+
        <td>N</td>\s+
@@ -563,25 +551,22 @@ $mech->content_like(
 );
 
 $mech->content_unlike(
-    qr{<a\ href="\d+">\s+
-       Mayers,\ Liam\s+
-       </a>\s+
-       </td>\s+
+    qr{<td><a\ href="\d+">Mayers,\ Liam</a></td>\s+
        <td>Novice</td>\s+
        <td>\s+
        <input\ name="assign"\s+
                type="checkbox"\s+
-               value="judge-2_session-1"\ />\s+
+               value="volunteer-2_session-1"\ />\s+
        </td>\s+
        <td>\s+
        <input\ name="assign"\s+
                type="checkbox"\s+
-               value="judge-2_session-2"\ />\s+
+               value="volunteer-2_session-2"\ />\s+
        </td>\s+
        <td>\s+
        <input\ name="assign"\s+
                type="checkbox"\s+
-               value="judge-2_session-3"\ />\s+
+               value="volunteer-2_session-3"\ />\s+
        </td>\s+
        <td>2</td>\s+
        <td>Y</td>\s+
@@ -590,28 +575,25 @@ $mech->content_unlike(
 );
 
 # test unassignment
-$mech->tick( unassign => 'judge-2_session-3', 1 );
+$mech->tick( unassign => 'volunteer-2_session-3', 1 );
 $mech->submit_form_ok();
 $mech->content_like(
-    qr{<a\ href="/manage/judge/\d+">\s+
-       Mayers,\ Liam\s+
-       </a>\s+
-       </td>\s+
+    qr{<td><a\ href="/manage/judge/\d+">Mayers,\ Liam</a></td>\s+
        <td>Novice</td>\s+
        <td>\s+
        <input\ name="assign"\s+
                type="checkbox"\s+
-               value="judge-2_session-1"\ />\s+
+               value="volunteer-2_session-1"\ />\s+
        </td>\s+
        <td>\s+
        <input\ name="assign"\s+
                type="checkbox"\s+
-               value="judge-2_session-2"\ />\s+
+               value="volunteer-2_session-2"\ />\s+
        </td>\s+
        <td>\s+
        <input\ name="assign"\s+
                type="checkbox"\s+
-               value="judge-2_session-3"\ />\s+
+               value="volunteer-2_session-3"\ />\s+
        </td>\s+
        <td>2</td>\s+
        <td>Y</td>\s+
@@ -619,17 +601,14 @@ $mech->content_like(
     'unassigned judge moved to bottom',
 );
 $mech->content_unlike(
-    qr{<a\ href="\d+">\s+
-       Mayers,\ Liam\s+
-       </a>\s+
-       </td>\s+
+    qr{<td><a\ href="\d+">Mayers,\ Liam</a></td>\s+
        <td>Novice</td>\s+
        <td>\s+</td>\s+
        <td>\s+</td>\s+
        <td>\s+
        <input\ name="unassign"\s+
                type="checkbox"\s+
-               value="judge-2_session-3"\ />\s+
+               value="volunteer-2_session-3"\ />\s+
        </td>\s+
        <td>2</td>\s+
        <td>Y</td>\s+
@@ -693,25 +672,22 @@ $mech->content_like(
 $lookup_url = "$url_base/manage/assignment/26";
 $mech->get_ok($lookup_url);
 $mech->content_like(
-    qr{<a\ href="/manage/judge/\d+">\s+
-       Mayers,\ Liam\s+
-       </a>\s+
-       </td>\s+
+    qr{<td><a\ href="/manage/judge/\d+">Mayers,\ Liam</a></td>\s+
        <td>Novice</td>\s+
        <td>\s+
        <input\ name="assign"\s+
                type="checkbox"\s+
-               value="judge-2_session-1"\ />\s+
+               value="volunteer-2_session-1"\ />\s+
        </td>\s+
        <td>\s+
        <input\ name="assign"\s+
                type="checkbox"\s+
-               value="judge-2_session-2"\ />\s+
+               value="volunteer-2_session-2"\ />\s+
        </td>\s+
        <td>\s+
        <input\ name="assign"\s+
                type="checkbox"\s+
-               value="judge-2_session-3"\ />\s+
+               value="volunteer-2_session-3"\ />\s+
        </td>\s+
        <td>2</td>\s+
        <td>Y</td>\s+
@@ -719,20 +695,17 @@ $mech->content_like(
     'available judge on flight 26',
 );
 $mech->content_like(
-    qr{<a\ href="/manage/judge/\d+">\s+
-       Underhill,\ Leann\s+
-       </a>\s+
-       </td>\s+
+    qr{<td><a\ href="/manage/judge/\d+">Underhill,\ Leann</a></td>\s+
        <td>Certified</td>\s+
        <td>\s+
        <input\ name="assign"\s+
                type="checkbox"\s+
-               value="judge-1_session-1"\ />\s+
+               value="volunteer-1_session-1"\ />\s+
        </td>\s+
        <td>\s+
        <input\ name="assign"\s+
                type="checkbox"\s+
-               value="judge-1_session-2"\ />\s+
+               value="volunteer-1_session-2"\ />\s+
        </td>\s+
        <td>\s+
        N/A</td>\s+
@@ -745,18 +718,15 @@ $mech->content_lacks( 'Carrera', 'homebrewer ineligible to judge flight 26' );
 
 # test assignment of a multi-category flight
 $mech->form_number(2);
-$mech->tick( assign => 'judge-2_session-1', 1 );
+$mech->tick( assign => 'volunteer-2_session-1', 1 );
 $mech->submit_form_ok();
 $mech->content_like(
-    qr{<a\ href="/manage/judge/\d+">\s+
-       Mayers,\ Liam\s+
-       </a>\s+
-       </td>\s+
+    qr{<td><a\ href="/manage/judge/\d+">Mayers,\ Liam</a></td>\s+
        <td>Novice</td>\s+
        <td>\s+
        <input\ name="unassign"\s+
                type="checkbox"\s+
-               value="judge-2_session-1"\ />\s+
+               value="volunteer-2_session-1"\ />\s+
        </td>\s+
        <td>\s+
        </td>\s+
@@ -768,25 +738,22 @@ $mech->content_like(
     'assigned judge moved to top',
 );
 $mech->content_unlike(
-    qr{<a\ href="\d+">\s+
-       Mayers,\ Liam\s+
-       </a>\s+
-       </td>\s+
+    qr{<td><a\ href="\d+">Mayers,\ Liam</a></td>\s+
        <td>Novice</td>\s+
        <td>\s+
        <input\ name="assign"\s+
                type="checkbox"\s+
-               value="judge-2_session-1"\ />\s+
+               value="volunteer-2_session-1"\ />\s+
        </td>\s+
        <td>\s+
        <input\ name="assign"\s+
                type="checkbox"\s+
-               value="judge-2_session-2"\ />\s+
+               value="volunteer-2_session-2"\ />\s+
        </td>\s+
        <td>\s+
        <input\ name="assign"\s+
                type="checkbox"\s+
-               value="judge-2_session-3"\ />\s+
+               value="volunteer-2_session-3"\ />\s+
        </td>\s+
        <td>2</td>\s+
        <td>Y</td>\s+
@@ -797,28 +764,25 @@ $mech->content_unlike( qr{Mayers,\ Liam.*Mayers,\ Liam}msx,
                        'assigned judge not duplicated' );
 
 # test unassignment in a multi-category flight
-$mech->tick( unassign => 'judge-2_session-1', 1 );
+$mech->tick( unassign => 'volunteer-2_session-1', 1 );
 $mech->submit_form_ok();
 $mech->content_like(
-    qr{<a\ href="/manage/judge/\d+">\s+
-       Mayers,\ Liam\s+
-       </a>\s+
-       </td>\s+
+    qr{<td><a\ href="/manage/judge/\d+">Mayers,\ Liam</a></td>\s+
        <td>Novice</td>\s+
        <td>\s+
        <input\ name="assign"\s+
                type="checkbox"\s+
-               value="judge-2_session-1"\ />\s+
+               value="volunteer-2_session-1"\ />\s+
        </td>\s+
        <td>\s+
        <input\ name="assign"\s+
                type="checkbox"\s+
-               value="judge-2_session-2"\ />\s+
+               value="volunteer-2_session-2"\ />\s+
        </td>\s+
        <td>\s+
        <input\ name="assign"\s+
                type="checkbox"\s+
-               value="judge-2_session-3"\ />\s+
+               value="volunteer-2_session-3"\ />\s+
        </td>\s+
        <td>2</td>\s+
        <td>Y</td>\s+
@@ -826,15 +790,12 @@ $mech->content_like(
     'unassigned judge moved to bottom',
 );
 $mech->content_unlike(
-    qr{<a\ href="\d+">\s+
-       Mayers,\ Liam\s+
-       </a>\s+
-       </td>\s+
+    qr{<td><a\ href="\d+">Mayers,\ Liam</a></td>\s+
        <td>Novice</td>\s+
        <td>\s+
        <input\ name="unassign"\s+
                type="checkbox"\s+
-               value="judge-2_session-3"\ />\s+
+               value="volunteer-2_session-3"\ />\s+
        </td>\s+
        <td>\s+
        </td>\s+

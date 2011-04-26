@@ -30,19 +30,19 @@ sub fetch {
 
     # fetch flights of each constraint type
     my $where_clause = <<EOF;
-judge.rowid = 'constraint'.judge
+volunteer.rowid = 'constraint'.volunteer
     AND 'constraint'.category = flight_category.category
     AND flight.rowid = flight_category.flight
-    AND 'constraint'.judge = ?
+    AND 'constraint'.volunteer = ?
 EOF
     my ( $flight_handle, $flight ) = $flight_table->bind_hash( {
         bind_values => [ $judge_id, $Ninkasi::Constraint::NUMBER{entry} ],
         columns     => [ qw/ number MAX(type) pro_brewer pro / ],
         join        => [ qw/ Ninkasi::Constraint Ninkasi::FlightCategory
-                             Ninkasi::Judge / ],
+                             Ninkasi::Volunteer / ],
         where       => $where_clause,
-        group_by    => 'judge.rowid, flight_category.flight',
-        having      => 'MAX(type) != ? OR judge.pro_brewer != flight.pro',
+        group_by    => 'volunteer.rowid, flight_category.flight',
+        having      => 'MAX(type) != ? OR volunteer.pro_brewer != flight.pro',
         order_by    => 'number',
     } );
     $flight_handle->bind_col( 2, \$flight->{type} );

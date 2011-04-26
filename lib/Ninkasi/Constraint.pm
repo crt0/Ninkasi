@@ -6,11 +6,11 @@ use warnings;
 use base 'Ninkasi::Table';
 
 __PACKAGE__->Table_Name('constraint');
-__PACKAGE__->Column_Names( [ qw/category judge type/ ] );
+__PACKAGE__->Column_Names( [ qw/category volunteer type/ ] );
 __PACKAGE__->Schema(<<'EOF');
 CREATE TABLE "constraint" (
     category      INTEGER,
-    judge         INTEGER,
+    volunteer         INTEGER,
     type          INTEGER
 )
 EOF
@@ -29,15 +29,15 @@ foreach my $constraint (@CONSTRAINTS) {
 }
 
 sub fetch {
-    my ($judge_id) = @_;
+    my ($volunteer_id) = @_;
 
-    # fetch constraints for the specified judge
+    # fetch constraints for the specified volunteer
     my $constraint = Ninkasi::Constraint->new();
     my ($sth, $result) = $constraint->bind_hash( {
-        bind_values => [$judge_id],
+        bind_values => [$volunteer_id],
         columns     => [qw/category type/],
         order_by    => 'category',
-        where       => 'judge = ?',
+        where       => 'volunteer = ?',
     } );
 
     # intialize a hash to store the constraint lists (indexed by type name)

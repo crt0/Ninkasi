@@ -1,0 +1,44 @@
+[% PROCESS view_volunteer.tt ~%]
+
+[% VIEW judge
+        base = volunteer
+        role = 'judge' ~%]
+   
+   [% BLOCK assignment_column ~%]
+      [% WRAPPER column; PROCESS assignment_link; END ~%]
+   [% END ~%]
+   
+   [% BLOCK constraint_header ~%]
+      [% WRAPPER column %]Entries[% END ~%]
+      [% WRAPPER column %]Prefers Not[% END ~%]
+      [% WRAPPER column %]Whatever[% END ~%]
+      [% WRAPPER column %]Prefers[% END ~%]
+   [% END ~%]
+   
+   [% BLOCK additional_headings ~%]
+      [% WRAPPER column %]Comps Judged[% END ~%]
+      [% WRAPPER column %]Pro Brewer?[% END ~%]
+      [% view.constraint_header ~%]
+   [% END ~%]
+   
+   [% BLOCK constraint_columns ~%]
+      [% constraint = volunteer_row.fetch_flights() ~%]
+      [% FOREACH type IN [ 'entry', 'prefer not', 'whatever', 'prefer' ] ~%]
+         [% flights = [] ~%]
+         [% FOREACH flight IN constraint.$type ~%]
+            [% formatted_flight = WRAPPER category_link; flight; END ~%]
+            [% flights.push(formatted_flight) ~%]
+         [% END ~%]
+         [% WRAPPER column; flights.grep('[1-9][0-9]*').join(', '); END ~%]
+      [% END ~%]
+   [% END ~%]
+   
+   [% BLOCK additional_columns ~%]
+      [% WRAPPER column_escaped; volunteer_row.competitions_judged; END ~%]
+      [% WRAPPER column ~%]
+         [% IF volunteer_row.pro_brewer %]Y[% ELSE %]N[% END ~%]
+      [% END ~%]
+      [% view.constraint_columns ~%]
+   [% END ~%]
+
+[% END ~%]

@@ -28,15 +28,15 @@
 [% END ~%]
 
 [% PROCESS header.html,
-   title => "Brewers$apostrophe Cup Judge Registration Form" -%]
+   title => "Brewers$apostrophe Cup Volunteer Registration Form" -%]
 [% PROCESS navbar.html -%]
 <div id="body_text">
-  <h2>Judge Registration Form</h2>
+  <h2>Volunteer Registration Form</h2>
 [% IF error -%]
 <div class="error">
 [% IF error.length -%]
-  The judge signup system is experiencing technical difficulties.  The
-  site maintainer has been notified and is working to correct the
+  The volunteer signup system is experiencing technical difficulties.
+  The site maintainer has been notified and is working to correct the
   problem.  Your information has NOT been recorded; please try
   resubmitting this form later.  Sorry for the inconvenience.  The
   error was: [% error | html %]
@@ -54,6 +54,7 @@
 </div>
 [% END -%]
 <div class="form_instructions">All fields are required.</div>
+<h3>Judge and Steward Information</h3>
 <form action="register" method="post">
   <table border="0">
     <tr>
@@ -142,10 +143,51 @@
         [% text_field('email2', 25) %]
       </td>
     </tr>
+    <tr>
+      <td align="right" valign="top">
+        <strong>Please select all</strong> the sessions you are able
+	to volunteer:
+      </td>
+      <td>
+        [% FOREACH session IN [ 1, 2, 3 ] %]
+        [% session_param = "session$session" %]
+        <div>
+          [% mark_field("$session_param") %]
+          <input
+             [% IF form.$session_param %]
+             checked="checked"
+             [% END %]
+             name="session[% session %]"
+             type="checkbox"
+             value="1">
+          [% session_name.$session %]
+        </div>
+        [% END %]
+      </td>
+    </tr>
   </table>
+  <p>Those registering as stewards need not submit any additional information.</p>
+  <center>
+    <table border="0" width="95%">
+      <tr>
+	<td>
+          <input name="submit" type="submit"
+                 value="Register to Steward"
+                 style="font-size: 18pt; font-weight: bold">
+        </td>
+	<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+	<td>
+          After submitting you must see the <strong>Thank you</strong>
+	  page to be sure we received your information.
+        </td>
+      </tr>
+    </table>
+  </center>
+  <hr size=4 width="90%">
+  <h3>Additional Judge Information</h3>
   <table>
     <tr>
-      <td align="right" width="30%">BJCP rank or experience level:</td>
+      <td align="right" width="50%">BJCP rank or experience level:</td>
       <td>
 	<select size="1" name="rank">
           [% FOREACH rank IN ranks -%]
@@ -164,28 +206,6 @@
       <td align="right">BJCP ID:</td>
       <td>
         [% text_field('bjcp_id', 6) %]
-      </td>
-    </tr>
-    <tr>
-      <td align="right" valign="top">
-        <strong>Please select all</strong> the sessions you are able
-	to judge:
-      </td>
-      <td>
-        [% FOREACH session IN [ 1, 2, 3 ] %]
-        [% session_param = "session$session" %]
-        <div>
-          [% mark_field("$session_param") %]
-          <input
-             [% IF form.$session_param %]
-             checked="checked"
-             [% END %]
-             name="session[% session %]"
-             type="checkbox"
-             value="1">
-          [% session_name.$session %]
-        </div>
-        [% END %]
       </td>
     </tr>
     <tr>
@@ -213,7 +233,6 @@
     If you are a professional brewer and you are entering beers, they
     will be judged in the professional division.
   </div>
-<hr size=4 width="90%">
 <h3>Categories</h3>
   <p>
     The following are the <a href="http://www.bjcp.org/">BJCP</a>
@@ -233,7 +252,7 @@
     <tr>
       <th>Description</th>
       <th>prefer</th>
-      <th>prefer not</th>
+      <th>prefer&nbsp;not</th>
       <th>entry</th>
       <th>whatever</th>
     </tr>
@@ -243,7 +262,7 @@
     <tr>
       <th>Description</th>
       <th>prefer</th>
-      <th>prefer not</th>
+      <th>prefer&nbsp;not</th>
       <th>entry</th>
       <th>whatever</th>
     </tr>
@@ -275,25 +294,24 @@
     </tr>
     [% END -%]
   </table>
-  <hr size=4 width="90%">
   <center>
     <table border="0" width="95%">
       <tr>
 	<td>
           <input name="submit" type="submit"
-                 value="Click Once to Submit Form"
+                 value="Register to Judge"
                  style="font-size: 18pt; font-weight: bold">
         </td>
 	<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
 	<td>
           After submitting you must see the <strong>Thank you</strong>
-	  page to be sure we received your information.  Print that
-	  page for your records.
+	  page to be sure we received your information.
         </td>
       </tr>
     </table>
   </center>
 </form>
+<hr size=4 width="90%">
 <p>
 Contact
 <a href="mailto:judgecoordinator@brewerscup.org">the Judge
@@ -308,8 +326,6 @@ the competition.
 Thanks to Linda Swihart for the previous version of this form.  Thanks
 also to the BUZZ club of Champaign-Urbana for their form from which
 Linda's was derived.
-<a href="https://netfiles.uiuc.edu/ro/www/BoneyardUnionofZymurgicalZealots/brewoff.html">Their
-competition</a> is a really great time; make it if you can!
 </em>
 </p>
 </div>
