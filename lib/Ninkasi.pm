@@ -15,7 +15,7 @@ use Taint::Util;
 our $VERSION = '0.01';
 
 my %Page;
-@Page{ qw/assignment flight judge register/ } = ();
+@Page{ qw/assignment flight judge register steward/ } = ();
 
 Readonly my %error_message => (
     403 => "You don't have permission to access this portion of the site.",
@@ -170,7 +170,7 @@ __END__
 
 =head1 NAME
 
-Ninkasi - web application to automate judge registration for BCJP competitions
+Ninkasi - web application to automate volunteer registration for BCJP competitions
 
 =head1 VERSION
 
@@ -182,8 +182,8 @@ This documentation refers to Ninkasi version 0.0.1.
 
 =head1 DESCRIPTION
 
-Ninkasi is a web-based judge registration system for BJCP homebrew and
-professional beer competitions.  The Ninkasi module currently also
+Ninkasi is a web-based volunteer registration system for BJCP homebrew
+and professional beer competitions.  The Ninkasi module currently also
 builds the Brewers' Cup web site.
 
 =head1 SUBROUTINES/METHODS

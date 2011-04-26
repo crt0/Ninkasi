@@ -1,46 +1,22 @@
 [% PROCESS html.tt ~%]
-
-[% BLOCK constraint_header ~%]
-   [% WRAPPER column %]Preference[% END ~%]
-[% END ~%]
-
-[% BLOCK assignment_checkbox ~%]
-   <input name="[% checkbox_name %]"
-          type="checkbox"
-          value="judge-[% judge.rowid %]_session-[% session %]" />
-[% END ~%]
-
-[% BLOCK constraint_columns ~%]
-   [% WRAPPER column %][% constraint_name.${judge.type} %][% END ~%]
-[% END ~%]
-
-[% BLOCK assignment_table -%]
-   <form method="post">
-   [% PROCESS judges_table.tt -%]
-   [% IF row ~%]
-   <input name="save" type="submit" value="[% button_value %]" />
-   [% END ~%]
-   </form>
-[% END ~%]
+[% PROCESS view_assignment.tt ~%]
 
 [% flight_string = "Flight $flight.number, $flight.description" | html %]
 [% PROCESS header title = flight_string -%]
 [% PROCESS manage_navbar -%]
 [% WRAPPER body_text ~%]
-   [% PROCESS assigned_column.html ~%]
-   [% fetch_judge = assigned_judges_func() ~%]
+   [% fetch_volunteer = assigned_judges_func() ~%]
    <p>
    Judges assigned to [% flight_string %]
    [<a href="/manage/assignment/[% flight.number | html %]?format=print">
        print</a>]:
    </p>
-   [% PROCESS assignment_table button_value = 'Unassign' ~%]
-   [% PROCESS unassigned_column.html ~%]
-   [% fetch_judge = unassigned_judges_func() ~%]
+   [% assignment.table ~%]
+   [% fetch_volunteer = unassigned_judges_func() ~%]
    <p>
    Judges available for Flight [% flight.number | html %], [%
    flight.description | html %]:
    </p>
-   [% PROCESS assignment_table button_value = 'Assign' ~%]
+   [% unassignment.table ~%]
 [% END ~%]
 [% PROCESS footer -%]

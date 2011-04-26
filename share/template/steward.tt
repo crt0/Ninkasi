@@ -1,0 +1,16 @@
+[% USE date -%]
+[% PROCESS html.tt -%]
+[% steward_name = "$volunteer_row.first_name $volunteer_row.last_name" | html -%]
+[% PROCESS header title = steward_name -%]
+[% PROCESS manage_navbar ~%]
+
+[% WRAPPER body_text ~%]
+   [% WRAPPER heading ~%]
+      [% steward_name ~%]
+   [% END %]
+   [% PROCESS view_steward.tt ~%]
+   
+   [% steward.individual ~%]
+[% END ~%]
+
+[% PROCESS footer -%]

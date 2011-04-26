@@ -14,6 +14,7 @@ use Ninkasi::Config;
 use Ninkasi::Constraint;
 use Ninkasi::Judge;
 use Ninkasi::Table;
+use Ninkasi::Volunteer;
 use Taint::Util;
 
 our @REQUIRED_FIELDS = qw/first_name last_name address city state zip
@@ -145,7 +146,7 @@ sub mail_confirmation {
         'confirmation.tt',
         {
             form       => $column,
-            title      => "Brewers' Cup Judge Volunteer Confirmation",
+            title      => "Brewers' Cup Volunteer Confirmation",
             to_address => create_rfc2822_address($column),
             type       => 'mail',
         },
@@ -158,7 +159,7 @@ sub mail_confirmation {
     return;
 }
 
-# store the data submitted by the judge form in the database
+# store the data submitted by the volunteer form in the database
 sub store {
     my ($column) = @_;
 
@@ -168,8 +169,13 @@ sub store {
     # validate the input
     $column = validate $column;
 
-    # create judge & constraint objects
-    my $judge_table = Ninkasi::Judge->new();
+    # create volunteer & constraint objects
+    ( my $role = $column->{submit} ) =~ s/Register to //;
+    my $volunteer_class = $role eq 'Steward' ? 'Ninkasi::Steward'
+                                             : 'Ninkasi::Judge';
+    eval "require $volunteer_class";
+    die if $@;
+    my $volunteer_table = $volunteer_class->new();
     my $constraint_table = Ninkasi::Constraint->new();
     my $assignment_table = Ninkasi::Assignment->new();
 
@@ -179,8 +185,8 @@ sub store {
     # disable autocommit to perform this operation as one transaction
     $dbh->begin_work();
     eval {
-        # create a judge row
-        my $judge_id = $judge_table->add( {
+        # create a volunteer row
+        my $volunteer_id = $volunteer_table->add( {
             %$column,
             email => $column->{email1},
             when_created => time(),
@@ -198,19 +204,19 @@ sub store {
 
             # create a row for the constraint
             $constraint_table->add({
-                category => $category->{number},
-                judge    => $judge_id,
-                type     => $Ninkasi::Constraint::NUMBER{$type_name},
+                category  => $category->{number},
+                type      => $Ninkasi::Constraint::NUMBER{$type_name},
+                volunteer => $volunteer_id,
             });
         }
 
-        # create a row for each session the judge is available
+        # create a row for each session the volunteer is available
         while (my ($name, $value) = each %$column) {
             my ($session) = $name =~ /^session(\d+)$/ or next;
             $assignment_table->add( {
-                flight  => $value ? 0 : -1,
-                session => $session,
-                judge   => $judge_id,
+                flight    => $value ? 0 : -1,
+                session   => $session,
+                volunteer => $volunteer_id,
             } );
         }
     };
@@ -240,7 +246,7 @@ sub transform {
 
     if ( $argument->{-number_of_options} ) {
 
-        # store judge data
+        # store volunteer data
         eval { store $argument };
         if ( my $error = $@ ) {
             die ref $error ? { %$error, @template_defaults } : $error;

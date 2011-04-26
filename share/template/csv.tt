@@ -24,7 +24,7 @@
 [% content -%]
 [% END ~%]
 
-[% BLOCK table -%]
+[% BLOCK F_table -%]
 [% content -%]
 [% END ~%]
 
@@ -61,3 +61,9 @@
 [% BLOCK manage_navbar %][% END ~%]
 
 [% BLOCK footer %][% END ~%]
+
+[% BLOCK F_table_caption; END ~%]
+
+[% BLOCK F_table_tally; END ~%]
+
+[% BLOCK F_link; content; END ~%]

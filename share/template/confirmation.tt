@@ -1,12 +1,12 @@
 [% PROCESS "${format}.tt" -%]
 [% PROCESS header
-   title = "Brewers$apostrophe Cup Judge Registration Confirmation" -%]
+   title = "Brewers$apostrophe Cup Volunteer Registration Confirmation" -%]
 [% PROCESS navbar -%]
 [% WRAPPER body_text -%]
 [% WRAPPER heading %]Thank you, [% form.first_name | html %]![% END %]
 [% WRAPPER paragraph %]
-You[% apostrophe %]ve agreed to judge the following flight(s) at the Indiana State Fair
-Brewers[% apostrophe %] Cup:
+You[% apostrophe %]ve agreed to volunteer for the following flight(s)
+at the Indiana State Fair Brewers[% apostrophe %] Cup:
 [% END %]
 [% WRAPPER list -%]
 [% IF form.session1 -%]

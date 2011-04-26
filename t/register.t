@@ -12,18 +12,11 @@ use Ninkasi::Register;
 use Ninkasi::Table;
 use Test::WWW::Mechanize;
 
+Ninkasi::Table->initialize_database( { unlink => 1 } );
+
 my $config = Apache::TestConfig->new();
 my $url_base = join '', $config->{vars}{scheme}, '://', $config->hostport();
 my $form_url = "$url_base/register";
-
-my $dbh = Ninkasi::Table->new()->Database_Handle();
-eval {
-    $dbh->{PrintError} = 0;
-    $dbh->do('DELETE FROM judge'       );
-    $dbh->do("DELETE FROM 'constraint'");
-    $dbh->do("DELETE FROM assignment");
-    $dbh->{PrintError} = 1;
-};
 
 my $judge = Ninkasi::Judge->new();
 ok $judge;
@@ -123,7 +116,7 @@ $mech->content_is( <<'EOF', 'header' );
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <link href="/ninkasi.css" rel="stylesheet" type="text/css" />
-<title>Brewers&#8217; Cup Judge Registration Confirmation</title>
+<title>Brewers&#8217; Cup Volunteer Registration Confirmation</title>
 </head>
 <body>
 <div id="masthead">
@@ -152,8 +145,8 @@ $mech->content_is( <<'EOF', 'header' );
 <div id="body_text">
 <h2>Thank you, Andrew!</h2>
 <p>
-You&#8217;ve agreed to judge the following flight(s) at the Indiana State Fair
-Brewers&#8217; Cup:
+You&#8217;ve agreed to volunteer for the following flight(s)
+at the Indiana State Fair Brewers&#8217; Cup:
 </p>
 <ul>
 <li>Friday, July 8, starting at 6 pm</li>
@@ -353,8 +346,8 @@ $mech->content_like(qr{name="zip"\s+
                        value="12345"}msx, 'zip code');
 
 # test table names in class data
-is(Ninkasi::Judge->Table_Name(),      'judge'      );
 is(Ninkasi::Constraint->Table_Name(), 'constraint' );
+is(Ninkasi::Volunteer ->Table_Name(), 'volunteer'  );
 
 my ($sth, $result) = $judge->bind_hash(
     {
@@ -388,7 +381,7 @@ is $result->{ zip                 }, 12345              ;
     bind_values => [$judge_id],
     columns     => [qw/flight session/],
     order       => 'session',
-    where       => 'judge = ?',
+    where       => 'volunteer = ?',
 } );
 
 ok $sth->fetch();
@@ -405,8 +398,8 @@ my $constraint = Ninkasi::Constraint->new();
 ok $constraint;
 ($sth, $result) = $constraint->bind_hash(
     {
-        columns     => [ qw/category rowid judge type/ ],
-        where       => 'judge = ?',
+        columns     => [ qw/category rowid type volunteer/ ],
+        where       => 'volunteer = ?',
         bind_values => [ $judge_id ],
     }
 );
@@ -446,7 +439,7 @@ my %expected_constraint = (
 my $rows_fetched = 0;
 while ( $sth->fetch() ) {
     is $result->{type}, $expected_constraint{ $result->{category} };
-    is $result->{judge}, $judge_id;
+    is $result->{volunteer}, $judge_id;
     ok $result->{rowid} > 0;
     ++$rows_fetched;
 }

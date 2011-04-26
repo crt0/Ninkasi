@@ -1,0 +1,61 @@
+[% USE String ~%]
+
+[% PROCESS view_judge.tt ~%]
+
+[% VIEW assignment
+        base   = judge
+        action = 'unassign' ~%]
+   
+   [% BLOCK assignment_checkbox ~%]
+      <input name="[% view.action %]"
+             type="checkbox"
+             value="volunteer-[% volunteer_row.rowid %]_session-[% session %]" />
+   [% END ~%]
+   
+   [% BLOCK assignment_column ~%]
+      <td>
+      [% IF assignments.$session == flight.number ~%]
+         [% view.assignment_checkbox ~%]
+      [% ELSIF assignments.$session ~%]
+         [% PROCESS assignment_link ~%]
+      [% END ~%]
+      </td>
+   [% END ~%]
+   
+   [% BLOCK constraint_header ~%]
+      [% WRAPPER column %]Preference[% END ~%]
+   [% END ~%]
+   
+   [% BLOCK constraint_columns ~%]
+      [% WRAPPER column; constraint_name.${volunteer_row.type}; END ~%]
+   [% END ~%]
+   
+   [% BLOCK form_start ~%]
+      <form method="post">
+   [% END ~%]
+
+   [% BLOCK form_end ~%]
+      [% IF row ~%]
+      <input name="save" type="submit"
+             value="[% String.new(view.action).capital %]" />
+      [% END ~%]
+      </form>
+   [% END ~%]
+
+[% END ~%]
+
+[% VIEW unassignment
+        base = assignment
+        action = 'assign' ~%]
+
+   [% BLOCK assignment_column ~%]
+      <td>
+      [% IF assignments.$session ~%]
+         [% PROCESS assignment_link ~%]
+      [% ELSE ~%]
+         [% view.assignment_checkbox ~%]
+      [% END ~%]
+      </td>
+   [% END ~%]
+
+[% END ~%]

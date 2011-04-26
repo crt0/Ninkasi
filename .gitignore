@@ -1,4 +1,6 @@
 Build
+MANIFEST.SKIP.bak
+MANIFEST.bak
 MYMETA.yml
 _build/
 blib/

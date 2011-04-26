@@ -1,0 +1,11 @@
+[% PROCESS view_volunteer.tt ~%]
+
+[% VIEW steward
+        base = volunteer
+        role = 'steward' ~%]
+
+   [% BLOCK assignment_column ~%]
+      [% WRAPPER column; assignments.$session; END ~%]
+   [% END ~%]
+
+[% END ~%]

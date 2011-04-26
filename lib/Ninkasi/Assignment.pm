@@ -9,15 +9,16 @@ use IPC::Open2 ();
 use Ninkasi::Constraint;
 use Ninkasi::Flight;
 use Ninkasi::Judge;
+use Ninkasi::Volunteer;
 use Readonly;
 
 __PACKAGE__->Table_Name('assignment');
-__PACKAGE__->Column_Names( [ qw/flight judge session/ ] );
+__PACKAGE__->Column_Names( [ qw/flight session volunteer/ ] );
 __PACKAGE__->Schema(<<'EOF');
 CREATE TABLE assignment (
-    flight  TEXT,
-    judge   INTEGER,
-    session INTEGER
+    flight    TEXT,
+    session   INTEGER,
+    volunteer INTEGER
 )
 EOF
 
@@ -32,7 +33,7 @@ sub fetch {
     my ($sth, $result) = $assignment->bind_hash( {
         bind_values => [$judge_id],
         columns     => [qw/flight session/],
-        where       => 'judge = ?',
+        where       => 'volunteer = ?',
     } );
 
     # walk the rows, building a list ordered by flight
@@ -49,16 +50,16 @@ sub fetch {
 sub select_assigned_judges {
     my ($flight) = @_;
 
-    my @columns = qw/judge.rowid first_name last_name rank
+    my @columns = qw/volunteer.rowid first_name last_name rank
                      competitions_judged pro_brewer type/;
 
-    my $judge = Ninkasi::Judge->new();
+    my $judge = Ninkasi::Volunteer->new();
     my $where_clause = <<EOF;
-judge.rowid = 'constraint'.judge
+volunteer.rowid = 'constraint'.volunteer
     AND 'constraint'.category = flight_category.category
     AND flight.rowid = flight_category.flight
     AND flight.number = ?
-    AND judge.rowid IN (SELECT judge FROM assignment WHERE flight = ?)
+    AND volunteer.rowid IN (SELECT volunteer FROM assignment WHERE flight = ?)
 EOF
     my ($sth, $result) = $judge->bind_hash( {
         bind_values => [ ( $flight->{number} ) x 2 ],
@@ -66,7 +67,7 @@ EOF
         join        => [ qw/Ninkasi::Constraint Ninkasi::Flight
                             Ninkasi::FlightCategory/ ],
         where       => $where_clause,
-        group_by    => 'judge.rowid, flight_category.flight',
+        group_by    => 'volunteer.rowid, flight_category.flight',
         order_by    => 'rank DESC, competitions_judged DESC, type DESC',
     } );
     $sth->bind_col( 1, \$result->{type } );
@@ -90,29 +91,29 @@ EOF
 sub select_unassigned_judges {
     my ($flight) = @_;
 
-    my @columns = qw/judge.rowid 'constraint'.category first_name last_name
+    my @columns = qw/volunteer.rowid 'constraint'.category first_name last_name
                      rank competitions_judged pro_brewer/;
 
     my $where_clause = <<EOF;
-judge.rowid = 'constraint'.judge
+volunteer.rowid = 'constraint'.volunteer
     AND flight.rowid = flight_category.flight
     AND 'constraint'.category = flight_category.category
     AND flight.number = ?
-    AND judge.rowid IN (SELECT judge FROM assignment WHERE flight = 0)
-    AND judge.rowid NOT IN (SELECT judge FROM assignment WHERE flight = ?)
+    AND volunteer.rowid IN (SELECT volunteer FROM assignment WHERE flight = 0)
+    AND volunteer.rowid NOT IN (SELECT volunteer FROM assignment WHERE flight = ?)
 EOF
     my $having_clause = <<EOF;
 MAX(type) != $Ninkasi::Constraint::NUMBER{entry}
-    OR judge.pro_brewer != flight.pro
+    OR volunteer.pro_brewer != flight.pro
 EOF
     my $flight_table = Ninkasi::Flight->new();
     my ( $handle, $result ) = $flight_table->bind_hash( {
         bind_values => [ ( $flight->{number} ) x 2 ],
         columns     => [ @columns, 'MAX(type)' ],
         join        => [ qw/Ninkasi::Constraint Ninkasi::FlightCategory
-                            Ninkasi::Judge/ ],
+                            Ninkasi::Volunteer/ ],
         where       => $where_clause,
-        group_by    => 'judge.rowid, flight_category.flight',
+        group_by    => 'volunteer.rowid, flight_category.flight',
         having      => $having_clause,
         order_by    => 'MAX(type), rank DESC, competitions_judged DESC',
     } );
@@ -156,11 +157,11 @@ sub update_assignment {
     my ($assignments, $flight_number) = @_;
 
     my $dbh = Ninkasi::Assignment->Database_Handle();
-    my @columns = qw/judge session/;
+    my @columns = qw/volunteer session/;
     foreach my $assignment (@$assignments) {
         my $constraint = deserialize $assignment;
         my $sql = <<EOF;
-UPDATE assignment SET flight = ? WHERE judge = ? AND session = ?
+UPDATE assignment SET flight = ? WHERE volunteer = ? AND session = ?
 EOF
         $dbh->do($sql, {}, $flight_number, @$constraint{@columns});
     }
@@ -196,7 +197,7 @@ sub groff_to_pdf {
 sub print_roster {
 
     # select whole judge table & order by last name
-    my $judge_table = Ninkasi::Judge->new();
+    my $judge_table = Ninkasi::Volunteer->new();
     my ( $judge_handle, $judge ) = $judge_table->bind_hash( {
         columns  => [ qw/rowid first_name last_name/ ],
         order_by => 'last_name',
@@ -221,7 +222,7 @@ sub print_roster {
                 = $assignment_table->bind_hash( {
                 bind_values => [ $judge->{rowid} ],
                 columns     => ['session'],
-                where       => 'judge = ? AND flight = 0',
+                where       => 'volunteer = ? AND flight = 0',
             } );
             while ( $assignment_handle->fetch() ) {
                 delete $assignments[ $result->{session} ];
@@ -234,7 +235,7 @@ sub print_roster {
                     columns     => \@columns,
                     join        => 'Ninkasi::Flight',
                     where       => 'assignment.flight = flight.number' .
-                                   ' AND judge = ?',
+                                   ' AND volunteer = ?',
                 } );
             while ( $assignment_handle->fetch() ) {
                 my $division = $result->{pro} ? 'pro' : 'hb';
@@ -280,13 +281,13 @@ sub print_table_card {
 
     my $division = $flight->{pro} ? 'Professional' : 'Homebrew';
 
-    my $judge_table = Ninkasi::Judge->new();
+    my $judge_table = Ninkasi::Volunteer->new();
     my ( $sth, $result ) = $judge_table->bind_hash( {
         bind_values => [ $flight->{number} ],
         columns     => [ qw/first_name last_name session/ ],
         join        => 'Ninkasi::Assignment',
         order_by    => 'rank DESC, competitions_judged DESC',
-        where       => 'judge.rowid = assignment.judge'
+        where       => 'volunteer.rowid = assignment.volunteer'
                        . ' AND assignment.flight = ?'
     } );
 
@@ -408,7 +409,7 @@ Ninkasi::Assignment - mapping of judges to their assigned flights and sessions
         bind_values => [ $judge_id ],
         columns     => [ qw/flight session/ ],
         order_by    => 'session',
-        where       => 'judge = ?',
+        where       => 'volunteer = ?',
     } );
     print "Judge: $judge_id\n";
     while ( $assignment_handle->fetch() ) {
@@ -420,7 +421,7 @@ EOF
 =head1 DESCRIPTION
 
 Ninkasi::Assignment provides an interface to a database table of
-assignments of judges (see L<Ninkasi::Judge>) to flights (see
+assignments of judges (see L<Ninkasi::Volunteer>) to flights (see
 L<Ninkasi::Flight>) for each session (see L<Ninkasi::Session>).
 
 =head1 METHODS
@@ -443,7 +444,7 @@ returned as a reference to a hash containing the following entries:
  Attribute            Class
  =========            =====
 
- rowid                Judge attribute
+ rowid                Volunteer attribute
  first_name                 "
  last_name                  "
  rank                       "
@@ -465,7 +466,7 @@ containing the following entries:
  Attribute            Class
  =========            =====
 
- rowid                Judge attribute
+ rowid                Volunteer attribute
  first_name                 "
  last_name                  "
  rank                       "
@@ -533,4 +534,4 @@ This software is in the public domain.
 =head1 SEE ALSO
 
 groff(1), Ninkasi::CGI(3), Ninkasi::Constraint(3), Ninkasi::Flight(3),
-Ninkasi::Judge(3), Ninkasi::Session(3), Ninkasi::Template(3)
+Ninkasi::Volunteer(3), Ninkasi::Session(3), Ninkasi::Template(3)
