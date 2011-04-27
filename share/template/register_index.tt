@@ -185,6 +185,9 @@
   </center>
   <hr size=4 width="90%">
   <h3>Additional Judge Information</h3>
+  <div class="form_instructions">
+    Each judge must have a valid BJCP id or be a professional brewer.
+  </div>
   <table>
     <tr>
       <td align="right" width="50%">BJCP rank or experience level:</td>
