@@ -109,7 +109,7 @@ EOF
 
     # add clauses
     foreach my $clause (@CLAUSES) {
-        if ( exists $attribute->{$clause} ) {
+        if ( $attribute->{$clause} ) {
 
             # e.g., order_by -> 'ORDER BY'
             ( my $keyword = $clause ) =~ tr/_/ /;
