@@ -1,0 +1,7 @@
+[% PROCESS "${format}.tt" ~%]
+[% PROCESS view_volunteer.tt ~%]
+
+[% PROCESS header title = "Registered Volunteers" -%]
+[% PROCESS manage_navbar -%]
+[% volunteer.table ~%]
+[% PROCESS footer -%]

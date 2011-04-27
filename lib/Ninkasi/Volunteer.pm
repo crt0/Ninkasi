@@ -54,11 +54,16 @@ sub get_all {
     my $volunteer_table = $class->new();
     my $quoted_role
         = $volunteer_table->Database_Handle->quote( $class->role() );
+    my $where_clause;
+    if ( $class ne __PACKAGE__ ) {
+        $where_clause = "role = $quoted_role";
+    }
     my ( $volunteer_handle, $volunteer_row ) = $volunteer_table->bind_hash( {
         columns  => [ qw/rowid first_name last_name rank competitions_judged
-                         pro_brewer/ ],
+                         pro_brewer address city state zip phone_day
+                         phone_evening email bjcp_id role/ ],
         order_by => 'last_name',
-        where    => "role = $quoted_role"
+        where    => $where_clause,
     } );
 
     # return callback to fetch volunteer data and some helper functions
@@ -112,8 +117,8 @@ sub transform {
     $volunteer_handle->finish();
 
     return {
-        rank_name     => \%Ninkasi::Judge::NAME,
         volunteer_row => $volunteer_row,
+        rank_name => \%Ninkasi::Judge::NAME,
     };
 }
 

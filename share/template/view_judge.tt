@@ -4,6 +4,12 @@
         base = volunteer
         role = 'judge' ~%]
    
+   [% BLOCK assignment_headings ~%]
+      [% WRAPPER column %]Fri. PM[% END ~%]
+      [% WRAPPER column %]Sat. AM[% END ~%]
+      [% WRAPPER column %]Sat. PM[% END ~%]
+   [% END ~%]
+
    [% BLOCK additional_information ~%]
       <tr>
         <th>BJCP Rank:</th>
@@ -21,12 +27,6 @@
         <th>Pro Brewer?</th>
         <td>[% IF volunteer_row.pro_brewer %]yes[% ELSE %]no[% END %]</td>
       </tr>
-   [% END ~%]
-
-   [% BLOCK rank_heading %][% WRAPPER column %]Rank[% END %][% END ~%]
-
-   [% BLOCK rank_column ~%]
-      [% WRAPPER column; rank_name.${volunteer_row.rank}; END ~%]
    [% END ~%]
 
    [% BLOCK assignment_column ~%]

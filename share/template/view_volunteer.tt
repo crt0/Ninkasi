@@ -1,4 +1,4 @@
-[% VIEW volunteer ~%]
+[% VIEW volunteer role = 'volunteer' ~%]
 
    [% BLOCK additional_information; END ~%]
 
@@ -34,13 +34,36 @@
       </table>
    [% END ~%]
 
-   [% BLOCK additional_headings; END ~%]
-   [% BLOCK additional_columns;  END ~%]
+   [% BLOCK assignment_headings; END ~%]
+
+   [% BLOCK additional_headings ~%]
+      [% WRAPPER column %]Address[% END ~%]
+      [% WRAPPER column %]Phone (day)[% END ~%]
+      [% WRAPPER column %]Phone (eve)[% END ~%]
+      [% WRAPPER column %]E-mail[% END ~%]
+      [% WRAPPER column %]BJCP id[% END ~%]
+   [% END ~%]
+
+   [% BLOCK additional_columns ~%]
+      [% WRAPPER column ~%]
+         [% volunteer_row.address | html %], [% volunteer_row.city | html
+         %], [% volunteer_row.state | html %] [% volunteer_row.zip | html ~%]
+      [% END ~%]
+      [% WRAPPER column; volunteer_row.phone_day | html; END ~%]
+      [% WRAPPER column; volunteer_row.phone_evening | html; END ~%]
+      [% WRAPPER column; volunteer_row.email | html; END ~%]
+      [% WRAPPER column; volunteer_row.bjcp_id | html; END ~%]
+   [% END ~%]
+
    [% BLOCK assignment_column;   END ~%]
    [% BLOCK form_start;          END ~%]
    [% BLOCK form_end;            END ~%]
-   [% BLOCK rank_heading;        END ~%]
-   [% BLOCK rank_column;         END ~%]
+
+   [% BLOCK rank_heading %][% WRAPPER column %]Rank[% END %][% END ~%]
+
+   [% BLOCK rank_column ~%]
+      [% WRAPPER column; rank_name.${volunteer_row.rank}; END ~%]
+   [% END ~%]
 
    [% BLOCK table ~%]
       [% view.form_start ~%]
@@ -50,9 +73,7 @@
             [% WRAPPER odd_row ~%]
                [% WRAPPER column %]Name[% END ~%]
                [% view.rank_heading ~%]
-               [% WRAPPER column %]Fri. PM[% END ~%]
-               [% WRAPPER column %]Sat. AM[% END ~%]
-               [% WRAPPER column %]Sat. PM[% END ~%]
+               [% view.assignment_headings ~%]
                [% view.additional_headings ~%]
             [% END ~%]
          [% END ~%]
@@ -66,8 +87,7 @@
                [% END ~%]
                [% WRAPPER $row_wrapper ~%]
                   [% WRAPPER column ~%]
-                     [% WRAPPER F_link
-                                href = "/manage/${view.role}/${volunteer_row.rowid}" ~%]
+                     [% WRAPPER F_link href = "/manage/${volunteer_row.role}/${volunteer_row.rowid}" ~%]
                        [% volunteer_row.last_name %], [% volunteer_row.first_name ~%]
                      [% END ~%]
                   [% END ~%]

@@ -51,7 +51,7 @@ sub select_assigned_judges {
     my ($flight) = @_;
 
     my @columns = qw/volunteer.rowid first_name last_name rank
-                     competitions_judged pro_brewer type/;
+                     competitions_judged pro_brewer type role/;
 
     my $judge = Ninkasi::Volunteer->new();
     my $where_clause = <<EOF;
@@ -92,7 +92,7 @@ sub select_unassigned_judges {
     my ($flight) = @_;
 
     my @columns = qw/volunteer.rowid 'constraint'.category first_name last_name
-                     rank competitions_judged pro_brewer/;
+                     rank competitions_judged pro_brewer role/;
 
     my $where_clause = <<EOF;
 volunteer.rowid = 'constraint'.volunteer
@@ -119,7 +119,7 @@ EOF
     } );
     $handle->bind_col( 1, \$result->{rowid   } );
     $handle->bind_col( 2, \$result->{category} );
-    $handle->bind_col( 8, \$result->{type    } );
+    $handle->bind_col( $#columns + 2, \$result->{type} );
 
     return sub {
         return if !$handle->fetch();

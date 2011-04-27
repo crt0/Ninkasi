@@ -4,6 +4,17 @@
         base = volunteer
         role = 'steward' ~%]
 
+   [% BLOCK additional_headings; END ~%]
+   [% BLOCK additional_columns;  END ~%]
+   [% BLOCK rank_heading;        END ~%]
+   [% BLOCK rank_column;         END ~%]
+
+   [% BLOCK assignment_headings ~%]
+      [% WRAPPER column %]Fri. PM[% END ~%]
+      [% WRAPPER column %]Sat. AM[% END ~%]
+      [% WRAPPER column %]Sat. PM[% END ~%]
+   [% END ~%]
+
    [% BLOCK assignment_column ~%]
       [% WRAPPER column; assignments.$session; END ~%]
    [% END ~%]
