@@ -28,7 +28,6 @@ my @category_names = (
     'Spice/Herb/Vegetable Beer',
     'Smoke-Flavored and Wood-Aged Beer',
     'Specialty Beer',
-    'Woodford Reserve Challenge',
 );
 
 our @CATEGORIES = ();

@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 139;
+use Test::More tests => 135;
 
 use Apache::TestConfig;
 use Ninkasi::Constraint;
@@ -86,7 +86,6 @@ $mech->submit_form_ok( {
         category21          => 'entry',
         category22          => 'whatever',
         category23          => 'whatever',
-        category24          => 'prefer',
         city                => 'Springfield',
         competitions_judged => 10,
         email1              => 'ninkasi@ajk.name',
@@ -192,7 +191,6 @@ like $last_line, qr/
                      category21          = entry              :
                      category22          = whatever           :
                      category23          = whatever           :
-                     category24          = prefer             :
                      city                = Springfield        :
                      competitions_judged = 10                 :
                      email1              = ninkasi\@ajk\.name :
@@ -240,7 +238,6 @@ $mech->submit_form_ok( {
         category21          => 'entry',
         category22          => 'whatever',
         category23          => 'whatever',
-        category24          => 'prefer',
         city                => 'Springfield',
         competitions_judged => 10,
         email1              => 'ninkasi@ajk.name',
@@ -292,10 +289,6 @@ $mech->content_like(qr{checked="checked"\s+
                        name="category21"\s+
                        type="radio"\s+
                        value="entry"}msx, 'category 21 checked');
-$mech->content_like(qr{checked="checked"\s+
-                       name="category24"\s+
-                       type="radio"\s+
-                       value="prefer"}msx, 'category 24 checked');
 $mech->content_like(qr{name="city"\s+
                        size="\d+"\s+
                        value="Springfield"}msx, 'city');
@@ -433,7 +426,6 @@ my %expected_constraint = (
     21 => $entry      ,
     22 => $whatever   ,
     23 => $whatever   ,
-    24 => $prefer     ,
 );
 
 my $rows_fetched = 0;
