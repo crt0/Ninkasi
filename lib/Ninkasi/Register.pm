@@ -113,6 +113,16 @@ sub validate {
         @error_field{ @empty_fields } = (1) x @empty_fields;
     }
 
+    # judges must have a valid BJCP id or be a pro
+    use Smart::Comments;
+### $column
+    if ( $column->{submit} eq 'Register to Judge'
+         && $column->{bjcp_id} !~ /^[a-z]\d{4}$/i && !$column->{pro} ) {
+        push @error_messages, 'You must have a valid BJCP id or be a '
+                              . 'professional brewer to judge';
+        @error_field{ qw/bjcp_id pro/ } = ( 1, 1 );
+    }
+
     if ($column->{email1} ne $column->{email2}) {
         push @error_messages, "Your e-mail addresses don't seem to match";
         @error_field{ qw/email1 email2/ } = (1, 1);
