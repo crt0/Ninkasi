@@ -25,7 +25,7 @@ sub register_steward {
     $mech->get_ok($signup_url);
     $mech->form_number(2);
     $mech->set_fields(@$fields);
-    $mech->click_button( name => 'submit', value => 'Register to Steward' );
+    $mech->click_button( value => 'Register to Steward' );
     ok $mech->success();
 
     return;
@@ -44,7 +44,6 @@ register_steward [
     phone_day           => '964-722-0584',
     phone_evening       => '964-710-1677',
     state               => 'CA',
-    submit              => 'Register to Steward',
     zip                 => '93007',
 ];
 
@@ -60,7 +59,6 @@ register_steward [
     phone_day           => '512-700-9946',
     phone_evening       => '512-521-2449',
     state               => 'TX',
-    submit              => 'Register to Steward',
     zip                 => '78043',
 ];
 
@@ -76,7 +74,6 @@ register_steward [
     phone_day           => '948-691-4519',
     phone_evening       => '948-643-3621',
     state               => 'FL',
-    submit              => 'Register to Steward',
     zip                 => '32122',
 ];
 
