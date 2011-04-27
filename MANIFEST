@@ -49,6 +49,7 @@ htdocs/maps.tt
 htdocs/ninkasi.css
 htdocs/results.tt
 htdocs/rules.pdf
+htdocs/volunteer.tt
 lib/Ninkasi.pm
 lib/Ninkasi/Assignment.pm
 lib/Ninkasi/Category.pm

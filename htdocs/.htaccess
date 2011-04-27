@@ -14,10 +14,11 @@ RewriteRule ^BCupInteractiveEntryForm\.pdf$ /entry-form-interactive.pdf \
             [L,R=permanent]
 RewriteRule ^entry_form\.pdf$  /entry-form.pdf    [L,R=permanent]
 RewriteRule ^Entries\.htm$     /enter             [L,R=permanent]
-RewriteRule ^JudgeInfo\.htm$   /judge             [L,R=permanent]
+RewriteRule ^JudgeInfo\.htm$   /volunteer         [L,R=permanent]
 RewriteRule ^Links\.htm$       /contacts          [L,R=permanent]
 RewriteRule ^Results\.htm$     /results           [L,R=permanent]
 RewriteRule ^index\.html$      /                  [L,R=permanent]
+RewriteRule ^judge$            /volunteer         [L,R=permanent]
 RewriteRule ^map\.htm$         /maps              [L,R=permanent]
 
 RewriteRule cgi                     - [H=cgi-script,L]

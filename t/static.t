@@ -57,7 +57,7 @@ sub navbar_ok {
 <div id="navigation_bar_horizontal">
 <a accesskey="h" href="/">Home</a>
 | <a accesskey="e" href="/enter">Enter</a>
-| <a accesskey="j" href="/judge">Judge</a>
+| <a accesskey="v" href="/volunteer">Judge/Steward</a>
 | <a accesskey="m" href="/maps">Maps</a>
 | <a accesskey="r" href="/results">Results</a>
 | <a accesskey="c" href="/contacts">Contacts</a>
@@ -130,7 +130,7 @@ $mech->get_ok("$url_base/Entries.htm");
 $mech->get_ok("$url_base/entry_form.pdf");
 $mech->back();
 
-$mech->follow_link_ok( {text => 'Judge'} );
+$mech->follow_link_ok( {text => 'Judge/Steward'} );
 header_transitional_ok $mech, 'Register to Judge at the Brewers&#8217; Cup';
 navbar_ok $mech;
 $mech->html_lint_ok('HTML validation of /judge');
