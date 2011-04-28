@@ -201,6 +201,7 @@ sub print_roster {
     my ( $judge_handle, $judge ) = $judge_table->bind_hash( {
         columns  => [ qw/rowid first_name last_name/ ],
         order_by => 'last_name',
+        where    => "role = 'judge'",
     } );
 
     my $assignment_table = Ninkasi::Assignment->new();
