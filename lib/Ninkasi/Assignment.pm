@@ -195,16 +195,19 @@ sub groff_to_pdf {
 }
 
 sub print_roster {
+    my ($role) = @_;
 
     # select whole judge table & order by last name
-    my $judge_table = Ninkasi::Volunteer->new();
-    my ( $judge_handle, $judge ) = $judge_table->bind_hash( {
-        columns  => [ qw/rowid first_name last_name/ ],
-        order_by => 'last_name',
-        where    => "role = 'judge'",
+    my $volunteer_table = Ninkasi::Volunteer->new();
+    my ( $volunteer_handle, $volunteer ) = $volunteer_table->bind_hash( {
+        bind_values => [$role],
+        columns     => [ qw/rowid first_name last_name/ ],
+        order_by    => 'last_name',
+        where       => 'role = ?',
     } );
 
     my $assignment_table = Ninkasi::Assignment->new();
+    my $capitalized_role = ucfirst $role;
     my @groff = ();
     for (;;) {
 
@@ -212,16 +215,16 @@ sub print_roster {
         my $finished = 0;
         for (;;) {
 
-            if ( !$judge_handle->fetch() ) {
+            if ( !$volunteer_handle->fetch() ) {
                 $finished = 1;
                 last;
             }
 
-            # find out for which sessions judge is available
+            # find out for which sessions volunteer is available
             my @assignments = ('N/A') x 4;
             my ( $assignment_handle, $result )
                 = $assignment_table->bind_hash( {
-                bind_values => [ $judge->{rowid} ],
+                bind_values => [ $volunteer->{rowid} ],
                 columns     => ['session'],
                 where       => 'volunteer = ? AND flight = 0',
             } );
@@ -232,7 +235,7 @@ sub print_roster {
             my @columns = qw/flight session description number pro/;
             ( $assignment_handle, $result )
                 = $assignment_table->bind_hash( {
-                    bind_values => [ $judge->{rowid} ],
+                    bind_values => [ $volunteer->{rowid} ],
                     columns     => \@columns,
                     join        => 'Ninkasi::Flight',
                     where       => 'assignment.flight = flight.number' .
@@ -244,7 +247,7 @@ sub print_roster {
                     "$result->{number}: $result->{description} ($division)";
             }
             push @rows,
-                join ';', "$judge->{last_name}, $judge->{first_name}",
+                join ';', "$volunteer->{last_name}, $volunteer->{first_name}",
                           map { defined $_ ? $_ : '' } @assignments[1..3];
 
             last if @rows >= $REPORT_LINES_PER_PAGE;
@@ -265,7 +268,7 @@ sub print_roster {
 tab(;);
 lb lb lb lb
 l  l  l  l  .
-Judge;Friday PM;Saturday AM; Saturday PM
+$capitalized_role;Friday PM;Saturday AM; Saturday PM
 _
 $rows
 .TE

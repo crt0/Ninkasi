@@ -90,7 +90,7 @@ sub transform {
     my $volunteer_id = $argument->{-positional}[0];
 
     # print roster if requested
-    return { content => &Ninkasi::Assignment::print_roster }
+    return { content => Ninkasi::Assignment::print_roster( $class->role() ) }
            if $argument->{format} eq 'print';
 
     # show all volunteers if no id is specified
