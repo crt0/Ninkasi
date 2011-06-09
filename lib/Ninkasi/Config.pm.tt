@@ -15,7 +15,7 @@ use AppConfig qw/:argcount/;
 Readonly our %USER_DEFAULT => (
     authentication_cgi => 'authenticate',
     maintainer_address => 'ninkasi@ajk.name',
-    path               => '/opt/local/bin:/usr/local/bin:/usr/bin:/bin',
+    path               => $ENV{HOME} . '/bin:/opt/local/bin:/usr/local/bin:/usr/bin:/bin',
 );
 
 sub new { shift->instance(@_) }
