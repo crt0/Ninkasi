@@ -216,9 +216,9 @@
 <td>
 <a href="http://www.in.gov/statefair/fair/">
 <img alt="Indiana State Fair"
-     height="186"
+     height="192"
      src="/image/state-fair.jpg"
-     width="320" />
+     width="216" />
 </a>
 </td>
 </tr>
@@ -229,6 +229,32 @@
      height="185"
      src="/image/quality.jpg"
      width="320" />
+</a>
+</td>
+<td>
+<a href="http://sunkingbrewing.com/">
+<img alt="Sun King Brewery"
+     height="112"
+     src="/image/sun-king.png"
+     width="320" />
+</a>
+</td>
+</tr>
+<tr>
+<td>
+<a href="http://www.broadripplebrewpub.com/">
+<img alt="Broad Ripple Brewpub"
+     height="178"
+     src="/image/brewpub.png"
+     width="151" />
+</a>
+</td>
+<td>
+<a href="http://www.blichmannengineering.com/">
+<img alt="Blichmann Engineering"
+     height="101"
+     src="/image/blichmann.png"
+     width="239" />
 </a>
 </td>
 </tr>
