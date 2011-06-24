@@ -114,8 +114,6 @@ sub validate {
     }
 
     # judges must have a valid BJCP id or be a pro
-    use Smart::Comments;
-### $column
     if ( $column->{submit} eq 'Register to Judge'
          && $column->{bjcp_id} !~ /^[a-z]\d{4}$/i && !$column->{pro} ) {
         push @error_messages, 'You must have a valid BJCP id or be a '
