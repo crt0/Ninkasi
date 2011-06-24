@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 135;
+use Test::More tests => 138;
 
 use Apache::TestConfig;
 use Ninkasi::Constraint;
@@ -463,3 +463,30 @@ ok $mech->success();
 $mech->content_contains( 'You must have a valid BJCP id or be a '
                          . 'professional brewer to judge',
                          'insufficient judging qualifications error message' );
+
+# but can judge if you don't have a BJCP id and *are* a professional brewer
+$mech->get_ok($form_url);
+$mech->form_number(2);
+$mech->set_fields(
+    address             => '123 Fake Street',
+    bjcp_id             => 'none',
+    city                => 'Springfield',
+    competitions_judged => 10,
+    email1              => 'ninkasi@ajk.name',
+    email2              => 'Xninkasi@ajk.name',
+    first_name          => 'Andrew',
+    session1            => 1,
+    session3            => 1,
+    last_name           => 'Korty',
+    phone_day           => '123-456-7890',
+    phone_evening       => '123-456-7890',
+    pro_brewer          => 1,
+    rank                => 50,
+    state               => '--',
+    zip                 => '12345',
+);
+$mech->click_button( value => 'Register to Judge' );
+ok $mech->success();
+$mech->content_lacks( 'You must have a valid BJCP id or be a '
+                      . 'professional brewer to judge',
+                      'pro brewers should not receive qualifications error message' );
