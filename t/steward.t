@@ -204,4 +204,4 @@ $mech->content_lacks( 'Underhill', 'steward view does not contain judges' );
 $lookup_url = "$url_base/manage/judge/";
 $mech->get_ok($lookup_url);
 $mech->content_contains( 'Underhill', 'judge view contains judge' );
-$mech->content_lacks( 'Mayers', 'steward view does not contain judge' );
+$mech->content_lacks( 'Mayers', 'judge view does not contain steward' );
