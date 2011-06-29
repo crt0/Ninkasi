@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 34;
+use Test::More tests => 39;
 
 use Apache::TestConfig;
 use File::LibMagic qw/:easy/;
@@ -205,3 +205,32 @@ $lookup_url = "$url_base/manage/judge/";
 $mech->get_ok($lookup_url);
 $mech->content_contains( 'Underhill', 'judge view contains judge' );
 $mech->content_lacks( 'Mayers', 'judge view does not contain steward' );
+
+# add flights
+$lookup_url = "$url_base/manage/flight/";
+$mech->get_ok($lookup_url);
+my %data = (
+    category    => [ 2, 8, 10, 14, 14 ],
+    number      => [ qw/02 08 10 14b 14a/ ],
+    pro         => [ undef, 1, (undef) x 3 ],
+    description => [
+        'Pilsner',
+        'English Pale Ale',
+        'American Ale',
+        'India Pale Ale, Table B',
+        'India Pale Ale, Table A',
+    ],
+);
+my %input = ();
+foreach my $row ( 1 .. 5 ) {
+    while ( my ( $name, $value ) = each %data ) {
+        $input{ "${name}_$row" } = $value->[ $row - 1 ];
+    }
+}
+$mech->submit_form_ok( { button => 'save', with_fields => \%input } );
+
+# make sure stewards don't show up as judges on assignment pages
+$lookup_url = "$url_base/manage/assignment/08";
+$mech->get_ok($lookup_url);
+$mech->content_contains( 'Underhill', 'assignment view contains judge' );
+$mech->content_lacks( 'Mayers', 'assignment view does not contain judge' );

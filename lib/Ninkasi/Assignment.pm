@@ -101,6 +101,7 @@ volunteer.rowid = 'constraint'.volunteer
     AND flight.number = ?
     AND volunteer.rowid IN (SELECT volunteer FROM assignment WHERE flight = 0)
     AND volunteer.rowid NOT IN (SELECT volunteer FROM assignment WHERE flight = ?)
+    AND volunteer.role = 'judge'
 EOF
     my $having_clause = <<EOF;
 MAX(type) != $Ninkasi::Constraint::NUMBER{entry}
