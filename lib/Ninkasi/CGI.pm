@@ -7,25 +7,6 @@ use base 'CGI::Simple';
 
 use Ninkasi::Config;
 
-sub new {
-    my $class = shift;
-
-    my $self = $class->SUPER::new();
-
-    # if app is disabled, display error card and exit
-    my $config = Ninkasi::Config->new();
-    my $disabled_template = $config->disabled();
-    if ($disabled_template) {
-        $self->transmit_header();
-        my $template_object = Ninkasi::Template->new();
-        $template_object->process("$disabled_template.html")
-            or warn $template_object->error();
-        exit;
-    }
-
-    return bless $self, $class;
-}
-
 sub get_arguments {
     my ($self) = @_;
 

@@ -1,3 +1,4 @@
+[% PROCESS html.tt -%]
 [% PROCESS header.html -%]
 [% PROCESS manage_navbar.html -%]
 <p[% IF is_backtrace %] class="backtrace"[% END %]>

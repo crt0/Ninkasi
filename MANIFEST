@@ -73,10 +73,8 @@ README
 share/htpasswd
 share/template/assignment.tt
 share/template/assignment_index.tt
-share/template/closed.html
 share/template/confirmation.tt
 share/template/csv.tt
-share/template/down.html
 share/template/error.tt
 share/template/flight.tt
 share/template/flight_index.tt

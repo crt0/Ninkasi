@@ -243,8 +243,45 @@ sub store {
     return;
 }
 
+sub closed_error {
+    my ( $month, $year ) = (localtime)[4 .. 5];
+    $year += 1900;
+    my ( $status, $when ) = $month < 6
+                            ? ( 'not yet opened', 'soon' )
+                            : ( 'closed'        , 'next year' )
+                            ;
+    return {
+        message => <<EOF,
+Volunteer registration has $status for $year.  Please check back $when
+to register!
+EOF
+        status  => 403,
+        title   => 'Brewers&#8217; Cup Registration Down',
+    };
+}
+
+sub down_error {
+    return {
+        message => <<EOF,
+The volunteer registration system is temporarily unavailable.  Please
+try back in a few minutes.
+EOF
+        status  => 503,
+        title   => 'Brewers&#8217; Cup Registration Down',
+    };
+}
+
 sub transform {
     my ( $class, $argument ) = @_;
+
+    # if app is disabled, display error card and exit
+    my $config = Ninkasi::Config->new();
+    my $disabled_template = $config->disabled();
+    if ($disabled_template) {
+        no strict 'refs';
+        my $error_func = $disabled_template . '_error';
+        die $error_func->();
+    }
 
     my @template_defaults = (
         categories => \@Ninkasi::Category::CATEGORIES,
@@ -261,7 +298,6 @@ sub transform {
         }
 
         # mail confirmation unless testing
-        my $config = Ninkasi::Config->new();
         if ( !$config->test_server_root() ) {
             eval { mail_confirmation $argument };
             if ($@) {
