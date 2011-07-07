@@ -7,6 +7,7 @@ use base 'Ninkasi::Table';
 
 use Ninkasi::FlightCategory;
 use Ninkasi::Template;
+use Ninkasi::Volunteer;
 
 __PACKAGE__->Table_Name('flight');
 __PACKAGE__->Column_Names( [ qw/description pro number/ ] );
@@ -186,6 +187,24 @@ sub fake_flight {
     };
 }
 
+sub get_assigned_judges {
+    my ($flight) = @_;
+
+    # get list of judge names
+    my $judge_table = Ninkasi::Volunteer->new();
+    my $sth = $judge_table->prepare( {
+        columns     => [ qw/first_name last_name/ ],
+        join        => 'Ninkasi::Assignment',
+        order_by    => 'rank DESC, competitions_judged DESC',
+        where       => 'volunteer.rowid = assignment.volunteer'
+            . ' AND assignment.flight = ?'
+        } );
+    $sth->execute( $flight->{number} );
+
+    # append first and last names
+    return [ map { join q{ }, @$_ } @{ $sth->fetchall_arrayref() } ];
+}
+
 sub transform {
     my ( $class, $argument ) = @_;
 
@@ -210,7 +229,17 @@ sub transform {
     } );
     $handle->bind_col( 1, \$result->{category} );
 
-    return { fetch_flight => sub { $handle->fetch() && $result } };
+    return {
+        fetch_flight => sub {
+            if ( $handle->fetch() ) {
+                $result->{judges} = get_assigned_judges $result;
+                return $result;
+            }
+            else {
+                return;
+            }
+        },
+    };
 }
 
 1;

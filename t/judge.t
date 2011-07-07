@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 74;
+use Test::More tests => 77;
 
 use Apache::TestConfig;
 use File::LibMagic qw/:easy/;
@@ -96,7 +96,7 @@ $mech->content_like(
                value="Light\ Lager"\ />\s+
        </td>\s+
        <td>\s+
-       <a\ href="/manage/assignment/1">view</a>\s+
+       <a\ href="/manage/assignment/1">edit</a>\s+
        </td>\s+
        </tr>}msx,
     'fields in flight table after error',
@@ -147,7 +147,7 @@ $mech->content_like(
                value="India\ Pale\ Ale,\ Table\ B"\ />\s+
        </td>\s+
        <td>\s+
-       <a\ href="/manage/assignment/14b">view</a>\s+
+       <a\ href="/manage/assignment/14b">edit</a>\s+
        </td>\s+
        </tr>}msx,
     'flight 14b got added',
@@ -176,7 +176,7 @@ $mech->content_like(
                value="English\ Pale\ Ale"\ />\s+
        </td>\s+
        <td>\s+
-       <a\ href="/manage/assignment/08">view</a>\s+
+       <a\ href="/manage/assignment/08">edit</a>\s+
        </td>\s+
        </tr>}msx,
     'flight 08 got added',
@@ -214,7 +214,7 @@ $mech->content_like(
                value="Spice/Herb/Vegetable\ Beer"\ />\s+
        </td>\s+
        <td>\s+
-       <a\ href="/manage/assignment/21">view</a>\s+
+       <a\ href="/manage/assignment/21">edit</a>\s+
        </td>\s+
        </tr>}msx,
     'flight 21 got added',
@@ -574,7 +574,42 @@ $mech->content_unlike(
     "assigned judge didn't stay on bottom",
 );
 
+# test assigned judges on flight page
+$lookup_url = "$url_base/manage/flight/";
+$mech->get_ok($lookup_url);
+$mech->content_like(
+    qr{<tr\ class="even">\s+
+       <td>\s+
+       <input\ name="number_2"\s+
+               size="10"\s+
+               value="08"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="category_2"\s+
+               size="10"\s+
+               value="8"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="pro_2"\s+
+               checked="checked"\s+
+               type="checkbox"\s+
+               value="1"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="description_2"\s+
+               size="40"\s+
+               value="English\ Pale\ Ale"\ />\s+
+       </td>\s+
+       <td>\s+
+       <em>Angelina\ \|&lt;iefer</em>,\ Liam\ Mayers\s+
+       <a\ href="/manage/assignment/08">edit</a>\s+
+       </td>\s+
+       </tr>}msx,
+     'assigned judges listed on flight page for flight 08',
+);
+
 # test unassignment
+$mech->follow_link_ok( { n => 2, text => 'edit' } );
 $mech->tick( unassign => 'volunteer-2_session-3', 1 );
 $mech->submit_form_ok();
 $mech->content_like(
@@ -662,7 +697,7 @@ $mech->content_like(
                value="Fruit\ Beer\ /\ SHV"\ />\s+
        </td>\s+
        <td>\s+
-       <a\ href="/manage/assignment/26">view</a>\s+
+       <a\ href="/manage/assignment/26">edit</a>\s+
        </td>\s+
        </tr>}msx,
        'flight with multiple categories',

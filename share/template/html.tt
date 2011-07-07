@@ -118,7 +118,11 @@
    [% END -%]
    [% WRAPPER column %]
       [% IF flight.number ~%]
-         <a href="/manage/assignment/[% flight.number %]">view</a>
+         [% IF flight.judges.0 -%]
+            <em>[% flight.judges.shift | html -%]</em>
+            [%- IF flight.judges.0 -%], [% flight.judges.join(', ') | html %][% END %]
+         [% END -%]
+         <a href="/manage/assignment/[% flight.number | html %]">edit</a>
       [% END -%]
    [% END -%]
 [% END ~%]
