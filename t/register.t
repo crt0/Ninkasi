@@ -152,7 +152,8 @@ at the Indiana State Fair Brewers&#8217; Cup:
 <li>Saturday, July 9, starting at noon</li>
 </ul>
 <p>
-Please refer to <a href="http://brewerscup.org/">the Brewers&#8217; Cup web site</a>
+Judge assignments will be sent a few days before the above date(s).  Please refer
+to <a href="http://brewerscup.org/">the Brewers&#8217; Cup web site</a>
 for up-to-the-minute information on the competition.  Thanks!
 </p></div>
 </body>
