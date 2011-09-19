@@ -13,7 +13,7 @@ __PACKAGE__->Table_Name('flight');
 __PACKAGE__->Column_Names( [ qw/description pro number/ ] );
 __PACKAGE__->Schema(<<'EOF');
 CREATE TABLE flight (
-    description        INTEGER,
+    description        TEXT,
     pro                INTEGER DEFAULT 0,
     number             TEXT UNIQUE
 )
