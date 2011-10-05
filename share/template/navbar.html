@@ -1,9 +1,18 @@
 <div id="navigation_bar_horizontal">
-<a accesskey="h" href="/">Home</a>
-| <a accesskey="e" href="/enter">Enter</a>
-| <a accesskey="v" href="/volunteer">Judge/Steward</a>
-| <a accesskey="m" href="/maps">Maps</a>
-| <a accesskey="r" href="/results">Results</a>
-| <a accesskey="c" href="/contacts">Contacts</a>
+[% FOREACH uri IN [ '', 'enter', 'volunteer', 'maps', 'results',
+                    'contacts' ] ~%]
+   [% USE String uri ~%]
+   [% desc = String.capital; key = uri.substr(0, 1) ~%]
+   [% IF !uri; desc = 'Home'; key = 'h'; END ~%]
+   [% IF uri == 'volunteer'; desc = 'Judge/Steward'; END ~%]
+   [% IF uri %]| [% END ~%]
+   [% IF page != uri ~%]
+      <a accesskey="[% key %]" href="/[% uri %]">
+   [%~ END ~%]
+   [% desc ~%]
+   [% IF page != uri ~%]
+      </a>
+   [%~ END %]
+[% END ~%]
 </div>
 [% PROCESS searchbox.html -%]

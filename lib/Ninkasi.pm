@@ -109,6 +109,7 @@ sub render {
             constraint_name       => \%Ninkasi::Constraint::NAME,
             escape_quotes         => sub { \&Ninkasi::CSV::escape_quotes },
             format                => $option->{format},
+            page                  => $program_name,
             rank_name             => \%Ninkasi::Judge::NAME,
             remove_trailing_comma => sub {
                 \&Ninkasi::CSV::remove_trailing_comma;

@@ -51,16 +51,20 @@ EOF
 }
 
 sub navbar_ok {
-    my ($mech) = @_;
+    my ( $mech, $page ) = @_;
 
+    my $navbar = join "\n",
+        map { join '', '| ',
+                       $_ eq $page ? '' : ( '<a accesskey="',
+                                            substr( $_, 0, 1),
+                                            qq{" href="/$_">} ),
+                       $_ eq 'volunteer' ? 'Judge/Steward' : ucfirst,
+                       $_ eq $page ? '' : '</a>' }
+            qw/enter volunteer maps results contacts/;
     $mech->content_contains(<<EOF, 'navbar');
 <div id="navigation_bar_horizontal">
 <a accesskey="h" href="/">Home</a>
-| <a accesskey="e" href="/enter">Enter</a>
-| <a accesskey="v" href="/volunteer">Judge/Steward</a>
-| <a accesskey="m" href="/maps">Maps</a>
-| <a accesskey="r" href="/results">Results</a>
-| <a accesskey="c" href="/contacts">Contacts</a>
+$navbar
 </div>
 <form action="http://www.google.com/cse" id="cse-search-box">
   <div>
@@ -122,7 +126,7 @@ $mech->get_ok("$url_base/index.html");
 
 $mech->follow_link_ok( {text => 'Submit Entries'} );
 header_ok $mech, 'Brewers&#8217; Cup Entry Forms and Guidelines';
-navbar_ok $mech;
+navbar_ok $mech, 'enter';
 $mech->html_lint_ok('HTML validation of /enter');
 $mech->page_links_ok('check all links on /enter');
 $mech->get_ok("$url_base/BCupInteractiveEntryForm.pdf");
@@ -132,7 +136,7 @@ $mech->back();
 
 $mech->follow_link_ok( {text => 'Judge/Steward'} );
 header_transitional_ok $mech, 'Register to Judge at the Brewers&#8217; Cup';
-navbar_ok $mech;
+navbar_ok $mech, 'volunteer';
 $mech->html_lint_ok('HTML validation of /judge');
 $mech->page_links_ok('check all links on /judge');
 $mech->get_ok("$url_base/JudgeInfo.htm");
@@ -140,7 +144,7 @@ $mech->back();
 
 $mech->follow_link_ok( {text => 'Maps'} );
 header_transitional_ok $mech, 'Directions to the Brewers&#8217; Cup';
-navbar_ok $mech;
+navbar_ok $mech, 'maps';
 $mech->html_lint_ok('HTML validation of /maps');
 $mech->page_links_ok('check all links on /maps');
 $mech->get_ok("$url_base/map.htm");
@@ -148,7 +152,7 @@ $mech->back();
 
 $mech->follow_link_ok( {text => 'Results'} );
 header_ok $mech, 'Results of Past Brewers&#8217; Cup Competitions';
-navbar_ok $mech;
+navbar_ok $mech, 'results';
 $mech->html_lint_ok('HTML validation of /results');
 $mech->links_ok([grep { $_->url() !~ m{^/photos/} } $mech->find_all_links()],
                 'check non-photo links on /results');
@@ -158,7 +162,7 @@ $mech->back();
 
 $mech->follow_link_ok( {text => 'Contacts'} );
 header_ok $mech, 'Brewers&#8217; Cup Contact Information';
-navbar_ok $mech;
+navbar_ok $mech, 'contacts';
 $mech->html_lint_ok('HTML validation of /contacts');
 $mech->page_links_ok('check all links on /contacts');
 $mech->get_ok("$url_base/Links.htm");

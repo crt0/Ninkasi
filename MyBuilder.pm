@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use Config;
+use File::Basename;
 use File::Spec;
 
 BEGIN {
@@ -72,9 +73,15 @@ sub process_tt_files {
         year                  => 1900 + (localtime)[5],
     );
     while ( my ($source, $destination) = each %$tt_files ) {
+        my $page_name = basename $source, '.tt';
+        if ( $page_name eq 'index' ) {
+            $page_name = '';
+        }
         my $blib_destination = File::Spec->catfile( $self->blib(),
                                                     $destination );
-        $template->process($source, \%template_variables, $blib_destination)
+        $template->process( $source,
+                            { %template_variables, page => $page_name },
+                            $blib_destination )
             or die $template->error();
         $self->make_executable($blib_destination);
         print "Processing $source -> $blib_destination\n";
