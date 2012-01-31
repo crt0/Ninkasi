@@ -10,23 +10,24 @@
 </div>
 <div id="photo_bar">
 <span class="photo_bar_slot">
-<img alt="2010 Homebrew Club of the Year" src="image/club_of_year.jpg" />
+<img alt="2010 Homebrew Club of the Year" height="190"
+     src="image/club_of_year.jpg" width="246" />
 </span>
 <span class="photo_bar_slot">
-<img alt="2010 Commercial Champions" src="image/commercial_champion.jpg" />
+<img alt="2010 Commercial Champions" height="190"
+     src="image/commercial_champion.jpg" width="257" />
 </span>
 <span class="photo_bar_slot">
-<img alt="2010 Homebrew Champion" src="image/homebrew_champion.jpg" />
+<img alt="2010 Homebrew Champion" height="190"
+     src="image/homebrew_champion.jpg" width="253" />
 </span>
 <span class="photo_bar_slot">
-<img alt="2010 Homebrew Best-of-Show Winner" src="image/homebrew_bos.jpg" />
+<img alt="2010 Homebrew Best-of-Show Winner" height="190"
+     src="image/homebrew_bos.jpg" width="253" />
 </span>
 <span class="photo_bar_slot">
-<img alt="Woodford Reserve Challenge Winners" src="image/wr_challenge.jpg" />
-</span>
-<span class="photo_bar_slot">
-<img alt="2010 Commercial Best-of-Show Winner" 
-     src="image/commercial_bos.jpg" />
+<img alt="2010 Commercial Best-of-Show Winner" height="190"
+     src="image/commercial_bos.jpg" width="253" />
 </span>
 </div>
 <div id="body_text">
