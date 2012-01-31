@@ -157,9 +157,9 @@ sub mail_confirmation {
             date1      => $config->date1(),
             date2      => $config->date2(),
             form       => $column,
+            format     => 'mail',
             title      => "Brewers' Cup Volunteer Confirmation",
             to_address => create_rfc2822_address($column),
-            type       => 'mail',
         },
         \$message,
     ) or warn $template_object->error();
