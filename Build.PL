@@ -22,7 +22,7 @@ my $build = MyBuilder->new(
         'Email::Address'           => '1.889',
         'File::LibMagic'           => 0,
         'HTML::Lint'               => 0,
-        'Module::Build'            => '0.2808',
+        'Module::Build'            => '0.31',
         'Readonly'                 => '1.03',
         'Taint::Util'              => '0.06',
         'Template'                 => '2.19',
@@ -32,6 +32,8 @@ my $build = MyBuilder->new(
     create_readme      => 1,
     license            => 'perl',
     module_name        => 'Ninkasi',
+    ninkasi_date1      => 'Friday, July 8',
+    ninkasi_date2      => 'Saturday, July 9',
 );
 
 foreach my $subdir (keys %RELPATH) {

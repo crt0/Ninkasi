@@ -14,6 +14,9 @@ BEGIN {
              ;
 }
 
+__PACKAGE__->add_property('ninkasi_date1');
+__PACKAGE__->add_property('ninkasi_date2');
+
 # copy a subdirectory into blib/
 sub process_dir {
     my ($self, $type_subdir, $want_tt_files) = @_;
@@ -67,6 +70,8 @@ sub process_tt_files {
     my $tt_files = $self->find_tt_files();
     my %template_variables = (
         apostrophe            => '&#8217;',
+        date1                 => $self->ninkasi_date1(),
+        date2                 => $self->ninkasi_date2(),
         install_base          => $self->install_base(),
         install_base_relpath  => \%install_base_relpath,
         scriptdir             => $Config{scriptdir},

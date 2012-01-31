@@ -149,10 +149,13 @@ sub mail_confirmation {
 
     # build message from template
     my $template_object = Ninkasi::Template->new();
+    my $config = Ninkasi::Config->new();
     my $message;
     $template_object->process(
         'confirmation.tt',
         {
+            date1      => $config->date1(),
+            date2      => $config->date2(),
             form       => $column,
             title      => "Brewers' Cup Volunteer Confirmation",
             to_address => create_rfc2822_address($column),
@@ -282,7 +285,6 @@ sub transform {
         my $error_func = $disabled_template . '_error';
         die $error_func->();
     }
-
     my @template_defaults = (
         categories => \@Ninkasi::Category::CATEGORIES,
         form       => $argument,
@@ -305,7 +307,11 @@ sub transform {
             }
         }
 
-        return { form => $argument };
+        return {
+            date1 => $config->date1(),
+            date2 => $config->date2(),
+            form  => $argument,
+        };
     }
 
     return { @template_defaults };

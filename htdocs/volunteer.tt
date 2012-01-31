@@ -43,15 +43,14 @@ in the country with approximately 1000 professional and amateur
 entries.  BJCP judges, professional brewers, and BJCP apprentices
 (those who have taken the test) are welcomed and encouraged to judge
 at this year&#8217;s competition.  Judging will take place
-on <strong>Friday, July 8th,</strong> and <strong>Saturday, July
-9th,</strong> at the Farm Bureau Building on the Indiana State
-Fairgrounds.  This is a BJCP-sanctioned competition, so points will be
-awarded.  We also pay a small stipend to offset travel expenses to
-professional brewers and BJCP judges.  Judges who travel at least 50
-miles one way and judge at least two sessions will receive a $100
-stipend.  Local judges will be paid $12.50 per session.  We provide
-meals during the judging and you are welcome to stay for the Awards
-Reception on Saturday evening.
+on <strong>[% date1 %],</strong> and <strong>[% date2 %],</strong> at
+the Farm Bureau Building on the Indiana State Fairgrounds.  This is a
+BJCP-sanctioned competition, so points will be awarded.  We also pay a
+small stipend to offset travel expenses to professional brewers and
+BJCP judges.  Judges who travel at least 50 miles one way and judge at
+least two sessions will receive a $100 stipend.  Local judges will be
+paid $12.50 per session.  We provide meals during the judging and you
+are welcome to stay for the Awards Reception on Saturday evening.
 </p>
 <p>
 We have arranged for a special rate of $69/night at
@@ -125,7 +124,7 @@ visit, check out:</h3>
 <h2>Schedule of Events</h2>
 <p>
 <table>
-  <caption>Friday, July 8th</caption>
+  <caption>[% date1 %]</caption>
   <tr>
     <td colspan="4">
       <em>
@@ -140,7 +139,7 @@ visit, check out:</h3>
 </p>
 <p>
 <table>
-  <caption>Saturday, July 9th</caption>
+  <caption>[% date2 %]</caption>
   <tr>
     <td colspan="4">
       <em>Farm Bureau Building, <a href="map.htm">Indiana State

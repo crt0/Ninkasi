@@ -65,6 +65,8 @@ sub _new_instance {
     my %DEFAULT = (
         cgi_uri          => $default_cgi_uri,
         database_file    => $default_database_file,
+        date1            => '[% date1 %]',
+        date2            => '[% date2 %]',
         disabled         => '',
         log_file         => $default_log_file,
         template_path    => $default_template_path,
