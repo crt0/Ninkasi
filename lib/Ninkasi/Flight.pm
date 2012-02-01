@@ -42,7 +42,8 @@ EOF
         join        => [ qw/ Ninkasi::Constraint Ninkasi::FlightCategory
                              Ninkasi::Volunteer / ],
         where       => $where_clause,
-        group_by    => 'volunteer.rowid, flight_category.flight',
+        group_by    => 'volunteer.rowid, flight_category.flight, number, '
+                       . 'pro_brewer, pro',
         having      => 'MAX(type) != ? OR volunteer.pro_brewer != flight.pro',
         order_by    => 'number',
     } );
@@ -219,13 +220,14 @@ sub transform {
     }
 
     # select whole table & order by category, then number
+    my $column_list = join ', ', @{ $class->Column_Names() };
     my ( $handle, $result ) = $class->new()->bind_hash( {
         columns  => [ 'group_concat("category", " ")',
                       @{ $class->Column_Names() } ],
         join     => 'Ninkasi::FlightCategory',
         order_by => 'number',
         where    => 'flight.rowid = flight_category.flight',
-        group_by => 'number',
+        group_by => $column_list,
     } );
     $handle->bind_col( 1, \$result->{category} );
 

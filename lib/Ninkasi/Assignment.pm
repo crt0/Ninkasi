@@ -51,7 +51,8 @@ sub select_assigned_judges {
     my ($flight) = @_;
 
     my @columns = qw/volunteer.rowid first_name last_name rank
-                     competitions_judged pro_brewer type role/;
+                     competitions_judged pro_brewer role/;
+    my $column_list = join ', ', @columns;
 
     my $judge = Ninkasi::Volunteer->new();
     my $where_clause = <<EOF;
@@ -67,7 +68,7 @@ EOF
         join        => [ qw/Ninkasi::Constraint Ninkasi::Flight
                             Ninkasi::FlightCategory/ ],
         where       => $where_clause,
-        group_by    => 'volunteer.rowid, flight_category.flight',
+        group_by    => "$column_list, flight_category.flight",
         order_by    => 'rank DESC, competitions_judged DESC, type DESC',
     } );
     $sth->bind_col( 1, \$result->{type } );
@@ -91,8 +92,9 @@ EOF
 sub select_unassigned_judges {
     my ($flight) = @_;
 
-    my @columns = qw/volunteer.rowid 'constraint'.category first_name last_name
-                     rank competitions_judged pro_brewer role/;
+    my @columns = qw/volunteer.rowid first_name last_name rank
+                     competitions_judged pro_brewer role/;
+    my $column_list = join ', ', @columns;
 
     my $where_clause = <<EOF;
 volunteer.rowid = 'constraint'.volunteer
@@ -114,12 +116,11 @@ EOF
         join        => [ qw/Ninkasi::Constraint Ninkasi::FlightCategory
                             Ninkasi::Volunteer/ ],
         where       => $where_clause,
-        group_by    => 'volunteer.rowid, flight_category.flight',
+        group_by    => "$column_list, flight_category.flight",
         having      => $having_clause,
         order_by    => 'MAX(type), rank DESC, competitions_judged DESC',
     } );
-    $handle->bind_col( 1, \$result->{rowid   } );
-    $handle->bind_col( 2, \$result->{category} );
+    $handle->bind_col( 1, \$result->{rowid} );
     $handle->bind_col( $#columns + 2, \$result->{type} );
 
     return sub {
