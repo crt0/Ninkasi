@@ -4,11 +4,11 @@
 [% content %]
 [%- END ~%]
 
-[% BLOCK list -%]
+[% BLOCK F_list -%]
 [% content -%]
 [% END ~%]
 
-[% BLOCK list_item %] - [% content %][% END ~%]
+[% BLOCK F_list_item %] - [% content %][% END ~%]
 
 [% MACRO link(href, text) BLOCK -%]
 [% text %] <[% href %]>

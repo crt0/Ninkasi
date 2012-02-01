@@ -4,13 +4,13 @@
 <p>[% content %]</p>
 [%- END ~%]
 
-[% BLOCK list -%]
+[% BLOCK F_list -%]
 <ul>
 [% content -%]
 </ul>
 [% END ~%]
 
-[% BLOCK list_item %]<li>[% content %]</li>[% END ~%]
+[% BLOCK F_list_item %]<li>[% content %]</li>[% END ~%]
 
 [% MACRO link(href, text) BLOCK -%]
 <a href="[% href %]">[% text %]</a>
