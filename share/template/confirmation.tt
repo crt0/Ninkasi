@@ -3,8 +3,8 @@
    title = "Brewers$apostrophe Cup Volunteer Registration Confirmation" -%]
 [% PROCESS navbar -%]
 [% WRAPPER body_text -%]
-[% WRAPPER heading %]Thank you, [% form.first_name | html %]![% END %]
-[% WRAPPER paragraph %]
+[% WRAPPER F_heading %]Thank you, [% form.first_name | html %]![% END %]
+[% WRAPPER F_paragraph %]
 You[% apostrophe %]ve agreed to volunteer for the following flight(s)
 at the Indiana State Fair Brewers[% apostrophe %] Cup:
 [% END %]
@@ -19,7 +19,7 @@ at the Indiana State Fair Brewers[% apostrophe %] Cup:
 [% WRAPPER list_item %][% date2 %], starting at noon[% END %]
 [% END -%]
 [% END -%]
-[% WRAPPER paragraph %]
+[% WRAPPER F_paragraph %]
 Judge assignments will be sent a few days before the above date(s).  Please refer
 to [% link('http://brewerscup.org/', "the Brewers$apostrophe Cup web site") %]
 for up-to-the-minute information on the competition.  Thanks!

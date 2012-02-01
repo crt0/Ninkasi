@@ -5,7 +5,7 @@
 [% PROCESS manage_navbar ~%]
 
 [% WRAPPER body_text ~%]
-   [% WRAPPER heading ~%]
+   [% WRAPPER F_heading ~%]
       [% steward_name ~%]
    [% END %]
    [% PROCESS view_steward.tt ~%]

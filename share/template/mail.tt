@@ -1,6 +1,6 @@
-[% BLOCK heading %][% content %][% END ~%]
+[% BLOCK F_heading %][% content %][% END ~%]
 
-[% BLOCK paragraph -%]
+[% BLOCK F_paragraph -%]
 [% content %]
 [%- END ~%]
 

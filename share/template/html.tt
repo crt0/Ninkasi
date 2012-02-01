@@ -1,6 +1,6 @@
-[% BLOCK heading %]<h2>[% content %]</h2>[% END ~%]
+[% BLOCK F_heading %]<h2>[% content %]</h2>[% END ~%]
 
-[% BLOCK paragraph -%]
+[% BLOCK F_paragraph -%]
 <p>[% content %]</p>
 [%- END ~%]
 
