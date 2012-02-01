@@ -36,14 +36,6 @@
 <td>[% content | html -%]</td>
 [% END ~%]
 
-[% BLOCK judge -%]
-[% WRAPPER column %]
-<a href="/manage/judge/[% judge.rowid %]">
-[% content | html %]
-</a>
-[% END -%]
-[% END ~%]
-
 [% BLOCK assignment_link ~%]
    [% IF assignments.$session && assignments.$session != 'N/A' ~%]
       <a href="/manage/assignment/[% assignments.$session %]">

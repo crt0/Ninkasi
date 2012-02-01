@@ -14,12 +14,6 @@
 [% WRAPPER column; content; END -%]
 [%- END ~%]
 
-[% BLOCK judge -%]
-[% WRAPPER column -%]
-[% content -%]
-[% END -%]
-[% END ~%]
-
 [% BLOCK input -%]
 [% content -%]
 [% END ~%]
