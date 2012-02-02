@@ -7,7 +7,7 @@
    [%- IF error ~%]
       [% WRAPPER error_message; error.message; END ~%]
    [% END ~%]
-   [% WRAPPER flight_table ~%]
+   [% WRAPPER F_flight_table ~%]
       [% WRAPPER thead ~%]
          [% WRAPPER F_even_row ~%]
             [% WRAPPER F_column %]Name[% END ~%]

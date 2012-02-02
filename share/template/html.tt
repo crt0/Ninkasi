@@ -38,7 +38,7 @@
    [% END ~%]
 [% END ~%]
 
-[% BLOCK flight_table %]
+[% BLOCK F_flight_table %]
 <form name="flight" method="post">
 [% PROCESS F_table ~%]
 <input name="save" type="submit" value="Save" />

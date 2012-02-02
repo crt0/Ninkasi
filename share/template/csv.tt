@@ -18,6 +18,10 @@
 [% content -%]
 [% END ~%]
 
+[% BLOCK F_flight_table -%]
+[% content -%]
+[% END ~%]
+
 [% BLOCK judge_table -%]
 [% content -%]
 [% END ~%]
