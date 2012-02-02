@@ -1,32 +1,4 @@
-[% BLOCK F_heading %]<h2>[% content %]</h2>[% END ~%]
-
-[% BLOCK F_paragraph -%]
-<p>[% content %]</p>
-[%- END ~%]
-
-[% BLOCK F_list -%]
-<ul>
-[% content -%]
-</ul>
-[% END ~%]
-
-[% BLOCK F_list_item %]<li>[% content %]</li>[% END ~%]
-
-[% BLOCK F_even_row %]
-<tr class="even">
-[% content -%]
-</tr>
-[% END ~%]
-
-[% BLOCK F_odd_row %]
-<tr class="odd">
-[% content -%]
-</tr>
-[% END ~%]
-
-[% BLOCK F_column -%]
-<td>[% IF escape; content | html; ELSE; content; END -%]</td>
-[% END ~%]
+[% apostrophe = '&#8217;' ~%]
 
 [% BLOCK F_assignment_link ~%]
    [% IF assignments.$session && assignments.$session != 'N/A' ~%]
@@ -38,40 +10,31 @@
    [% END ~%]
 [% END ~%]
 
-[% BLOCK F_flight_table %]
-<form name="flight" method="post">
-[% PROCESS F_table ~%]
-<input name="save" type="submit" value="Save" />
-</form>
-[% END ~%]
-
-[% BLOCK F_table -%]
-<table cellspacing="0" class="view">
-[% content -%]
-</table>
-[% END ~%]
-
 [% BLOCK F_body_text -%]
 <div id="body_text">
 [% content -%]
 </div>
 [% END ~%]
 
-[% BLOCK F_thead -%]
-<thead>
-[%- content -%]
-</thead>
-[% END ~%]
-
-[% BLOCK F_tbody -%]
-<tbody>
-[%- content -%]
-</tbody>
-[% END ~%]
-
 [% BLOCK F_category_link ~%]
 <a href="/manage/assignment/[% content %]">[% content %]</a>
 [%~ END ~%]
+
+[% BLOCK F_column -%]
+<td>[% IF escape; content | html; ELSE; content; END -%]</td>
+[% END ~%]
+
+[% BLOCK F_error_message -%]
+   <div class="error">
+     [% content | html %]
+   </div>
+[% END ~%]
+
+[% BLOCK F_even_row %]
+<tr class="even">
+[% content -%]
+</tr>
+[% END ~%]
 
 [% BLOCK F_flight_row -%]
    [% WRAPPER F_column %]
@@ -104,28 +67,59 @@
       [% IF flight.number ~%]
          [% IF flight.judges.0 -%]
             <em>[% flight.judges.shift | html -%]</em>
-            [%- IF flight.judges.0 -%], [% flight.judges.join(', ') | html %][% END %]
+            [%- IF flight.judges.0 ~%]
+                , [% flight.judges.join(', ') | html ~%]
+            [% END %]
          [% END -%]
          <a href="/manage/assignment/[% flight.number | html %]">edit</a>
       [% END -%]
    [% END -%]
 [% END ~%]
 
-[% BLOCK F_error_message -%]
-   <div class="error">
-     [% content | html %]
-   </div>
+[% BLOCK F_flight_table %]
+<form name="flight" method="post">
+[% PROCESS F_table ~%]
+<input name="save" type="submit" value="Save" />
+</form>
 [% END ~%]
 
-[% BLOCK F_header %][% PROCESS "header.html" %][% END ~%]
+[% BLOCK F_footer; PROCESS "footer.html"; END ~%]
 
-[% BLOCK F_navbar %][% PROCESS "navbar.html" %][% END ~%]
+[% BLOCK F_header; PROCESS "header.html"; END ~%]
 
-[% BLOCK F_manage_navbar %][% PROCESS "manage_navbar.html" %][% END ~%]
+[% BLOCK F_heading %]<h2>[% content %]</h2>[% END ~%]
 
-[% BLOCK F_footer %][% PROCESS "footer.html" %][% END ~%]
+[% BLOCK F_link -%]
+<a href="[% href %]">[% IF escape; content | html; ELSE; content; END %]</a>
+[%- END ~%]
 
-[% apostrophe = '&#8217;' ~%]
+[% BLOCK F_list -%]
+<ul>
+[% content -%]
+</ul>
+[% END ~%]
+
+[% BLOCK F_list_item %]<li>[% content %]</li>[% END ~%]
+
+[% BLOCK F_manage_navbar; PROCESS "manage_navbar.html"; END ~%]
+
+[% BLOCK F_navbar; PROCESS "navbar.html"; END ~%]
+
+[% BLOCK F_odd_row %]
+<tr class="odd">
+[% content -%]
+</tr>
+[% END ~%]
+
+[% BLOCK F_paragraph -%]
+<p>[% content %]</p>
+[%- END ~%]
+
+[% BLOCK F_table -%]
+<table cellspacing="0" class="view">
+[% content -%]
+</table>
+[% END ~%]
 
 [% BLOCK F_table_caption -%]
    <p>
@@ -137,10 +131,18 @@
 
 [% BLOCK F_table_tally -%]
    <p>
-     [% row %] [% IF row == 1 %][% view.role %][% ELSE %][% view.role %]s[% END %].
+     [% row %] [% IF row == 1; view.role; ELSE; view.role %]s[% END %].
    </p>
 [% END ~%]
 
-[% BLOCK F_link -%]
-<a href="[% href %]">[% IF escape; content | html; ELSE; content; END %]</a>
-[%- END ~%]
+[% BLOCK F_tbody -%]
+<tbody>
+[%- content -%]
+</tbody>
+[% END ~%]
+
+[% BLOCK F_thead -%]
+<thead>
+[%- content -%]
+</thead>
+[% END ~%]
