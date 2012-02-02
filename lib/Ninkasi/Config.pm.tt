@@ -18,6 +18,20 @@ Readonly our %USER_DEFAULT => (
     path               => $ENV{HOME} . '/bin:/opt/local/bin:/usr/local/bin:/usr/bin:/bin',
 );
 
+# allow configuration values to be set at run time
+our %RUNTIME_OPTION = ();
+sub import {
+    my ( undef, $argument ) = @_;
+
+    %RUNTIME_OPTION = map {
+        # remove angle brackets from Getopt::Euclid
+        my ($variable) = /([^<>]*)/;
+        $variable => $argument->{$_};
+    } keys %$argument;
+
+    return;
+}
+
 sub new { shift->instance(@_) }
 
 sub _new_instance {
