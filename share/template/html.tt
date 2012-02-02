@@ -57,13 +57,13 @@
 </div>
 [% END ~%]
 
-[% BLOCK thead -%]
+[% BLOCK F_thead -%]
 <thead>
 [%- content -%]
 </thead>
 [% END ~%]
 
-[% BLOCK tbody -%]
+[% BLOCK F_tbody -%]
 <tbody>
 [%- content -%]
 </tbody>

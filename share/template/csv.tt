@@ -30,11 +30,11 @@
 [% content -%]
 [% END ~%]
 
-[% BLOCK thead -%]
+[% BLOCK F_thead -%]
 [% content -%]
 [% END ~%]
 
-[% BLOCK tbody -%]
+[% BLOCK F_tbody -%]
 [% content -%]
 [% END ~%]
 
