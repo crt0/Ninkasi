@@ -51,7 +51,7 @@
 </table>
 [% END ~%]
 
-[% BLOCK body_text -%]
+[% BLOCK F_body_text -%]
 <div id="body_text">
 [% content -%]
 </div>

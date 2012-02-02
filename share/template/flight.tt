@@ -2,7 +2,7 @@
 
 [% PROCESS header title = "Flights" -%]
 [% PROCESS manage_navbar -%]
-[% WRAPPER body_text ~%]
+[% WRAPPER F_body_text ~%]
    [% WRAPPER F_heading %]Flights[% END %]
    [%- IF error ~%]
       [% WRAPPER error_message; error.message; END ~%]

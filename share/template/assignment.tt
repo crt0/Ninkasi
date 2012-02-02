@@ -4,7 +4,7 @@
 [% flight_string = "Flight $flight.number, $flight.description" | html %]
 [% PROCESS header title = flight_string -%]
 [% PROCESS manage_navbar -%]
-[% WRAPPER body_text ~%]
+[% WRAPPER F_body_text ~%]
    [% fetch_volunteer = assigned_judges_func() ~%]
    <p>
    Judges assigned to [% flight_string %]

@@ -14,7 +14,7 @@
 [% content %] <[% href %]>
 [%- END ~%]
 
-[% BLOCK body_text -%]
+[% BLOCK F_body_text -%]
 From:    "Brewers' Cup Judge Coordinator" <judgecoordinator@brewerscup.org>
 Subject: [% title %]
 To:      [% to_address %]
