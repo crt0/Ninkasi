@@ -1,18 +1,4 @@
-[% BLOCK F_heading %][% content %][% END ~%]
-
-[% BLOCK F_paragraph -%]
-[% content %]
-[%- END ~%]
-
-[% BLOCK F_list -%]
-[% content -%]
-[% END ~%]
-
-[% BLOCK F_list_item %] - [% content %][% END ~%]
-
-[% BLOCK F_link -%]
-[% content %] <[% href %]>
-[%- END ~%]
+[% apostrophe = "'" ~%]
 
 [% BLOCK F_body_text -%]
 From:    "Brewers' Cup Judge Coordinator" <judgecoordinator@brewerscup.org>
@@ -27,10 +13,18 @@ Indiana State Fair
 judgecoordinator@brewerscup.org
 [% END ~%]
 
-[% BLOCK F_header %][% END ~%]
+[% BLOCK F_footer; END ~%]
 
-[% BLOCK F_navbar %][% END ~%]
+[% BLOCK F_header; END ~%]
 
-[% BLOCK F_footer %][% END ~%]
+[% BLOCK F_heading; content; END ~%]
 
-[% apostrophe = "'" ~%]
+[% BLOCK F_link -%][% content %] <[% href %]>[%- END ~%]
+
+[% BLOCK F_list; content; END ~%]
+
+[% BLOCK F_list_item %] - [% content %][% END ~%]
+
+[% BLOCK F_navbar; END ~%]
+
+[% BLOCK F_paragraph; content; END ~%]

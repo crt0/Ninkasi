@@ -1,51 +1,39 @@
+[% BLOCK F_assignment_link; assignments.$session; END ~%]
+
+[% BLOCK F_body_text; content; END ~%]
+
+[% BLOCK F_category_link; content; END ~%]
+
+[% BLOCK F_column %]"[% content | $escape_quotes -%]",[% END ~%]
+
+[% BLOCK F_error_message; content; END ~%]
+
 [% BLOCK F_even_row -%]
 [% content | $remove_trailing_comma %]
 [% END ~%]
+
+[% BLOCK F_flight_table; content; END ~%]
+
+[% BLOCK F_footer; END ~%]
+
+[% BLOCK F_header; END ~%]
+
+[% BLOCK F_link; content; END ~%]
+
+[% BLOCK F_manage_navbar; END ~%]
+
+[% BLOCK F_navbar; END ~%]
 
 [% BLOCK F_odd_row -%]
 [% content | $remove_trailing_comma %]
 [% END ~%]
 
-[% BLOCK F_column -%]
-"[% content | $escape_quotes -%]",
-[%- END ~%]
-
-[% BLOCK F_table -%]
-[% content -%]
-[% END ~%]
-
-[% BLOCK F_flight_table -%]
-[% content -%]
-[% END ~%]
-
-[% BLOCK F_body_text -%]
-[% content -%]
-[% END ~%]
-
-[% BLOCK F_thead -%]
-[% content -%]
-[% END ~%]
-
-[% BLOCK F_tbody -%]
-[% content -%]
-[% END ~%]
-
-[% BLOCK F_assignment_link; assignments.$session; END ~%]
-
-[% BLOCK F_category_link %][% content %][% END ~%]
-
-[% BLOCK F_error_message; content; END ~%]
-
-[% BLOCK F_header %][% END ~%]
-
-[% BLOCK F_navbar %][% END ~%]
-
-[% BLOCK F_manage_navbar %][% END ~%]
-
-[% BLOCK F_footer %][% END ~%]
+[% BLOCK F_table; content; END ~%]
 
 [% BLOCK F_table_caption; END ~%]
 
 [% BLOCK F_table_tally; END ~%]
 
-[% BLOCK F_link; content; END ~%]
+[% BLOCK F_tbody; content; END ~%]
+
+[% BLOCK F_thead; content; END ~%]
