@@ -12,10 +12,6 @@
 
 [% BLOCK F_list_item %]<li>[% content %]</li>[% END ~%]
 
-[% MACRO link(href, text) BLOCK -%]
-<a href="[% href %]">[% text %]</a>
-[%- END ~%]
-
 [% BLOCK even_row %]
 <tr class="even">
 [% content -%]
@@ -149,4 +145,6 @@
    </p>
 [% END ~%]
 
-[% BLOCK F_link %]<a href="[% href %]">[% content | html %]</a>[% END ~%]
+[% BLOCK F_link -%]
+<a href="[% href %]">[% IF noescape; content; ELSE; content | html; END %]</a>
+[%- END ~%]

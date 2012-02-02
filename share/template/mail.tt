@@ -10,8 +10,8 @@
 
 [% BLOCK F_list_item %] - [% content %][% END ~%]
 
-[% MACRO link(href, text) BLOCK -%]
-[% text %] <[% href %]>
+[% BLOCK F_link -%]
+[% content %] <[% href %]>
 [%- END ~%]
 
 [% BLOCK body_text -%]
