@@ -30,7 +30,7 @@
    [% END ~%]
 
    [% BLOCK assignment_column ~%]
-      [% WRAPPER F_column; PROCESS assignment_link; END ~%]
+      [% WRAPPER F_column; PROCESS F_assignment_link; END ~%]
    [% END ~%]
    
    [% BLOCK constraint_header ~%]

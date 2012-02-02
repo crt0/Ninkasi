@@ -28,7 +28,7 @@
 <td>[% IF escape; content | html; ELSE; content; END -%]</td>
 [% END ~%]
 
-[% BLOCK assignment_link ~%]
+[% BLOCK F_assignment_link ~%]
    [% IF assignments.$session && assignments.$session != 'N/A' ~%]
       <a href="/manage/assignment/[% assignments.$session %]">
    [% END ~%]
