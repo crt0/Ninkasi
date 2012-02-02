@@ -10,19 +10,11 @@
 "[% content | $escape_quotes -%]",
 [%- END ~%]
 
-[% BLOCK input -%]
-[% content -%]
-[% END ~%]
-
 [% BLOCK F_table -%]
 [% content -%]
 [% END ~%]
 
 [% BLOCK F_flight_table -%]
-[% content -%]
-[% END ~%]
-
-[% BLOCK judge_table -%]
 [% content -%]
 [% END ~%]
 
@@ -39,10 +31,6 @@
 [% END ~%]
 
 [% BLOCK F_assignment_link; assignments.$session; END ~%]
-
-[% BLOCK all_judges_table ~%]   
-   [% PROCESS judges_table.tt ~%]
-[% END ~%]
 
 [% BLOCK F_category_link %][% content %][% END ~%]
 
