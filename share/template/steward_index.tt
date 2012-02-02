@@ -1,7 +1,7 @@
 [% PROCESS "${format}.tt" ~%]
 [% PROCESS view_steward.tt ~%]
 
-[% PROCESS header title = "Registered Stewards" -%]
-[% PROCESS manage_navbar -%]
+[% PROCESS F_header title = "Registered Stewards" -%]
+[% PROCESS F_manage_navbar -%]
 [% steward.table ~%]
-[% PROCESS footer -%]
+[% PROCESS F_footer -%]

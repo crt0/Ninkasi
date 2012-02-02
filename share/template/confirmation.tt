@@ -1,7 +1,7 @@
 [% PROCESS "${format}.tt" -%]
-[% PROCESS header
+[% PROCESS F_header
    title = "Brewers$apostrophe Cup Volunteer Registration Confirmation" -%]
-[% PROCESS navbar -%]
+[% PROCESS F_navbar -%]
 [% WRAPPER F_body_text -%]
 [% WRAPPER F_heading %]Thank you, [% form.first_name | html %]![% END %]
 [% WRAPPER F_paragraph %]
@@ -26,4 +26,4 @@ the Brewers[% apostrophe %] Cup web site[% END %]
 for up-to-the-minute information on the competition.  Thanks!
 [% END -%]
 [% END -%]
-[% PROCESS footer -%]
+[% PROCESS F_footer -%]

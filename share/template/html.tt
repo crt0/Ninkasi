@@ -117,13 +117,13 @@
    </div>
 [% END ~%]
 
-[% BLOCK header %][% PROCESS "header.html" %][% END ~%]
+[% BLOCK F_header %][% PROCESS "header.html" %][% END ~%]
 
-[% BLOCK navbar %][% PROCESS "navbar.html" %][% END ~%]
+[% BLOCK F_navbar %][% PROCESS "navbar.html" %][% END ~%]
 
-[% BLOCK manage_navbar %][% PROCESS "manage_navbar.html" %][% END ~%]
+[% BLOCK F_manage_navbar %][% PROCESS "manage_navbar.html" %][% END ~%]
 
-[% BLOCK footer %][% PROCESS "footer.html" %][% END ~%]
+[% BLOCK F_footer %][% PROCESS "footer.html" %][% END ~%]
 
 [% apostrophe = '&#8217;' ~%]
 

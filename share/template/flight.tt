@@ -1,7 +1,7 @@
 [% PROCESS "${format}.tt" ~%]
 
-[% PROCESS header title = "Flights" -%]
-[% PROCESS manage_navbar -%]
+[% PROCESS F_header title = "Flights" -%]
+[% PROCESS F_manage_navbar -%]
 [% WRAPPER F_body_text ~%]
    [% WRAPPER F_heading %]Flights[% END %]
    [%- IF error ~%]
@@ -34,4 +34,4 @@
       [% END ~%]
    [% END ~%]
 [% END ~%]
-[% PROCESS footer -%]
+[% PROCESS F_footer -%]

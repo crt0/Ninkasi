@@ -27,10 +27,10 @@ Indiana State Fair
 judgecoordinator@brewerscup.org
 [% END ~%]
 
-[% BLOCK header %][% END ~%]
+[% BLOCK F_header %][% END ~%]
 
-[% BLOCK navbar %][% END ~%]
+[% BLOCK F_navbar %][% END ~%]
 
-[% BLOCK footer %][% END ~%]
+[% BLOCK F_footer %][% END ~%]
 
 [% apostrophe = "'" ~%]

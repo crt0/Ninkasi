@@ -2,8 +2,8 @@
 [% PROCESS view_assignment.tt ~%]
 
 [% flight_string = "Flight $flight.number, $flight.description" | html %]
-[% PROCESS header title = flight_string -%]
-[% PROCESS manage_navbar -%]
+[% PROCESS F_header title = flight_string -%]
+[% PROCESS F_manage_navbar -%]
 [% WRAPPER F_body_text ~%]
    [% fetch_volunteer = assigned_judges_func() ~%]
    <p>
@@ -19,4 +19,4 @@
    </p>
    [% unassignment.table ~%]
 [% END ~%]
-[% PROCESS footer -%]
+[% PROCESS F_footer -%]
