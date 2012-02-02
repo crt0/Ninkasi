@@ -87,7 +87,7 @@
                [% END ~%]
                [% WRAPPER "F_$row_wrapper" ~%]
                   [% WRAPPER F_column ~%]
-                     [% WRAPPER F_link href = "/manage/${volunteer_row.role}/${volunteer_row.rowid}" ~%]
+                     [% WRAPPER F_link href = "/manage/${volunteer_row.role}/${volunteer_row.rowid}" escape = 1 ~%]
                        [% volunteer_row.last_name %], [% volunteer_row.first_name ~%]
                      [% END ~%]
                   [% END ~%]

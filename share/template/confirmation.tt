@@ -21,7 +21,7 @@ at the Indiana State Fair Brewers[% apostrophe %] Cup:
 [% END -%]
 [% WRAPPER F_paragraph %]
 Judge assignments will be sent a few days before the above date(s).  Please refer
-to [% WRAPPER F_link href = "http://brewerscup.org/" noescape = 1 -%]
+to [% WRAPPER F_link href = "http://brewerscup.org/" -%]
 the Brewers[% apostrophe %] Cup web site[% END %]
 for up-to-the-minute information on the competition.  Thanks!
 [% END -%]
