@@ -1,30 +1,97 @@
 #![% scriptdir %]/perl
+# -*- cperl -*-
 
-use blib;
 use strict;
 use warnings;
 
-use DBI;
-use Ninkasi::Config;
-use Readonly;
+use Taint::Util;
 
-Readonly my @CLASS_SUFFIXES
-         => qw/Assignment Constraint Flight FlightCategory MailingList
-               Volunteer/;
-
-MAIN: {
-    my $database_file = $ARGV[0];
-    if ( !defined $database_file ) {
-        my $config = Ninkasi::Config->new();
-        $database_file = $config->database_file();
-    }
-    die "$database_file: file exists\n" if -e $database_file;
-    my $dbh = DBI->connect( "dbi:SQLite:dbname=$database_file", '', '',
-                            { RaiseError  => 1 } );
-
-    foreach my $class_suffix (@CLASS_SUFFIXES) {
-        my $class = "Ninkasi::$class_suffix";
-        eval "require $class";
-        $dbh->do( $class->Schema() );
+BEGIN {
+    if ( exists $ENV{NINKASI_TEST_SERVER_ROOT} ) {
+        my $blib = File::Spec->catfile( $ENV{NINKASI_TEST_SERVER_ROOT},
+                                        File::Spec->updir(), 'blib' );
+        untaint $blib;
+        require lib;
+        lib->import( File::Spec->catfile( $blib, 'lib'  ),
+                     File::Spec->catfile( $blib, 'arch' ) );
     }
 }
+
+require Ninkasi::Config;
+Ninkasi::Config->import(\%ARGV);
+require Ninkasi::Table;
+Ninkasi::Table->initialize_database();
+
+__END__
+
+=head1 NAME
+
+ninkasi-init - create and initialize the Ninkasi database
+
+=head1 USAGE
+
+    ninkasi-init [-d|--debug] [<database_file>]
+
+=head1 REQUIRED ARGUMENTS
+
+None.
+
+=head1 OPTIONS
+
+=over
+
+=item -d | --debug
+
+Display debugging information while the program is running.
+
+=item <database_file>
+
+Filename of database to be initialized.
+
+=for Euclid:
+	database_file.type: writeable
+
+=back
+
+=head1 DESCRIPTION
+
+ninkasi-init calls C<Ninkasi::Table->initialize_database()> to create
+Ninkasi(3)'s SQLite database.
+
+=head1 DIAGNOSTICS
+
+Same as Ninkasi::Table(3).
+
+=head1 ENVIRONMENT
+
+=over 4
+
+=item NINKASI_TEST_SERVER_ROOT
+
+If defined (usually to the F<t> subdirectory of the module's source
+directory), assume we are descended from C<Build test> and, apart from
+using the test configuration file specified above, override the
+following values:
+
+  database_file  $NINKASI_TEST_SERVER_ROOT/database
+  log_file       $NINKASI_TEST_SERVER_ROOT/log
+  template_path  $NINKASI_TEST_SERVER_ROOT/../blib/share/template
+
+=back
+
+=head1 BUGS AND LIMITATIONS
+
+There are no known bugs in this module.  Please report problems to
+Andrew Korty <andrew@korty.name>.  Patches are welcome.
+
+=head1 AUTHOR
+
+Andrew Korty <andrew@korty.name>
+
+=head1 LICENSE AND COPYRIGHT
+
+This software is in the public domain.
+
+=head1 SEE ALSO
+
+Ninkasi(3), Ninkasi::Table(3)

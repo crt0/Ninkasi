@@ -21,6 +21,7 @@ my $build = MyBuilder->new(
         'Date::Format'             => '2.22',
         'Email::Address'           => '1.889',
         'File::LibMagic'           => 0,
+        'Getopt::Euclid'           => 0,
         'HTML::Lint'               => 0,
         'Module::Build'            => '0.31',
         'Readonly'                 => '1.03',
