@@ -69,11 +69,11 @@
 </tbody>
 [% END ~%]
 
-[% BLOCK category_link ~%]
+[% BLOCK F_category_link ~%]
 <a href="/manage/assignment/[% content %]">[% content %]</a>
 [%~ END ~%]
 
-[% BLOCK flight_row -%]
+[% BLOCK F_flight_row -%]
    [% WRAPPER F_column %]
       [% IF error && error.row == flight.number ~%]
          <span class="error">*</span>

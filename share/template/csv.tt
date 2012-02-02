@@ -44,7 +44,7 @@
    [% PROCESS judges_table.tt ~%]
 [% END ~%]
 
-[% BLOCK category_link %][% content %][% END ~%]
+[% BLOCK F_category_link %][% content %][% END ~%]
 
 [% BLOCK error_message; content; END ~%]
 

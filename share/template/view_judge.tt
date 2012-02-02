@@ -51,7 +51,7 @@
       [% FOREACH type IN [ 'entry', 'prefer not', 'whatever', 'prefer' ] ~%]
          [% flights = [] ~%]
          [% FOREACH flight IN constraint.$type ~%]
-            [% formatted_flight = WRAPPER category_link; flight; END ~%]
+            [% formatted_flight = WRAPPER F_category_link; flight; END ~%]
             [% flights.push(formatted_flight) ~%]
          [% END ~%]
          [% WRAPPER F_column; flights.grep('[1-9][0-9]*').join(', '); END ~%]
