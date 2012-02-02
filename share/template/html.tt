@@ -24,12 +24,8 @@
 </tr>
 [% END ~%]
 
-[% BLOCK column -%]
-<td>[% content -%]</td>
-[% END ~%]
-
-[% BLOCK column_escaped -%]
-<td>[% content | html -%]</td>
+[% BLOCK F_column -%]
+<td>[% IF escape; content | html; ELSE; content; END -%]</td>
 [% END ~%]
 
 [% BLOCK assignment_link ~%]
@@ -78,7 +74,7 @@
 [%~ END ~%]
 
 [% BLOCK flight_row -%]
-   [% WRAPPER column %]
+   [% WRAPPER F_column %]
       [% IF error && error.row == flight.number ~%]
          <span class="error">*</span>
       [% END ~%]
@@ -86,12 +82,12 @@
              size="10"
              value="[% flight.number | html %]" />
    [% END -%]
-   [% WRAPPER column %]
+   [% WRAPPER F_column %]
       <input name="category_[% row %]"
              size="10"
              value="[% flight.category | html  %]" />
    [% END -%]
-   [% WRAPPER column %]
+   [% WRAPPER F_column %]
       <input name="pro_[% row %]"
       [%~ IF flight.pro %]
              checked="checked"
@@ -99,12 +95,12 @@
              type="checkbox"
              value="1" />
    [% END -%]
-   [% WRAPPER column %]
+   [% WRAPPER F_column %]
       <input name="description_[% row %]"
              size="40"
              value="[% flight.description | html %]" />
    [% END -%]
-   [% WRAPPER column %]
+   [% WRAPPER F_column %]
       [% IF flight.number ~%]
          [% IF flight.judges.0 -%]
             <em>[% flight.judges.shift | html -%]</em>

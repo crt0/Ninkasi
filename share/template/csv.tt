@@ -6,12 +6,8 @@
 [% content | $remove_trailing_comma %]
 [% END ~%]
 
-[% BLOCK column -%]
+[% BLOCK F_column -%]
 "[% content | $escape_quotes -%]",
-[%- END ~%]
-
-[% BLOCK column_escaped -%]
-[% WRAPPER column; content; END -%]
 [%- END ~%]
 
 [% BLOCK input -%]

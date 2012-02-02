@@ -10,13 +10,13 @@
    [% BLOCK rank_column;         END ~%]
 
    [% BLOCK assignment_headings ~%]
-      [% WRAPPER column %]Fri. PM[% END ~%]
-      [% WRAPPER column %]Sat. AM[% END ~%]
-      [% WRAPPER column %]Sat. PM[% END ~%]
+      [% WRAPPER F_column %]Fri. PM[% END ~%]
+      [% WRAPPER F_column %]Sat. AM[% END ~%]
+      [% WRAPPER F_column %]Sat. PM[% END ~%]
    [% END ~%]
 
    [% BLOCK assignment_column ~%]
-      [% WRAPPER column; assignments.$session; END ~%]
+      [% WRAPPER F_column; assignments.$session; END ~%]
    [% END ~%]
 
 [% END ~%]

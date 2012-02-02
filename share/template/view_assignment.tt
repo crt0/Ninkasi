@@ -23,11 +23,11 @@
    [% END ~%]
    
    [% BLOCK constraint_header ~%]
-      [% WRAPPER column %]Preference[% END ~%]
+      [% WRAPPER F_column %]Preference[% END ~%]
    [% END ~%]
    
    [% BLOCK constraint_columns ~%]
-      [% WRAPPER column; constraint_name.${volunteer_row.type}; END ~%]
+      [% WRAPPER F_column; constraint_name.${volunteer_row.type}; END ~%]
    [% END ~%]
    
    [% BLOCK form_start ~%]
