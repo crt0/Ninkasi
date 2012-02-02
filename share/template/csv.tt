@@ -46,7 +46,7 @@
 
 [% BLOCK F_category_link %][% content %][% END ~%]
 
-[% BLOCK error_message; content; END ~%]
+[% BLOCK F_error_message; content; END ~%]
 
 [% BLOCK header %][% END ~%]
 

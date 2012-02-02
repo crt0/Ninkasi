@@ -5,7 +5,7 @@
 [% WRAPPER F_body_text ~%]
    [% WRAPPER F_heading %]Flights[% END %]
    [%- IF error ~%]
-      [% WRAPPER error_message; error.message; END ~%]
+      [% WRAPPER F_error_message; error.message; END ~%]
    [% END ~%]
    [% WRAPPER F_flight_table ~%]
       [% WRAPPER F_thead ~%]
