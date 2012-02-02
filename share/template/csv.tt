@@ -1,8 +1,8 @@
-[% BLOCK even_row -%]
+[% BLOCK F_even_row -%]
 [% content | $remove_trailing_comma %]
 [% END ~%]
 
-[% BLOCK odd_row -%]
+[% BLOCK F_odd_row -%]
 [% content | $remove_trailing_comma %]
 [% END ~%]
 

@@ -12,13 +12,13 @@
 
 [% BLOCK F_list_item %]<li>[% content %]</li>[% END ~%]
 
-[% BLOCK even_row %]
+[% BLOCK F_even_row %]
 <tr class="even">
 [% content -%]
 </tr>
 [% END ~%]
 
-[% BLOCK odd_row %]
+[% BLOCK F_odd_row %]
 <tr class="odd">
 [% content -%]
 </tr>
