@@ -46,3 +46,6 @@ $build->add_build_element('share' );
 $build->add_build_element('tt'    );
 
 $build->create_build_script();
+
+MyBuilder->require_external_program('groff' );
+MyBuilder->require_external_program('ps2pdf');

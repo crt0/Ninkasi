@@ -93,4 +93,21 @@ sub process_tt_files {
     }
 }
 
+sub require_external_program {
+    my ( $self, $program ) = @_;
+
+    print "checking for $program...";
+    for my $dir ( ( split /$Config::Config{path_sep}/, $ENV{PATH} ), '.' ) {
+        next if $dir eq '';
+        my $absolute_path = File::Spec->catfile( $dir, $_[1] );
+        if ( -x $absolute_path ) {
+            print "$absolute_path\n";
+            return;
+        }
+    }
+    print "\n";
+
+    die "external program $program not found -- external dependency failed";
+}
+
 1;
