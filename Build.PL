@@ -37,6 +37,9 @@ my $build = MyBuilder->new(
     ninkasi_date2      => 'Saturday, July 9',
 );
 
+$build->require_external_program('groff' );
+$build->require_external_program('ps2pdf');
+
 foreach my $subdir (keys %RELPATH) {
     $build->install_base_relpaths( $subdir => $RELPATH{$subdir} );
 }
@@ -46,6 +49,3 @@ $build->add_build_element('share' );
 $build->add_build_element('tt'    );
 
 $build->create_build_script();
-
-MyBuilder->require_external_program('groff' );
-MyBuilder->require_external_program('ps2pdf');
