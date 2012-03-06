@@ -5,8 +5,6 @@ use warnings;
 
 use base 'CGI::Simple';
 
-use Ninkasi::Config;
-
 sub get_arguments {
     my ($self) = @_;
 
