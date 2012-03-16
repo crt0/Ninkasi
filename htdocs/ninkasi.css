@@ -310,3 +310,23 @@ table.view tbody tr.ruled td {
     font-family: monospace;
     white-space: pre-wrap;
 }
+
+#information {
+    background-color: #c0d0e0;
+    border:           1px dashed;
+    clear:            both;
+    font-family:      Gill Sans, sans-serif;
+    margin-top:       15px;
+    padding:          0px 15px 15px 15px;
+}
+
+#information a:link { color: #405060 }
+
+#information a:visited { color: #607080 }
+
+#information th {
+    font-style:    oblique;
+    font-weight:   normal;
+    padding-right: 5px;
+    text-align:    right;
+}
