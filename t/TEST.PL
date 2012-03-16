@@ -12,7 +12,7 @@ $ENV{NINKASI_TEST_SERVER_ROOT} = File::Spec->catfile(getcwd(), 't');
 # create new SQL log for every test run
 unlink File::Spec->catfile( $ENV{NINKASI_TEST_SERVER_ROOT}, 'dbi.log' );
 
-main::->new()->run(@ARGV);
+main::->new()->run( -httpd_conf => 'etc/httpd.conf', @ARGV );
 
 sub pre_configure {
     my $self = shift;
@@ -20,4 +20,6 @@ sub pre_configure {
     # Don't load buggy installed modules
     Apache::TestConfig::autoconfig_skip_module_add('mod_dav_svn.c');
     Apache::TestConfig::autoconfig_skip_module_add('mod_authz_svn.c');
+
+    $self->SUPER::pre_configure($@);
 }
