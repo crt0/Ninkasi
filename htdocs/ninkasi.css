@@ -1,5 +1,6 @@
 body {
     background-color: #e6e6ba;
+    font-family:      Garamond, serif;
 }
 
 h1 {
@@ -84,7 +85,9 @@ a:visited {
 }
 
 #body_text {
-    padding: 0 5%;
+    line-height: 1.5;
+    max-width:   625px;
+    padding:     0 5%;
 }
 
 #menu {
@@ -316,6 +319,7 @@ table.view tbody tr.ruled td {
     border:           1px dashed;
     clear:            both;
     font-family:      Gill Sans, sans-serif;
+    line-height:      1;
     margin-top:       15px;
     padding:          0px 15px 15px 15px;
 }
@@ -327,6 +331,6 @@ table.view tbody tr.ruled td {
 #information th {
     font-style:    oblique;
     font-weight:   normal;
-    padding-right: 5px;
+    padding:       5px;
     text-align:    right;
 }
