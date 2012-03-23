@@ -16,14 +16,16 @@ unlink File::Spec->catfile( $ENV{NINKASI_TEST_SERVER_ROOT}, 'dbi.log' );
 unlink File::Spec->catfile( $ENV{NINKASI_TEST_SERVER_ROOT},
                             qw/conf ninkasi.conf/ );
 
-main::->new()->run( -httpd_conf => 'etc/httpd.conf', @ARGV );
+main::->new()->run( @ARGV );
 
 sub pre_configure {
     my $self = shift;
 
-    # Don't load buggy installed modules
-    Apache::TestConfig::autoconfig_skip_module_add('mod_dav_svn.c');
+    # Don't load buggy/conflicting installed modules
     Apache::TestConfig::autoconfig_skip_module_add('mod_authz_svn.c');
+    Apache::TestConfig::autoconfig_skip_module_add('mod_dav_svn.c');
+    Apache::TestConfig::autoconfig_skip_module_add('mod_fcgid.c');
+    Apache::TestConfig::autoconfig_skip_module_add('mod_php5.c');
 
     $self->SUPER::pre_configure($@);
 }
