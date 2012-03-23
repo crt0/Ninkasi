@@ -66,6 +66,9 @@ sub get_all {
         where    => $where_clause,
     } );
 
+    # build roster link, if any
+    my $roster_credential = Ninkasi::Config->new()->get('roster');
+
     # return callback to fetch volunteer data and some helper functions
     return {
         argument => $argument,
@@ -80,6 +83,7 @@ sub get_all {
                 },
             };
         },
+        roster_credential => $roster_credential,
         title => "Registered ${quoted_role}s",
     };
 }
@@ -117,8 +121,8 @@ sub transform {
     $volunteer_handle->finish();
 
     return {
-        volunteer_row => $volunteer_row,
-        rank_name => \%Ninkasi::Judge::NAME,
+        rank_name         => \%Ninkasi::Judge::NAME,
+        volunteer_row     => $volunteer_row,
     };
 }
 

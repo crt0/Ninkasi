@@ -3,10 +3,13 @@
 use strict;
 use warnings;
 
-use Test::More tests => 77;
+use Test::More tests => 82;
 
 use Apache::TestConfig;
+use Data::UUID;
 use File::LibMagic qw/:easy/;
+use File::Spec;
+use Ninkasi::Config;
 use Ninkasi::Table;
 use Test::WWW::Mechanize;
 
@@ -360,6 +363,7 @@ $mech->submit_form_ok( {
 # test view of all judges
 $lookup_url = "$url_base/manage/judge/";
 $mech->get_ok($lookup_url);
+$mech->content_contains('Public roster view is disabled.');
 $mech->content_like(
     qr{<td><a\ href="/manage/judge/\d+">\|&lt;iefer,\ Angelina</a></td>\s+
        <td>Certified</td>\s+
@@ -840,4 +844,25 @@ $mech->content_unlike(
        <td>Y</td>\s+
        <td>whatever</td>}msx,
     "unassigned judge didn't stay at top",
+);
+
+# public roster link should be disabled
+my $credential = Data::UUID->new()->create_str();
+$lookup_url = "$url_base/manage/roster/$credential";
+$mech->get($lookup_url);
+is $mech->status(), 403;
+
+open my $ninkasi_config, '>>', Ninkasi::Config->new()->get('config_file');
+$ninkasi_config->print( join '', 'roster = ', $credential, "\n" );
+$ninkasi_config->close();
+$mech->get("$url_base/manage/roster/");
+is $mech->status(), 403;
+$mech->get("$url_base/manage/judge/");
+$mech->follow_link_ok( { text => 'Public roster view is enabled.' } );
+$mech->content_like(
+    qr{<td>\|&lt;iefer,\ Angelina</td>\s+
+       <td></td>\s+
+       <td></td>\s+
+       <td>08:\ English\ Pale\ Ale\ \(pro\)</td>}msx,
+    'judge appears in public roster view'
 );

@@ -18,6 +18,7 @@ my $build = MyBuilder->new(
         'Class::Singleton'         => '1.4',
         'DBD::SQLite'              => '1.13',
         'Data::Dumper'             => '2.121_08',
+        'Data::UUID'               => 0,
         'Date::Format'             => '2.22',
         'Email::Address'           => '1.889',
         'File::LibMagic'           => 0,

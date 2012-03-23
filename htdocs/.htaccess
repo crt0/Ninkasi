@@ -21,8 +21,8 @@ RewriteRule ^index\.html$      /                  [L,R=permanent]
 RewriteRule ^judge$            /volunteer         [L,R=permanent]
 RewriteRule ^map\.htm$         /maps              [L,R=permanent]
 
-RewriteRule cgi                     - [H=cgi-script,L]
-RewriteRule ^(newsletter|register)$ - [H=ninkasi,L]
+RewriteRule cgi                            - [H=cgi-script,L]
+RewriteRule ^(newsletter$|register$|roster/) - [H=ninkasi,L]
 
 RewriteRule ^[^.]*$ - [T=text/html]
 

@@ -3,5 +3,6 @@
 
 [% PROCESS F_header title = "Registered Judges" -%]
 [% PROCESS F_manage_navbar -%]
+[% PROCESS F_roster_link -%]
 [% judge.table ~%]
 [% PROCESS F_footer -%]
