@@ -1,7 +1,7 @@
 [% PROCESS html.tt ~%]
 
 [% PROCESS F_header title = "Registered Judges" -%]
-[% PROCESS F_manage_navbar -%]
+[% PROCESS F_navbar -%]
 <p>
 [% WRAPPER F_table ~%]
    [% WRAPPER F_thead ~%]
