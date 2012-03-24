@@ -13,3 +13,7 @@ Options ExecCGI SymLinksIfOwnerMatch
 RewriteEngine on
 RewriteRule index - [H=cgi-script,L]
 RewriteRule .     - [H=ninkasi,L]
+
+<Files roster>
+    Allow from All
+</Files>
