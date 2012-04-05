@@ -6,6 +6,7 @@ use warnings;
 use Test::More tests => 138;
 
 use Apache::TestConfig;
+use Ninkasi::Config;
 use Ninkasi::Constraint;
 use Ninkasi::Judge;
 use Ninkasi::Register;
@@ -107,7 +108,10 @@ if ( !$mech->content_lacks( '<div class="error">', 'error <div>' ) ) {
     warn $1;
 }
 
-$mech->content_is( <<'EOF', 'header' );
+my $ninkasi_config = Ninkasi::Config->new();
+my $date1 = $ninkasi_config->get('date1');
+my $date2 = $ninkasi_config->get('date2');
+$mech->content_is( <<"EOF", 'header' );
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE html
      PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -148,8 +152,8 @@ You&#8217;ve agreed to volunteer for the following flight(s)
 at the Indiana State Fair Brewers&#8217; Cup:
 </p>
 <ul>
-<li>Friday, July 8, starting at 6 pm</li>
-<li>Saturday, July 9, starting at noon</li>
+<li>$date1, starting at 6 pm</li>
+<li>$date2, starting at noon</li>
 </ul>
 <p>
 Judge assignments will be sent a few days before the above date(s).  Please refer

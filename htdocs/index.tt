@@ -53,8 +53,8 @@
       <tr>
         <th>Judging:</th>
         <td>
-          <strong>Friday, July 6,</strong> and <strong>Saturday, July
-          7, 2012</strong>
+          <strong>[% date1 %], [% year %]</strong> and <strong>[% date2 %],
+          [% year %]</strong>
         </td>
       </tr>
       <tr>
