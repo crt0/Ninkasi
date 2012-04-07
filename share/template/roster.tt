@@ -3,6 +3,11 @@
 [% PROCESS F_header title = "Registered Judges" -%]
 [% PROCESS F_navbar -%]
 <p>
+  <strong>
+    Judges, assignments are subject to change!  Keep checking back for
+    the most up-to-date information.
+  </strong>
+</p>
 [% WRAPPER F_table ~%]
    [% WRAPPER F_thead ~%]
       [% WRAPPER F_odd_row ~%]
