@@ -116,14 +116,14 @@
 [%- END ~%]
 
 [% BLOCK F_roster_link -%]
+   <p>
    [% IF roster_credential -%]
-      <p>
-        <a href="/roster/[% roster_credential %]">Public roster view is
-        enabled.</a>
-      </p>
+      <a href="/roster/[% roster_credential %]">Public roster view is
+      enabled.</a>
    [% ELSE -%]
       Public roster view is disabled.
    [% END -%]
+   </p>
 [% END ~%]
 
 [% BLOCK F_table -%]
