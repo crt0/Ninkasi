@@ -8,7 +8,6 @@ use base 'Ninkasi::Table';
 use Ninkasi::Assignment;
 use Ninkasi::CSV;
 use Ninkasi::Category;
-use Ninkasi::Constraint;
 use Ninkasi::Template;
 
 __PACKAGE__->Table_Name('volunteer');

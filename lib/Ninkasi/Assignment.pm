@@ -387,7 +387,6 @@ sub transform {
     return {
         assigned_judges_func   => sub { select_assigned_judges $flight },
         constraint_name        => \%Ninkasi::Constraint::NAME,
-        fetch_constraint       => \&Ninkasi::Constraint::fetch,
         flight                 => $flight,
         rank_name              => \%Ninkasi::Judge::NAME,
         type                   => $format,
