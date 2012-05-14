@@ -156,7 +156,10 @@ at the Indiana State Fair Brewers&#8217; Cup:
 <li>$date2, starting at noon</li>
 </ul>
 <p>
-Judge assignments will be sent a few days before the above date(s).  Please refer
+Judge assignments will be sent a few days before the above date(s).
+To preserve the integrity of the competition, please do not discuss
+your assignments or post about them on social media until after the
+awards banquet.  Refer
 to <a href="http://brewerscup.org/">the Brewers&#8217; Cup web site</a>
 for up-to-the-minute information on the competition.  Thanks!
 </p></div>
