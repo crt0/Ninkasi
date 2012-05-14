@@ -69,13 +69,16 @@ a:visited {
     padding-top:  1em;
 }
 
+#navigation_bar_vertical div { padding-top: 0.3em }
+
 #search {
     float: left;
 }
 
 #photo_bar {
     height:      190px;
-    width:       70%;
+    max-width:   500px;
+    width:       60%;
     overflow:    auto;
     white-space: nowrap;
 }
