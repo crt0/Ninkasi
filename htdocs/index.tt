@@ -4,7 +4,7 @@
   <div><a accesskey="e" href="enter">Submit Entries</a></div>
   <div><a accesskey="j" href="judge">Register to Judge/Steward</a></div>
   <div><a accesskey="m" href="maps">Find the Fairgrounds</a></div>
-  <div><a accesskey="r" href="results">View 2011 Results</a></div>
+  <div><a accesskey="r" href="results">View Results</a></div>
   <div><a accesskey="c" href="contacts">Contact Us</a></div>
   <div>[% PROCESS searchbox.html %]</div>
 </div>
@@ -63,6 +63,10 @@
       <tr>
         <th>Judging Location:</th>
         <td><a href="/maps">Indiana State Fairgrounds</a></td>
+      </tr>
+      <tr>
+        <th>Competition Results:</th>
+        <td><em>posted <a href="/results">here</a> once available</em></td>
       </tr>
     </table>
   </div>
