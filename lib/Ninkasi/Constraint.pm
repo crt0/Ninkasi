@@ -28,14 +28,4 @@ foreach my $constraint (@CONSTRAINTS) {
     $NUMBER{ $constraint->{name  } } = $constraint->{number};
 }
 
-
-    } );
-
-
-
-
-
-
-
-
 1;
