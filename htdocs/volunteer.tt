@@ -53,13 +53,21 @@ entries.  BJCP judges, professional brewers, and BJCP apprentices
 (those who have taken the test) are welcomed and encouraged to judge
 at this year&#8217;s competition.  Judging will take place
 on <strong>[% date1 %],</strong> and <strong>[% date2 %],</strong> at
-the Farm Bureau Building on the Indiana State Fairgrounds.  This is a
-BJCP-sanctioned competition, so points will be awarded.  We also pay a
-small stipend to offset travel expenses to professional brewers and
-BJCP judges.  Judges who travel at least 50 miles one way and judge at
-least two sessions will receive a $100 stipend.  Local judges will be
-paid $12.50 per session.  We provide meals during the judging and you
-are welcome to stay for the Awards Reception on Saturday evening.
+the <a href="http://www.in.gov/statefair/fairgrounds/venues/blue_ribbon_pav.html">Marsh
+Blue Ribbon Pavilion</a> on the Indiana State Fairgrounds.  The Marsh
+Blue Ribbon Pavilion is a <strong>new location</strong> for the
+Brewers&#8217; Cup and will better accommodate our growth &mdash; when
+you arrive at the fairgrounds, simply follow the &#8220;Brewers&#8217;
+Cup&#8221; signs.
+</p>
+<p>
+This competition is BJCP-sanctioned, so points will be awarded.  We
+also pay a small stipend to offset travel expenses to professional
+brewers and BJCP judges.  Judges who travel at least 50 miles one way
+and judge at least two sessions will receive a $100 stipend.  Local
+judges will be paid $12.50 per session.  We provide meals during the
+judging and you are welcome to stay for the Awards Reception on
+Saturday evening.
 </p>
 <p>
 We have arranged for a special rate of $69/night at
@@ -137,9 +145,15 @@ visit, check out:</h3>
   <tr>
     <td colspan="4">
       <em>
-        Farm Bureau Building, <a href="maps">Indiana State
-        Fairgrounds</a>
+        <a href="http://www.in.gov/statefair/fairgrounds/venues/blue_ribbon_pav.html">Marsh
+          Blue Ribbon Pavilion</a>, <a href="maps">Indiana State
+          Fairgrounds</a>
       </em>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="4">
+      <strong>Note the new location!</strong>
     </td>
   </tr>
 <tr><td class="time">6:00 pm</td><td>&#8211;</td><td>7:00 pm:</td><td>Check-in, buffet dinner (provided)</td></tr>
@@ -151,12 +165,16 @@ visit, check out:</h3>
   <caption>[% date2 %]</caption>
   <tr>
     <td colspan="4">
-      <em>Farm Bureau Building, <a href="map.htm">Indiana State
-      Fairgrounds</a></em>
+      <em><a href="http://www.in.gov/statefair/fairgrounds/venues/blue_ribbon_pav.html">Marsh
+          Blue Ribbon Pavilion</a>, <a href="map.htm">Indiana State
+          Fairgrounds</a></em>
     </td>
   </tr>
   <tr>
-    <td colspan="4"><strong>Note the new, earlier start time!</strong></td>
+    <td colspan="4">
+      <strong>Note the new location and earlier start
+      time!</strong>
+    </td>
   </tr>
   <tr>
 <td class="time">8:00 am</td><td>&#8211;</td><td class="time">8:45 am:</td><td>Check-in, continental breakfast (provided)</td></tr>
@@ -164,12 +182,6 @@ visit, check out:</h3>
 <tr><td class="time">12:00 pm</td><td>&#8211;</td><td class="time">12:45 pm:</td><td>Lunch (provided)</td></tr>
 <tr><td class="time">1:00 pm</td><td>&#8211;</td><td class="time">4:00
     pm:</td><td>Second Session of Judging</td></tr>
-  <tr>
-    <td colspan="4">
-      <em>Farm Bureau Building, <a href="map.htm">Indiana State
-      Fairgrounds</a></em>
-    </td>
-  </tr>
 <tr><td class="time">6:00 pm</td><td>&#8211;</td><td class="time">8:00 pm:</td><td>Awards Reception (heavy appetizers and libations provided)</td></tr>
 </table>
 </p>
