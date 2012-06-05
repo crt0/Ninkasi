@@ -55,12 +55,19 @@ sub navbar_ok {
 
     my $navbar = join "\n",
         map { join '', '| ',
-                       $_ eq $page ? '' : ( '<a accesskey="',
-                                            substr( $_, 0, 1),
-                                            qq{" href="/$_">} ),
+                       $_ eq $page ? ''
+                                   : ( '<a accesskey="',
+                                       $_ eq 'results'
+                                           ? 'p'
+                                           : substr( $_, 0, 1 ),
+                                       qq{" href="/},
+                                       $_ eq 'rules'  ? 'rules.pdf'
+                                     : $_ eq 'labels' ? 'labels-interactive.pdf'
+                                                      : $_,
+                                       qq{">} ),
                        $_ eq 'volunteer' ? 'Judge/Steward' : ucfirst,
                        $_ eq $page ? '' : '</a>' }
-            qw/enter volunteer maps results contacts/;
+            qw/rules labels enter volunteer maps results contacts/;
     $mech->content_contains(<<EOF, 'navbar');
 <div id="navigation_bar_horizontal">
 <a accesskey="h" href="/">Home</a>
@@ -102,10 +109,12 @@ $mech->get_ok($url_base);
 header_ok $mech, 'The Brewers&#8217; Cup Competition';
 $mech->content_contains(<<EOF, 'navigation bar');
 <div id="navigation_bar_vertical">
+  <div><a accesskey="r" href="rules.pdf">Official Rules</a></div>
+  <div><a accesskey="l" href="labels-interactive.pdf">Printable Labels</a></div>
   <div><a accesskey="e" href="enter">Submit Entries</a></div>
   <div><a accesskey="j" href="judge">Register to Judge/Steward</a></div>
   <div><a accesskey="m" href="maps">Find the Fairgrounds</a></div>
-  <div><a accesskey="r" href="results">View Results</a></div>
+  <div><a accesskey="p" href="results">View Past Results</a></div>
   <div><a accesskey="c" href="contacts">Contact Us</a></div>
   <div><form action="http://www.google.com/cse" id="cse-search-box">
   <div>

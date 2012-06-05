@@ -1,9 +1,12 @@
 <div id="navigation_bar_horizontal">
-[% FOREACH uri IN [ '', 'enter', 'volunteer', 'maps', 'results',
-                    'contacts' ] ~%]
+[% FOREACH uri IN [ '', 'rules', 'labels', 'enter', 'volunteer',
+                    'maps', 'results', 'contacts' ] ~%]
    [% USE String uri ~%]
    [% desc = String.capital; key = uri.substr(0, 1) ~%]
    [% IF !uri; desc = 'Home'; key = 'h'; END ~%]
+   [% IF uri == 'labels'; uri = 'labels-interactive.pdf'; END ~%]
+   [% IF uri == 'results'; key = 'p'; END ~%]
+   [% IF uri == 'rules'; uri = 'rules.pdf'; END ~%]
    [% IF uri == 'volunteer'; desc = 'Judge/Steward'; END ~%]
    [% IF uri %]| [% END ~%]
    [% IF page != uri ~%]
