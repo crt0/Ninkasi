@@ -13,7 +13,7 @@ at the Indiana State Fair Brewers[% apostrophe %] Cup:
 [% WRAPPER F_list_item %][% date1 %], starting at 6 pm[% END %]
 [% END -%]
 [% IF form.session2 -%]
-[% WRAPPER F_list_item %][% date2 %], starting at 9 am[% END %]
+[% WRAPPER F_list_item %][% date2 %], starting at 8 am[% END %]
 [% END -%]
 [% IF form.session3 -%]
 [% WRAPPER F_list_item %][% date2 %], starting at noon[% END %]
