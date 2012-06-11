@@ -303,13 +303,11 @@ table.view tbody tr.ruled td {
 }
 
 .sponsors {
+    background-color: white;
+    border: 1px dashed black;
     text-align:    center;
     padding:       5px;
     verical-align: middle;
-}
-
-.sponsors td img {
-    border: 1px solid #ccc;
 }
 
 .backtrace {

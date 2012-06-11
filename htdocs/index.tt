@@ -203,9 +203,9 @@
 <td>
 <a href="http://www.in.gov/statefair/fair/">
 <img alt="Indiana State Fair"
-     height="192"
-     src="/image/state-fair.jpg"
-     width="216" />
+     height="252"
+     src="/image/state-fair.png"
+     width="320" />
 </a>
 </td>
 </tr>
@@ -213,8 +213,8 @@
 <td>
 <a href="http://www.homebrewit.com/">
 <img alt="Quality Wine and Ale Supply"
-     height="185"
-     src="/image/quality.jpg"
+     height="317"
+     src="/image/quality.png"
      width="320" />
 </a>
 </td>
