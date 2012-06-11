@@ -11,6 +11,8 @@ htdocs/2009-hb-winners.pdf
 htdocs/2009-pb-winners.pdf
 htdocs/2010-hb-winners.pdf
 htdocs/2010-pb-winners.pdf
+htdocs/2011-hb-winners.pdf
+htdocs/2011-pb-winners.pdf
 htdocs/403.tt
 htdocs/404.tt
 htdocs/500.tt
@@ -23,8 +25,10 @@ htdocs/favicon.ico
 htdocs/image/.htaccess
 htdocs/image/anita.jpg
 htdocs/image/bill.jpg
+htdocs/image/blichmann.png
 htdocs/image/brewers-art-supply.jpg
 htdocs/image/brewers-guild.jpg
+htdocs/image/brewpub.png
 htdocs/image/club_of_year.jpg
 htdocs/image/commercial_bos.jpg
 htdocs/image/commercial_champion.jpg
@@ -36,9 +40,13 @@ htdocs/image/homebrew_champion.jpg
 htdocs/image/judging.jpg
 htdocs/image/lbc.jpg
 htdocs/image/quality.jpg
+htdocs/image/quality.png
 htdocs/image/ron_bos.jpg
 htdocs/image/state-fair.jpg
+htdocs/image/state-fair.png
 htdocs/image/stewards.jpg
+htdocs/image/sun-king.png
+htdocs/image/superbowl.png
 htdocs/image/tasting.jpg
 htdocs/image/wr_challenge.jpg
 htdocs/index.tt
@@ -62,6 +70,7 @@ lib/Ninkasi/Judge.pm
 lib/Ninkasi/MailingList.pm
 lib/Ninkasi/Newsletter.pm
 lib/Ninkasi/Register.pm
+lib/Ninkasi/Roster.pm
 lib/Ninkasi/Steward.pm
 lib/Ninkasi/Table.pm
 lib/Ninkasi/Template.pm
@@ -87,6 +96,7 @@ share/template/mail.tt
 share/template/manage_navbar.html
 share/template/navbar.html
 share/template/register_index.tt
+share/template/roster.tt
 share/template/search.html
 share/template/searchbox.html
 share/template/steward.tt
@@ -96,9 +106,12 @@ share/template/view_assignment.tt
 share/template/view_judge.tt
 share/template/view_steward.tt
 share/template/view_volunteer.tt
+share/template/volunteer_index.tt
 t/conf/extra.conf.in
+t/conf/ninkasi.conf
 t/judge.t
 t/register.t
 t/static.t
 t/steward.t
 t/TEST.PL
+t/volunteer.t
