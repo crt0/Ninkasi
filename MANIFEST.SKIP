@@ -81,3 +81,4 @@
 ^t/dbi\.log$
 ^t/log$
 ^t/logs/
+^$
