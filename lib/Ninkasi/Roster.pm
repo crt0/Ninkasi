@@ -20,9 +20,9 @@ sub fetch_assignments {
         where       => 'assignment.flight = flight.number AND volunteer = ?',
     } );
 
-    my @assignments = ();
+    my @assignments;
     while ( $sth->fetch() ) {
-        $assignments[ $result->{session} ] = $result->{flight} && $result;
+        $assignments[ $result->{session} ] = $result;
     }
 
     return \@assignments;

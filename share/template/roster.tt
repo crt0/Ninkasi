@@ -34,9 +34,18 @@
             [% FOREACH session IN [ 1 .. 3 ] ~%]
                [% WRAPPER F_column ~%]
                   [% IF assignments.$session ~%]
-                     [% assignments.$session.number ~%]
-                     : [% assignments.$session.description %] (
-                     [%~ IF assignments.$session.pro %]pro[% ELSE %]hb[% END %])
+                     [% IF assignments.$session.flight ~%]
+                        [% assignments.$session.number ~%]
+                        : [% assignments.$session.description %] (
+                        [%~ IF assignments.$session.pro ~%]
+                            pro
+                        [%~ ELSE ~%]
+                            hb
+                        [%~ END ~%]
+                        )
+                     [%~ ELSIF ~%]
+                        N/A
+                     [%~ END ~%]
                   [%~ END ~%]
                [% END ~%]
             [% END ~%]
