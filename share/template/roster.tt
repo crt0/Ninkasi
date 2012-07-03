@@ -34,17 +34,13 @@
             [% FOREACH session IN [ 1 .. 3 ] ~%]
                [% WRAPPER F_column ~%]
                   [% IF assignments.$session ~%]
-                     [% IF assignments.$session.flight ~%]
-                        [% assignments.$session.number ~%]
-                        : [% assignments.$session.description %] (
-                        [%~ IF assignments.$session.pro ~%]
-                            pro
-                        [%~ ELSE ~%]
-                            hb
-                        [%~ END ~%]
-                        )
-                     [%~ ELSIF ~%]
+                     [% IF assignments.$session == 'N/A' ~%]
                         N/A
+                     [%~ ELSE ~%]
+                        [% flight = volunteer_row.fetch_flight(assignments
+                                                               .$session) ~%]
+                        [% flight.number ~%]: [% flight.description %] (
+                        [%~ IF flight.pro %]pro[% ELSE %]hb[% END %])
                      [%~ END ~%]
                   [%~ END ~%]
                [% END ~%]

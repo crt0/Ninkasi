@@ -862,7 +862,7 @@ $mech->follow_link_ok( { text => 'Public roster view is enabled.' } );
 $mech->content_like(
     qr{<td>\|&lt;iefer,\ Angelina</td>\s+
        <td></td>\s+
-       <td></td>\s+
+       <td>N/A</td>\s+
        <td>08:\ English\ Pale\ Ale\ \(pro\)</td>}msx,
     'judge appears in public roster view'
 );

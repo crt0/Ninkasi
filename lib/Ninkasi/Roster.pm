@@ -8,24 +8,21 @@ use base 'Ninkasi::Table';
 use Ninkasi::Template;
 use Ninkasi::Volunteer;
 
-sub fetch_assignments {
-    my ($judge_id) = @_;
+sub fetch_flight {
+    my ($flight_number) = @_;
 
-    # fetch assignments for specified judge
-    my $assignment = Ninkasi::Assignment->new();
-    my ( $sth, $result ) = $assignment->bind_hash( {
-        bind_values => [$judge_id],
-        columns     => [qw/flight session number description pro/],
-        join        => 'Ninkasi::Flight',
-        where       => 'assignment.flight = flight.number AND volunteer = ?',
+    my $flight = Ninkasi::Flight->new();
+    my ( $description, $number, $pro ) = $flight->get_one_row( {
+        bind_values => [$flight_number],
+        columns     => [qw/description number pro/],
+        where       => 'number = ?',
     } );
 
-    my @assignments;
-    while ( $sth->fetch() ) {
-        $assignments[ $result->{session} ] = $result;
-    }
-
-    return \@assignments;
+    return {
+        description => $description,
+        number      => $number,
+        pro         => $pro,
+    };
 }
 
 sub transform {
@@ -66,8 +63,9 @@ EOF
             $volunteer_handle->fetch() && {
                 %$volunteer_row,
                 fetch_assignments => sub {
-                    return fetch_assignments $volunteer_row->{rowid};
+                    return Ninkasi::Assignment::fetch $volunteer_row->{rowid};
                 },
+                fetch_flight => \&fetch_flight,
             };
         },
     };
