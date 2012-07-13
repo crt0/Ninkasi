@@ -503,7 +503,7 @@ $mech->content_unlike(
 );
 $mech->content_lacks( 'Reynoso, Greggory',
                       'pro judge ineligible for flight 08' );
-$mech->content_like( qr{<title>Flight 08, English Pale Ale</title>},
+$mech->content_like( qr{<title>Flight 08, English Pale Ale \(Pro\)</title>},
                      'flight 08 assignment view title' );
 
 # test judge link
