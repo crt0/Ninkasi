@@ -1,7 +1,8 @@
 [% PROCESS html.tt ~%]
 [% PROCESS view_assignment.tt ~%]
 
-[% flight_string = "Flight $flight.number, $flight.description" | html %]
+[% pro = flight.pro ? "Pro" : "Homebrew" -%]
+[% flight_string = "Flight $flight.number, $flight.description ($pro)" | html %]
 [% PROCESS F_header title = flight_string -%]
 [% PROCESS F_manage_navbar -%]
 [% WRAPPER F_body_text ~%]
@@ -14,8 +15,7 @@
    [% assignment.table ~%]
    [% fetch_volunteer = unassigned_judges_func() ~%]
    <p>
-   Judges available for Flight [% flight.number | html %], [%
-   flight.description | html %]:
+   Judges available for [% flight_string %]:
    </p>
    [% unassignment.table ~%]
 [% END ~%]
