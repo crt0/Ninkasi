@@ -55,3 +55,71 @@ foreach my $rank (@RANKS) {
 }
 
 1;
+__END__
+
+=head1 NAME
+
+Ninkasi::Judge - BJCP judge rank information
+
+=head1 SYNOPSIS
+
+  use Ninkasi::Judge;
+
+  # transform user interface input into template input (really only
+  # called by Ninkasi(3))
+  $transform_results = Ninkasi::Judge->transform( {
+      \%options,
+      -positional => \%positional_parameters,
+  } );
+  Ninkasi::Template->new()->process( judge => $transform_results);
+
+  # print sorted list of ranks and descriptions
+  foreach $rank (@Ninkasi::Judge::RANKS) {
+      print "$rank->{name}: $category->{description}\n";
+  }
+
+  # print sort key associated with Certified rank
+  print "$Ninkasi::Judge::NUMBER{Certified}\n";
+
+  # print rank associated with sort key 70
+  print "$Ninkasi::Judge::NAME{70}\n";
+
+=head1 DESCRIPTION
+
+Ninkasi::Judge contains a list of BJCP ranks as defined in
+the L<Beer Judge Certification Program Membership
+Guide|http://www.bjcp.org/membergd.php#rank>.  An ordered
+list of the ranks, C<@RANKS>, is exported.  Each element is
+a hash reference with the following elements:
+
+  name         the rank name (I<e.g.>, I<National>)
+  number       a numeric sort key indicating the rank level
+  description  a brief description of the rank
+
+=head1 SUBROUTINES/METHODS
+
+None.
+
+=head1 CONFIGURATION
+
+No L<Ninkasi::Config(3)> variables are used by this module.
+
+=head1 BUGS AND LIMITATIONS
+
+While this module inherits from L<Ninkasi::Volunteer(3)>, it doesn't
+act as a subclass in any useful way except to inherit C<transform()>.
+
+Please report problems to Andrew Korty <andrew@korty.name>.  Patches
+are welcome.
+
+=head1 AUTHOR
+
+Andrew Korty <andrew@korty.name>
+
+=head1 LICENSE AND COPYRIGHT
+
+This software is in the public domain.
+
+=head1 SEE ALSO
+
+L<Ninkasi(3)>, L<Ninkasi::Volunteer(3)>

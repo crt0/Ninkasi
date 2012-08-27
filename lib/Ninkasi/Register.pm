@@ -318,3 +318,91 @@ sub transform {
 }
 
 1;
+__END__
+
+=head1 NAME
+
+Ninkasi::Register - template logic for Ninkasi volunteer registration
+
+=head1 SYNOPSIS
+
+  use Ninkasi::Register;
+  
+  # transform user interface input into template input (really only
+  # called by Ninkasi(3))
+  $transform_results = Ninkasi::Register->transform( {
+      \%options,
+      -positional => \%positional_parameters,
+  } );
+  Ninkasi::Template->new()->process( register => $transform_results);
+
+=head1 DESCRIPTION
+
+Ninkasi::Register provides the logic for generating a web form to
+register volunteers (judges and stewards); validate, process, and
+store the results of the form; logs the request; and e-mail a
+confirmation message to the volunteer.
+
+This module defines a C<transform()> method to be called by
+L<Ninkasi(3)>; see the latter for documentation on this method.
+
+The methods of this module are not called directly by programs but by
+C<Ninkasi-E<gt>render()>.
+
+=head1 SUBROUTINES/METHODS
+
+Ninkasi::Register is a subclass of L<Ninkasi::Table(3)>.
+
+=head1 DIAGNOSTICS
+
+If this module encounters an error while rendering a template,
+C<Ninkasi::Template-E<gt>error()> is called to generate a warning message
+that is printed on C<STDERR>.
+
+=head1 CONFIGURATION
+
+The following L<Ninkasi::Config(3)> variables are used by this module:
+
+=over 4
+
+=item date1
+
+the date of the first judging session
+
+=item date2
+
+the date of the second judging session
+
+=item disabled
+
+when defined, disable registration, the value being the name of the
+template to display instead of the registration form
+
+=item log_file
+
+file where registration data is logged
+
+=item test_server_root
+
+whether the module is being tested, in which case no confirmations
+will be e-mailed
+
+=back
+
+=head1 BUGS AND LIMITATIONS
+
+There are no known bugs in this module.  Please report problems to
+Andrew Korty <andrew@korty.name>.  Patches are welcome.
+
+=head1 AUTHOR
+
+Andrew Korty <andrew@korty.name>
+
+=head1 LICENSE AND COPYRIGHT
+
+This software is in the public domain.
+
+=head1 SEE ALSO
+
+L<Ninkasi(3)>, L<Ninkasi::Config(3)>, L<Ninkasi::Table(3)>,
+L<Ninkasi::Template(3)>

@@ -403,46 +403,50 @@ Ninkasi::Assignment - mapping of judges to their assigned flights and sessions
 
 =head1 SYNOPSIS
 
-    use Ninkasi::Assignment;
+  use Ninkasi::Assignment;
 
-    # render a web page displaying all assignments
-    Ninkasi::Assignment->render_page( Ninkasi::CGI->new() );
+  # transform user interface input into template input (really only
+  # called by Ninkasi(3))
+  $transform_results = Ninkasi::Assignment->transform( {
+      \%options,
+      -positional => \%positional_parameters,
+  } );
+  Ninkasi::Template->new()->process( assignment => $transform_results);
 
-    # look up a judge in the assignment table; display that judge's assignments
-    my $assignment_table = Ninkasi::Assignment->new();
-    my ( $assignment_handle, $assignment ) = $assignment_table->bind_hash( {
-        bind_values => [ $judge_id ],
-        columns     => [ qw/flight session/ ],
-        order_by    => 'session',
-        where       => 'volunteer = ?',
-    } );
-    print "Judge: $judge_id\n";
-    while ( $assignment_handle->fetch() ) {
-        print <<EOF;
+  # look up a judge in the assignment table; display that judge's assignments
+  my $assignment_table = Ninkasi::Assignment->new();
+  my ( $assignment_handle, $assignment ) = $assignment_table->bind_hash( {
+      bind_values => [ $judge_id ],
+      columns     => [ qw/flight session/ ],
+      order_by    => 'session',
+      where       => 'volunteer = ?',
+  } );
+  print "Judge: $judge_id\n";
+  while ( $assignment_handle->fetch() ) {
+      print <<EOF;
   Session $assignment->{session}: Flight $assignment->{flight}
 EOF
-    }
+  }
 
 =head1 DESCRIPTION
 
 Ninkasi::Assignment provides an interface to a database table of
-assignments of judges (see L<Ninkasi::Volunteer>) to flights (see
-L<Ninkasi::Flight>) for each session (see L<Ninkasi::Session>).
+assignments of judges (see L<Ninkasi::Volunteer(3)>) to flights (see
+L<Ninkasi::Flight(3)>) for each judging session.
 
-=head1 METHODS
+=head1 SUBROUTINES/METHODS
+
+Ninkasi::Assignment defines a C<transform()> method to be called by
+L<Ninkasi(3)>; see the latter for documentation on this method.
+
+This module is a subclass of L<Ninkasi::Table(3)>.  The following
+subroutines/methods are defined in addition to those inherited:
 
 =over 4
 
-=item Ninkasi::Assignment->render_page($cgi_object)
+=item $hash_ref = select_assigned_judges($flight_object)
 
-Render a web page using the F<assignment.html> template (see
-L<Ninkasi::Template>) to display the assignments for all judges in a
-form that allows competition organizers to edit these assignments.
-Uses the Ninkasi::CGI(3) object C<$cgi_object>.
-
-=item $hash_ref = select_assigned_judges $flight_object
-
-Given a Ninkasi::Flight object C<$flight_object>, return an iterator
+Given a L<Ninkasi::Flight(3)> object C<$flight_object>, return an iterator
 that fetches data corresponding to each successive assigned judge,
 returned as a reference to a hash containing the following entries:
 
@@ -461,9 +465,9 @@ returned as a reference to a hash containing the following entries:
                       assigned) to which this judge is assigned, in
                       session order
 
-=item $hash_ref = select_unassigned_judges $flight_object
+=item $hash_ref = select_unassigned_judges($flight_object)
 
-Given a Ninkasi::Flight object C<$flight_object>, return an iterator
+Given a L<Ninkasi::Flight(3)> object C<$flight_object>, return an iterator
 that fetches data corresponding to each successive judge not assigned
 but available to judge that flight, returned as a reference to a hash
 containing the following entries:
@@ -484,53 +488,79 @@ containing the following entries:
                       assigned) to which this judge is assigned, in
                       session order
 
-=item $string = serialize $hash_ref
+=item $string = serialize($hash_ref)
 
-Serialize hash referenced by I<$hash_ref> into a string of the form
+Serialize hash referenced by C<$hash_ref> into a string of the form
 C<key1-value1_key2-value2...>.  Used in passing assignment data via
 HTTP query parameters.
 
-=item $hash_ref = deserialize $string
+=item $hash_ref = deserialize($string)
 
-Reverse of I<serialize>, above.
+Reverse of C<serialize()>, above.
 
-=item update_assignment $assignments, $flight_number
+=item update_assignment($assignments, $flight_number)
 
-Update stored list of assignments for I<$flight_number> according to
-the serialized list of assignments in I<$assignments> (see
+Update stored list of assignments for C<$flight_number> according to
+the serialized list of assignments in C<$assignments> (see
 L</serialize>).
 
-=item print_roster
+=item print_roster()
 
 Produce a PDF of the entire judge roster on C<STDOUT>.
 
-=item print_table_card $flight
+=item print_table_card($flight)
 
 Produce a PDF of the table card for $flight on C<STDOUT>.
 
 =back
 
+=head1 ATTRIBUTES
+
+The following attributes are represented as columns in the database
+table:
+
+=over 4
+
+=item flight (TEXT)
+
+Name of the flight (see L<Ninkasi::Flight(3)>).
+
+=item session (INTEGER)
+
+Session of the flight -- Friday evening (0), Saturday morning (1), or
+Saturday afternoon (2).
+
+=item volunteer (INTEGER)
+
+Judge assigned to this flight (see L<Ninkasi::Judge(3)> and
+L<Ninkasi::Volunteer(3)>).
+
+=back
+
 =head1 DIAGNOSTICS
 
-The I<print_*> routines produce warnings on C<STDERR> when problems
+The C<print_*()> routines produce warnings on C<STDERR> when problems
 are encountered running groff(1) to generate the PDF output.
 
 If this module encounters an error while rendering a template,
-I<Ninkasi::Template->error()> is called to generate a warning message
+C<Ninkasi::Template-E<gt>error()> is called to generate a warning message
 that is printed on C<STDERR>.
 
 =head1 CONFIGURATION
 
-No Ninkasi::Config(3) variables are used by this module.
+No L<Ninkasi::Config(3)> variables are used by this module.
 
 =head1 BUGS AND LIMITATIONS
 
-There are no known bugs in this module.  Please report problems to
-Andrew Korty <ajk@iu.edu>.  Patches are welcome.
+This class doesn't use L<Ninkasi::Judge(3)> properly as a subclass of
+L<Ninkasi::Volunteer(3)> but instead reaches into the latter.
+
+Please report problems to Andrew Korty <andrew@korty.name>.  Patches
+are welcome.
 
 =head1 AUTHOR
 
-Andrew Korty <ajk@iu.edu>
+Andrew Korty <andrew@korty.name>
 
 =head1 LICENSE AND COPYRIGHT
 
@@ -538,5 +568,7 @@ This software is in the public domain.
 
 =head1 SEE ALSO
 
-groff(1), Ninkasi::CGI(3), Ninkasi::Constraint(3), Ninkasi::Flight(3),
-Ninkasi::Volunteer(3), Ninkasi::Session(3), Ninkasi::Template(3)
+L<groff(1)>, L<Ninkasi(3)>, L<Ninkasi::CGI(3)>,
+L<Ninkasi::Constraint(3)>, L<Ninkasi::Flight(3)>,
+L<Ninkasi::Judge(3)>, L<Ninkasi::Table(3)>, L<Ninkasi::Template(3)>,
+L<Ninkasi::Volunteer(3)>
