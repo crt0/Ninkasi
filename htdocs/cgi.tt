@@ -1,6 +1,8 @@
 #![% scriptdir %]/perl -T
 # -*- cperl -*-
 
+# CGI program that drives a Ninkasi site
+
 use strict;
 use warnings;
 

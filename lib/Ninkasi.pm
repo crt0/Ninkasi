@@ -173,13 +173,11 @@ __END__
 
 Ninkasi - web application to automate volunteer registration for BCJP competitions
 
-=head1 VERSION
-
-This documentation refers to Ninkasi version 0.0.1.
-
 =head1 SYNOPSIS
 
+    use Ninkasi;
 
+    Ninkasi->render();
 
 =head1 DESCRIPTION
 
@@ -187,38 +185,107 @@ Ninkasi is a web-based volunteer registration system for BJCP homebrew
 and professional beer competitions.  The Ninkasi module currently also
 builds the Brewers' Cup web site.
 
+Ninkasi uses the L<Template Toolkit|http://template-toolkit.org/> to
+pre-process content in the appropriate output format.  In most cases,
+the format can be specified using the C<format> query parameter in the
+URL for the resource being requested.  Currently, HTML (C<html>),
+comma-separated value (C<csv>), and plain text e-mail (C<mail>)
+formats are supported.
+
+The Template Toolkit is also used to pre-process the static HTML pages
+that make up the Brewers' Cup web site.  This pre-processing happens
+when the C<./Build> script is run, and C<./Build install> installs the
+static HTML files into the document root.
+
 =head1 SUBROUTINES/METHODS
 
+=over 4
 
+=item render()
+
+The C<render()> method uses information from the environment (such as
+CGI or the command line) to determine which page to render and how,
+and then do so.  The environment provides a program name, positional
+arguments, and options.  See L<Ninkasi::CGI(3)> and
+L<Ninkasi::CommandLine(3)> for examples of each.  The C<render()> method
+uses the program name to determine a Ninkasi module to load and calls
+the module's C<transform()> method with the positional arguments and
+options.  The C<transform()> method returns template variables to pass
+to a Template Toolkit template.
+
+This method and the C<transform()> methods throw exceptions on error.
+The exception object is a hash with the following fields:
+
+  message   the error message
+  status    a status code, similar to an HTTP response code
+
+=item die_with_error_page($environment, $error, $template, $input)
+
+Display an error page to the browser based on information from the
+browser and emit an error message on the standard error.
+C<$environment> is a L<Ninkasi::CGI(3)> or L<Ninkasi::CommandLine(3)>
+object.  C<$error> is a hash with the following fields:
+
+  message   the error message
+  status    a status code, similar to an HTTP response code
+  title     page title
+
+C<$template> is the template object to use when rendering the error
+(often the same template that was being processed when the error was
+encountered -- for having the user correct errors in input).
+C<$input> is a hash of Template Toolkit variables to pass to
+C<$template>.
+
+=back
 
 =head1 DIAGNOSTICS
 
+The C<render()> method throws an exception if
 
+=over 4
+
+=item *
+
+the program name does not represent a class that can be loaded
+
+=item *
+
+the program name isn't present in a compile-time list of permitted program names
+
+=item *
+
+the module throws compile-time errors
+
+=item *
+
+the module doesn't have a C<transform()> method
+
+=back
+
+In addition, C<render()> passes along any errors thrown by the module
+through the C<die_with_error_page()> method.
 
 =head1 CONFIGURATION
 
+See L<Ninkasi::Config(3)> for run-time configuration.
 
-
-=head1 ENVIRONMENT
-
-
+At build time, the document root and template directory may be set by
+changing the C<%RELPATH> variable in the distribution's C<Build.PL>
+file.
 
 =head1 DEPENDENCIES
 
-
-
-=head1 INCOMPATIBILITIES
-
-
+See the C<Build.PL> file bundled with the Ninkasi distribution for a
+list of its software dependencies.
 
 =head1 BUGS AND LIMITATIONS
 
 There are no known bugs in this module.  Please report problems to
-Andrew Korty <ajk@iu.edu>.  Patches are welcome.
+Andrew Korty <andrew@korty.name>.  Patches are welcome.
 
 =head1 AUTHOR
 
-Andrew Korty <ajk@iu.edu>
+Andrew Korty <andrew@korty.name>
 
 =head1 LICENSE AND COPYRIGHT
 
@@ -226,20 +293,12 @@ This software is in the public domain.
 
 =head1 EXAMPLES
 
+If the I</manage/volunteer/23?format=csv> URL were requested,
+Ninkasi(3) would call
 
-
-=head1 FREQUENTLY ASKED QUESTIONS
-
-
-
-=head1 COMMON USAGE MISTAKES
-
-
-
-=head1 ACKNOWLEDGMENTS
-
-
+  Ninkasi::Volunteer->transform( { format => csv, -positional => [23] } )
 
 =head1 SEE ALSO
 
-
+L<Ninkasi::CGI(3)>, L<Ninkasi::CommandLine(3)>, L<Ninkasi::Config(3)>,
+L<Template(3)>
