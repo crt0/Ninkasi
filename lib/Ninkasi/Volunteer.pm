@@ -126,3 +126,93 @@ sub transform {
 }
 
 1;
+__END__
+
+=head1 NAME
+
+Ninkasi::Volunteer - Ninkasi class representing judges and stewards
+
+=head1 SYNOPSIS
+
+  use Ninkasi::Volunteer;
+
+  # transform user interface input into template input (really only
+  # called by Ninkasi(3))
+  $transform_results = Ninkasi::Volunteer->transform( {
+      \%options,
+      -positional => \%positional_parameters,
+  } );
+  Ninkasi::Template->new()->process( volunteer => $transform_results);
+
+  # look up a volunteer and display some of his/her attributes
+  my $volunteer_table = Ninkasi::Volunteer->new();
+  my ( $volunteer_handle, $volunteer_row ) = $volunteer_table->bind_hash( {
+      bind_values => [$volunteer_id],
+      columns     => [ qw/rowid first_name last_name address city state zip
+                          phone_evening phone_day email rank bjcp_id
+                          competitions_judged pro_brewer when_created/ ],
+      limit       => 1,
+      where       => $where_clause,
+  } );
+  print <<EOF;
+Volunteer: $first_name $last_name
+  Address: $address, $city, $state $zip
+    Phone: $phone_day
+   E-Mail: $email
+EOF
+  if ( $role = 'judge' ) {
+      use Ninkasi::Judge;
+
+      print <<EOF;
+     Rank: $Ninkasi::Judge::NAME{$rank}
+  BJCP ID: $bjcp_id
+EOF
+  }
+
+=head1 DESCRIPTION
+
+Ninkasi::Volunteer provides an interface to a database table of
+competition volunteers (see L<Ninkasi::Judge(3)> and
+L<Ninkasi::Steward(3)>) whose availability can be tracked, and in the
+case of judges, who can be assigned to flights, for competition.
+
+=head1 SUBROUTINES/METHODS
+
+Ninkasi::Volunteer defines a C<transform()> method to be called by
+L<Ninkasi(3)>; see the latter for documentation on this method.
+
+This module is a subclass of L<Ninkasi::Table(3)>.
+
+=head1 DIAGNOSTICS
+
+If this module encounters an error while rendering a template,
+C<Ninkasi::Template-E<gt>error()> is called to generate a warning message
+that is printed on C<STDERR>.  If an error is encountered while
+updating a flight, the database is rolled back.
+
+=head1 CONFIGURATION
+
+The C<roster> configuration variable is used to determine whether the
+roster is enabled and its URL (see L<Ninkasi::Config(3)>).
+
+=head1 BUGS AND LIMITATIONS
+
+While L<Ninkasi::Judge(3)> and L<Ninkasi::Steward(3)> inherit from
+this module, they doesn't act as subclasses in any useful way except
+to inherit C<transform()>.
+
+Please report problems to Andrew Korty <andrew@korty.name>.  Patches
+are welcome.
+
+=head1 AUTHOR
+
+Andrew Korty <andrew@korty.name>
+
+=head1 LICENSE AND COPYRIGHT
+
+This software is in the public domain.
+
+=head1 SEE ALSO
+
+Ninkasi(3), Ninkasi::Config(3), Ninkasi::Judge(3),
+Ninkasi::Steward(3), Ninkasi::Table(3)

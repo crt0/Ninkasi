@@ -242,6 +242,9 @@ Ninkasi::Table - superclass for accessing SQLite tables
  )
  EOF
     
+    # initialize a database (creating the tables
+    Ninkasi::Table->initialize_database();
+    
     my $example_table = Ninkasi::ExampleClass->new();
     
     # add a row
@@ -276,13 +279,13 @@ SQLite database.
 
 =item Class_Suffixes
 
-Class method that returns a list all of Ninkasi(3)'s relative class
+Class method that returns a list all of L<Ninkasi(3)>'s relative class
 names (C<Feed>, C<Entry>, etc.).
 
 =item Database_Handle($handle)
 
-Set the current DBI(3) database handle to C<$handle>.  When C<$handle>
-is undefined, return the current database handle.
+Set the current L<DBI(3)> database handle to C<$handle>.  When
+C<$handle> is undefined, return the current database handle.
 
 =item Table_Name($table_name)
 
@@ -294,6 +297,14 @@ C<$table_name> is undefined, return the class's table name.
 Set this class's schema, in the form of an SQL C<CREATE TABLE>
 statement, to the string C<$sql>.  When C<$sql> is undefined, return
 the class's schema.
+
+=item initialize_database($unlink)
+
+Initialize the database in the file specified by the C<database_file>
+configuration parameter (see L<Ninkasi::Config(3)>).  If C<$unlink> is
+TRUE, unlink the file first.  The database is created using the schema
+definitions in Ninkasi classes specified using the C<Schema> class
+method.
 
 =back
 
@@ -308,7 +319,7 @@ Create a new object for accessing the table.
 =item init($database_filename)
 
 Create a new SQLite database in the file named by
-C<$database_filename> using the Ninkasi(3) schema.
+C<$database_filename> using the Ninkasi schema.
 
 =item add(\%column_data)
 
@@ -320,6 +331,12 @@ table using C<INSERT>.
 Prepare a C<SELECT> statement using parameters specified in
 C<%argument> (according to L</"Query Building"> below) and return a
 hash reference containing the column data.
+
+=item get_one_row(\%argument)
+
+Prepare a C<SELECT> statement using parameters specified in
+C<%argument> (according to L</"Query Building"> below) and return a
+list of all the values selected from only the first row returned.
 
 =back
 
@@ -368,17 +385,17 @@ The C<init()> method will throw an exception of C<$database_filename:
 file exists\n>, where C<$database_filename> is the name of the
 database file that was supposed to have been created, if that file
 already exists.  It will also throw an exception if it encounters any
-error while loading Ninkasi(3) classes to build the database
+error while loading Ninkasi classes to build the database
 schema.
 
 =head1 BUGS AND LIMITATIONS
 
 There are no known bugs in this module.  Please report problems to
-Andrew Korty <ajk@iu.edu>.  Patches are welcome.
+Andrew Korty <andrew@korty.name>.  Patches are welcome.
 
 =head1 AUTHOR
 
-Andrew Korty <ajk@iu.edu>
+Andrew Korty <andrew@korty.name>
 
 =head1 LICENSE AND COPYRIGHT
 
@@ -386,7 +403,7 @@ This software is in the public domain.
 
 =head1 EXAMPLES
 
-See the Ninkasi(3) module and test source.
+See the Ninkasi module and test source.
 
 =head1 ACKNOWLEDGMENTS
 
@@ -396,4 +413,4 @@ L<http://www.perl.com/pub/a/2001/03/dbiokay.html>.
 
 =head1 SEE ALSO
 
-sqlite3(1), DBI(3), Ninkasi(3)
+sqlite3(1), DBI(3), Ninkasi(3), Ninkasi::Config(3)

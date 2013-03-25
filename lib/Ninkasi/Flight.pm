@@ -245,3 +245,114 @@ sub transform {
 }
 
 1;
+
+__END__
+
+=head1 NAME
+
+Ninkasi::Flight - table of flight names and descriptions
+
+=head1 SYNOPSIS
+
+  use Ninkasi::Flight;
+
+  # transform user interface input into template input (really only
+  # called by Ninkasi(3))
+  $transform_results = Ninkasi::Flight->transform( {
+      \%options,
+      -positional => \%positional_parameters,
+  } );
+  Ninkasi::Template->new()->process( flight => $transform_results);
+
+  # fetch flights a given volunteer can judge, organized by constraint
+  $constraint_hashref = Ninkasi::Flight::fetch $volunteer->{rowid};
+  print "Flights $volunteer->{last_name} prefers to judge: ",
+    join( ', ', $constraint_hashref->{prefer} ), "\n";
+
+  # get all judges assigned to a given flight
+  $judges = Ninkasi::Flight::get_assigned_judges $flight;
+  print "Judges assigned to $flight->{description}: ",
+    join( ', ', @$judges ), "\n";
+
+=head1 DESCRIPTION
+
+Ninkasi::Flight provides an interface to a database table of
+a competition's flight names and descriptions.
+
+=head1 SUBROUTINES/METHODS
+
+Ninkasi::Flight defines a C<transform()> method to be called by
+L<Ninkasi(3)>; see the latter for documentation on this method.
+
+This module is a subclass of L<Ninkasi::Table(3)>.  The following
+subroutines/methods are defined in addition to those inherited:
+
+=over 4
+
+=item $constraint_hashref = fetch $volunteer_id
+
+Fetch all flights a volunteer is eligible to judge, organized by
+constraint type.  C<$constraint_hashref> maps each constraint type
+(see L<Ninkasi::Constraint(3)>) to a reference to an array of flight
+numbers.
+
+=item $judges_arrayref = get_assigned_judges $flight
+
+Fetch all judges assigned to C<$flight> (a L<Ninkasi::Flight(3)>
+object) and return them as a reference to an array of strings of the
+form "FIRSTNAME LASTNAME".
+
+=back
+
+=head1 ATTRIBUTES
+
+The following attributes are represented as columns in the database
+table.
+
+=over 4
+
+=item description (TEXT)
+
+Description of the flight.
+
+=item pro (INTEGER)
+
+Which division the flight is in -- professional (1) or homebrew (0).
+
+=item number (TEXT)
+
+Name of the flight (will be renamed to C<name> in the future).
+
+=back
+
+=head1 DIAGNOSTICS
+
+If this module encounters an error while rendering a template,
+C<Ninkasi::Template-E<gt>error()> is called to generate a warning message
+that is printed on C<STDERR>.  If an error is encountered while
+updating a flight, the database is rolled back.
+
+=head1 CONFIGURATION
+
+No L<Ninkasi::Config(3)> variables are used by this module.
+
+=head1 BUGS AND LIMITATIONS
+
+This class doesn't use L<Ninkasi::Judge(3)> properly as a subclass of
+L<Ninkasi::Volunteer(3)> but instead reaches into the latter.
+
+Please report problems to Andrew Korty <andrew@korty.name>.  Patches
+are welcome.
+
+=head1 AUTHOR
+
+Andrew Korty <andrew@korty.name>
+
+=head1 LICENSE AND COPYRIGHT
+
+This software is in the public domain.
+
+=head1 SEE ALSO
+
+L<Ninkasi(3)>, L<Ninkasi::Constraint(3)>, L<Ninkasi::Judge(3)>,
+L<Ninkasi::Table(3)>, L<Ninkasi::Volunteer(3)>

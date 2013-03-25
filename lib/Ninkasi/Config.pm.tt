@@ -101,3 +101,103 @@ sub _new_instance {
 }
 
 1;
+
+__END__
+
+=head1 NAME
+
+Ninkasi::Config - interface to the Ninkasi configuration file
+
+=head1 SYNOPSIS
+
+  use Ninkasi::Config;
+  
+  # create an object for accessing configuration values
+  my $config = Ninkasi::Config->new();
+  
+  # import configuration values at runtime using Getopt::Euclid
+  Ninkasi::Config->import(\%ARGV);
+  
+  # access configuration values
+  my $database_file = $config->get('database_file');
+  my $maintainer_address = $config->get('maintainer_address');
+  # etc.
+
+=head1 DESCRIPTION
+
+Ninkasi::Config provides an interface to the L<Ninkasi(3)>
+configuration file.  Values can be set at runtime using the C<import>
+fuction as shown above -- this approach is useful for allowing the
+user to override configuration parameters on the command line.  The
+configuration file is loaded each time C<new> is called.
+
+=head2 Defaults
+
+The module provides following compile-time defaults, which can be
+overloaded in the configuration file or at runtime:
+
+  config_file    [% install_base %]/[% install_base_relpath.share %]/ninkasi.conf
+  database_file  [% install_base %]/[% install_base_relpath.share %]/database
+  log_file       [% install_base %]/var/ninkasi/log
+  template_path  [% install_base %]/[% install_base_relpath.share %]/template
+
+Other compile-time defaults can be set by editing the module source
+and changing the C<%USER_DEFAULT> constant.
+
+=head1 SUBROUTINES/METHODS
+
+This module inherits from L<AppConfig(3)>, so its methods may also be
+used.
+
+=over 4
+
+=item $config = Ninkasi::Config->new()
+
+Create a new object for accessing configuration parameters.
+
+=item $config->import(\%runtime_parameters)
+
+Override certain configuration values set in the configuration file
+with those in C<%runtime_parameters>.  Since this method is named
+C<import>, these values can also be set when loading the module with
+C<use>.
+
+=back
+
+=head1 CONFIGURATION
+
+The default configuration file is
+
+  [% install_base %]/[% install_base_relpath.share %]/ninkasi.conf
+
+=head1 ENVIRONMENT
+
+=over 4
+
+=item NINKASI_TEST_SERVER_ROOT
+
+Used to determine whether the module is running in an
+L<Apache::Test(3)> environment.  If so, the parameter defaults are set
+instead to
+
+  config_file    $NINKASI_TEST_SERVER_ROOT/conf/ninkasi.conf
+  database_file  $NINKASI_TEST_SERVER_ROOT/database
+  log_file       $NINKASI_TEST_SERVER_ROOT/log
+  template_path  $NINKASI_TEST_SERVER_ROOT/blib/share/template
+
+=head1 BUGS AND LIMITATIONS
+
+There are no known bugs in this module.  Please report problems to
+Andrew Korty <andrew@korty.name>.  Patches are welcome.
+
+=head1 AUTHOR
+
+Andrew Korty <andrew@korty.name>
+
+=head1 LICENSE AND COPYRIGHT
+
+This software is in the public domain.
+
+=head1 SEE ALSO
+
+L<AppConfig(3)>, L<Ninkasi(3)>
