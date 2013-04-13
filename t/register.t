@@ -60,8 +60,8 @@ $mech->content_contains( 'Looks like you left', 'blank field error message' );
 
 ## test complete & correct input
 
-$mech->submit_form_ok( {
-    with_fields => {
+$mech->form_number(2);
+$mech->set_fields(
         address             => '123 Fake Street',
         bjcp_id             => 'Z9999',
         category01          => 'whatever',
@@ -99,9 +99,11 @@ $mech->submit_form_ok( {
         phone_evening       => '123-456-7890',
         rank                => 50,
         state               => '--',
+        submit              => 'Register to Judge',
         zip                 => '12345',
-    },
-} );
+);
+$mech->click_button( value => 'Register to Judge' );
+ok $mech->success();
 
 if ( !$mech->content_lacks( '<div class="error">', 'error <div>' ) ) {
     $mech->content() =~ /<div class="error">([^<]*)/s;
@@ -209,6 +211,7 @@ like $last_line, qr/
                      phone_day           = 123-456-7890       :
                      phone_evening       = 123-456-7890       :
                      rank                = 50                 :
+                     role                = judge              :
                      session1            = 1                  :
                      session3            = 1                  :
                      state               = --                 :

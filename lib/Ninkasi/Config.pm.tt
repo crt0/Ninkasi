@@ -13,9 +13,13 @@ use base qw/AppConfig Class::Singleton/;
 use AppConfig qw/:argcount/;
 
 Readonly our %USER_DEFAULT => (
-    authentication_cgi => 'authenticate',
-    maintainer_address => 'ninkasi@ajk.name',
-    path               => $ENV{HOME} . '/bin:/opt/local/bin:/usr/local/bin:/usr/bin:/bin',
+    authentication_cgi  => 'authenticate',
+    coordinator_address => {
+                             judge   => 'ninkasi@ajk.name',
+                             steward => 'ninkasi@ajk.name',
+                        },
+    maintainer_address  => 'ninkasi@ajk.name',
+    path                => $ENV{HOME} . '/bin:/opt/local/bin:/usr/local/bin:/usr/bin:/bin',
 );
 
 # allow configuration values to be set at run time
