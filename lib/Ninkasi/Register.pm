@@ -144,22 +144,27 @@ sub validate {
     return $column;
 }
 
-sub mail_confirmation {
-    my ($column) = @_;
+sub mail_from_template {
+    my ($argument) = @_;
+
+    my $template   = $argument->{template  };
+    my $form       = $argument->{form      };
+    my $to_address = $argument->{to_address};
+    my $title      = $argument->{title     };
 
     # build message from template
     my $template_object = Ninkasi::Template->new();
     my $config = Ninkasi::Config->new();
     my $message;
     $template_object->process(
-        'confirmation.tt',
+        "$template.tt",
         {
             date1      => $config->date1(),
             date2      => $config->date2(),
-            form       => $column,
+            form       => $form,
             format     => 'mail',
-            title      => "Brewers' Cup Volunteer Confirmation",
-            to_address => create_rfc2822_address($column),
+            title      => $title,
+            to_address => $to_address,
         },
         \$message,
     ) or warn $template_object->error();
@@ -181,9 +186,8 @@ sub store {
     $column = validate $column;
 
     # create volunteer & constraint objects
-    ( my $role = $column->{submit} ) =~ s/Register to //;
-    my $volunteer_class = $role eq 'Steward' ? 'Ninkasi::Steward'
-                                             : 'Ninkasi::Judge';
+    my $volunteer_class = $column->{role} eq 'steward' ? 'Ninkasi::Steward'
+                                                       : 'Ninkasi::Judge';
     eval "require $volunteer_class";
     die if $@;
     my $volunteer_table = $volunteer_class->new();
@@ -293,15 +297,36 @@ sub transform {
 
     if ( $argument->{-number_of_options} ) {
 
+        # determine role
+        ( $argument->{role} = lc $argument->{submit} ) =~ s/register to //;
+
         # store volunteer data
         eval { store $argument };
         if ( my $error = $@ ) {
             die ref $error ? { %$error, @template_defaults } : $error;
         }
 
-        # mail confirmation unless testing
+        # mail confirmation & coordinator notifications unless testing
         if ( !$config->test_server_root() ) {
-            eval { mail_confirmation $argument };
+            my $coordinator_address
+                = $config->coordinator_address()->{ $argument->{role} };
+            eval {
+                mail_from_template {
+                    form       => $argument,
+                    template   => 'confirmation',
+                    title      => "Brewers' Cup Volunteer Confirmation",
+                    to_address => create_rfc2822_address($argument),
+                };
+                mail_from_template {
+                    form       => $argument,
+                    template   => 'notification',
+                    title      => join( ' ', "New $argument->{role}:",
+                                             $argument->{first_name},
+                                             $argument->{last_name} ),
+                    to_address => Email::Address
+                                  ->new(undef, $coordinator_address)->format(),
+                };
+            };
             if ($@) {
                 warn $@;
             }
