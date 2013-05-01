@@ -308,8 +308,7 @@ sub transform {
 
         # mail confirmation & coordinator notifications unless testing
         if ( !$config->test_server_root() ) {
-            my $coordinator_address
-                = $config->coordinator_address()->{ $argument->{role} };
+            my $coordinator_address = $config->get( $argument->{role} . '_coordinator' );
             eval {
                 mail_from_template {
                     form       => $argument,
