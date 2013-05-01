@@ -41,6 +41,9 @@ sub die_with_error_page {
     my $send_to_browser = $error->{status} != 500
                           || $ENV{NINKASI_TEST_SERVER_ROOT};
 
+    # save real error message for log
+    my $log_message = $error->{message};
+
     # else (or if missing) replace message/title with something innocuous
     if ( !$send_to_browser || !$error->{message} ) {
         $error->{message} = $error_message{ $error->{status} };
@@ -56,7 +59,7 @@ sub die_with_error_page {
         %$error
     } );
 
-    croak $environment->path_info(), ': ', $error->{message};
+    croak $environment->path_info(), ': ', $log_message || $error->{message};
 }
 
 sub render {
