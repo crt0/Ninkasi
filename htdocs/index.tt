@@ -39,13 +39,13 @@
       <tr>
         <th>Entries Accepted:</th>
         <td>
-          June 14-28, 2013 (<strong>Note:</strong> Sun King closes at
-          7 pm on June 28)
+          <strong>Friday, June 14,</strong> through <strong>Friday,
+            June 28, 2013 at 7 pm EDT</strong>
         </td>
       </tr>
       <tr>
         <th>Entry Registration Online:</th>
-        <td><em>not yet open</em></td>
+        <td><em>available June 14</em></td>
       </tr>
       <tr><th>Entry Requirements:</th><td>three (3) bottles</td></tr>
       <tr>
@@ -54,15 +54,24 @@
       </tr>
       <tr>
         <th>Judging:</th>
-        <td>July 12-13, 2013</td>
+        <td>
+          <strong>[% date1 %], [% year %],</strong> and <strong>[% date2 %],
+          [% year %]</strong>
+        </td>
       </tr>
       <tr>
         <th>Judge/Steward Registration:</th>
-        <td><em>not yet open</em></td></tr>
+        <td>
+          <a href="/register">available now&mdash;proceed to
+          registration</a>
+        </td>
+      </tr>
       <tr>
         <th>Judging Location:</th>
         <td>
-          <em>TBA</em>
+          <a href="http://www.in.gov/statefair/fairgrounds/venues/blue_ribbon_pav.html">Marsh
+            Blue Ribbon Pavilion</a>,
+          <a href="/maps">Indiana State Fairgrounds</a>
         </td>
       </tr>
       <tr>
