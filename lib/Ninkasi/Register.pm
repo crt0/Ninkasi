@@ -82,7 +82,7 @@ sub log_request {
     my $log_file = $config->log_file();
     untaint $log_file;
     if (open LOG, ">>$log_file") {
-        print LOG time2str( '%b %d %T ', time() ), $ENV{REMOTE_ADDR}, ': ',
+        print LOG time2str( '%Y-%m-%d %T ', time() ), $ENV{REMOTE_ADDR}, ': ',
                   join(':', map {
                                 my $value = $column->{$_};
                                 $value =~ s/:/%3a/g;
