@@ -5,7 +5,7 @@ AuthType       Basic
 AuthUserFile   /home/httpd/vhosts/brewerscup.org/share/ninkasi/htpasswd
 DirectoryIndex judge
 Order          Allow,Deny
-Require        user ajk anita tom mike john
+Require        user ajk anita tom mike john nathan
 Satisfy        any
 
 Options ExecCGI SymLinksIfOwnerMatch
