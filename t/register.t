@@ -173,9 +173,9 @@ for up-to-the-minute information on the competition.  Thanks!
 EOF
 
 # test log file
-open LOG, 't/log' or die "t/log: $!";
+open my $log_handle, 't/log' or die "t/log: $!";
 my ($last_line);
-while (my $line = <LOG>) {
+while (my $line = <$log_handle>) {
     $last_line = $line;
 }
 like $last_line, qr/
