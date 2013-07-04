@@ -306,6 +306,8 @@ sub transform {
 
         # determine role
         ( $argument->{role} = lc $argument->{submit} ) =~ s/register to //;
+
+        # return error page if this role is disabled
         if ( $disabled_value && $argument->{role} eq $disabled_value ) {
             die closed_disabled $argument->{role};
         }
@@ -318,7 +320,8 @@ sub transform {
 
         # mail confirmation & coordinator notifications unless testing
         if ( !$config->test_server_root() ) {
-            my $coordinator_address = $config->get( $argument->{role} . '_coordinator' );
+            my $coordinator_address = $config->get( $argument->{role}
+                                                    . '_coordinator' );
             eval {
                 mail_from_template {
                     form       => $argument,
