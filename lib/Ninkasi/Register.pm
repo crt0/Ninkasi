@@ -250,7 +250,8 @@ sub store {
     return;
 }
 
-sub closed_error {
+sub closed_disabled {
+    my $role = ucfirst shift || 'Volunteer';
     my ( $month, $year ) = (localtime)[4 .. 5];
     $year += 1900;
     my ( $status, $when ) = $month < 6
@@ -259,15 +260,15 @@ sub closed_error {
                             ;
     return {
         message => <<EOF,
-Volunteer registration has $status for $year.  Please check back $when
+$role registration has $status for $year.  Please check back $when
 to register!
 EOF
         status  => 403,
-        title   => 'Brewers&#8217; Cup Registration Down',
+        title   => 'Brewers&#8217; Cup Registration Closed',
     };
 }
 
-sub down_error {
+sub down_disabled {
     return {
         message => <<EOF,
 The volunteer registration system is temporarily unavailable.  Please
@@ -283,22 +284,31 @@ sub transform {
 
     # if app is disabled, display error card and exit
     my $config = Ninkasi::Config->new();
-    my $disabled_template = $config->disabled();
-    if ($disabled_template) {
+    my $disabled_value = $config->disabled();
+    my @disabled_variables = ();
+    if ($disabled_value) {
         no strict 'refs';
-        my $error_func = $disabled_template . '_error';
-        die $error_func->();
+        my $disabled_func = $disabled_value . '_disabled';
+        if ( defined &$disabled_func ) {
+            die $disabled_func->();
+        } else {
+            @disabled_variables = ( disabled => $disabled_value );
+        }
     }
     my @template_defaults = (
         categories => \@Ninkasi::Category::CATEGORIES,
         form       => $argument,
         ranks      => \@Ninkasi::Judge::RANKS,
+        @disabled_variables
     );
 
     if ( $argument->{-number_of_options} ) {
 
         # determine role
         ( $argument->{role} = lc $argument->{submit} ) =~ s/register to //;
+        if ( $disabled_value && $argument->{role} eq $disabled_value ) {
+            die closed_disabled $argument->{role};
+        }
 
         # store volunteer data
         eval { store $argument };

@@ -3,7 +3,9 @@
 use strict;
 use warnings;
 
-use Test::More tests => 138;
+use Fatal qw/open close/;
+
+use Test::More tests => 145;
 
 use Apache::TestConfig;
 use Ninkasi::Config;
@@ -502,3 +504,77 @@ ok $mech->success();
 $mech->content_lacks( 'You must have a valid BJCP id or be a '
                       . 'professional brewer to judge',
                       'pro brewers should not receive qualifications error message' );
+
+# save original config
+my $config_handle;
+my $original_config = '';
+my $config_file = $ninkasi_config->get('config_file');
+eval { open $config_handle, $config_file };
+if (!$@) {
+    local $/;
+    $original_config = <$config_handle>;
+    close $config_handle;
+}
+
+# disable registration entirely
+open $config_handle, '>>', $config_file;
+$config_handle->print( "disabled = closed\n" );
+$config_handle->close();
+$mech->get($form_url);
+is $mech->status(), 403;
+
+# disable just judge registration
+open $config_handle, '>', $config_file;
+$config_handle->print( $original_config, "disabled = judge\n" );
+$config_handle->close();
+$mech->get_ok($form_url);
+$mech->content_like(
+    qr{no\ longer\ in\ need\ of\ judges.*disabled="disabled"\s+
+       value="Register\ to\ Judge"}msx,
+    'warning at top, plus judge registration button disabled'
+);
+
+# try to submit judge form anyway
+$mech->get_ok($form_url);
+$mech->form_number(2);
+$mech->set_fields(
+    address             => '123 Fake Street',
+    bjcp_id             => 'none',
+    city                => 'Springfield',
+    competitions_judged => 10,
+    email1              => 'ninkasi@ajk.name',
+    email2              => 'Xninkasi@ajk.name',
+    first_name          => 'Andrew',
+    session1            => 1,
+    session3            => 1,
+    last_name           => 'Korty',
+    phone_day           => '123-456-7890',
+    phone_evening       => '123-456-7890',
+    pro_brewer          => 1,
+    rank                => 50,
+    state               => '--',
+    submit              => 'Register to Judge',
+    zip                 => '12345',
+);
+$mech->click_button( value => 'Register to Judge' );
+ok !$mech->success(), 'prevent submission of disabled judge form';
+
+# disable just steward registration
+open $config_handle, '>', $config_file;
+$config_handle->print( $original_config, "disabled = steward\n" );
+$config_handle->close();
+$mech->get_ok($form_url);
+$mech->content_like(
+    qr{no\ longer\ in\ need\ of\ stewards.*disabled="disabled"\s+
+       value="Register\ to\ Steward"}msx,
+    'warning at top, plus steward registration button disabled'
+);
+
+# restore config
+if ($original_config) {
+    open $config_handle, '>', $config_file;
+    $config_handle->print( $original_config );
+    $config_handle->close();
+} else {
+    unlink $config_file;
+}

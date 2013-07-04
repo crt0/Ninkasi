@@ -53,6 +53,12 @@
 [% END -%]
 </div>
 [% END -%]
+[% IF disabled -%]
+<div class="error">
+We're no longer in need of [% disabled %]s.  If you were signing up to
+[% disabled %], please try back next year!
+</div>
+[% END -%]
 <div class="form_instructions">All fields are required.</div>
 <h3>Judge and Steward Information</h3>
 <form action="register" method="post">
@@ -172,13 +178,21 @@
       <tr>
 	<td>
           <input name="submit" type="submit"
+                 [% IF disabled == 'steward' -%]
+                    disabled="disabled"
+                 [% END -%]
                  value="Register to Steward"
                  style="font-size: 18pt; font-weight: bold">
         </td>
 	<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
 	<td>
-          After submitting you must see the <strong>Thank you</strong>
-	  page to be sure we received your information.
+          [% IF disabled == 'steward' -%]
+            We're no longer in need of stewards.  If you were signing
+            up to steward, please try back next year!
+          [% ELSE -%]
+            After submitting you must see the <strong>Thank you</strong>
+            page to be sure we received your information.
+          [% END -%]
         </td>
       </tr>
     </table>
@@ -302,13 +316,21 @@
       <tr>
 	<td>
           <input name="submit" type="submit"
+                 [% IF disabled == 'judge' -%]
+                    disabled="disabled"
+                 [% END -%]
                  value="Register to Judge"
                  style="font-size: 18pt; font-weight: bold">
         </td>
 	<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
 	<td>
-          After submitting you must see the <strong>Thank you</strong>
-	  page to be sure we received your information.
+          [% IF disabled == 'judge' -%]
+             We're no longer in need of judges.  If you were signing
+             up to judge, please try back next year!
+          [% ELSE -%]
+             After submitting you must see the <strong>Thank you</strong>
+  	     page to be sure we received your information.
+          [% END -%]
         </td>
       </tr>
     </table>
