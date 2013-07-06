@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 82;
+use Test::More tests => 87;
 
 use Apache::TestConfig;
 use Data::UUID;
