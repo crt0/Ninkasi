@@ -114,11 +114,13 @@ sub validate {
     }
 
     # judges must have a valid BJCP id or be a pro
-    if ( $column->{submit} eq 'Register to Judge'
-         && $column->{bjcp_id} !~ /^[a-z]\d{4}$/i && !$column->{pro_brewer} ) {
-        push @error_messages, 'You must have a valid BJCP id or be a '
-                              . 'professional brewer to judge';
-        @error_field{ qw/bjcp_id pro/ } = ( 1, 1 );
+    if ( $column->{submit} eq 'Register to Judge' ) {
+        substr( $column->{bjcp_id}, 1 ) =~ tr/oO/0/; # fix user error
+        if ( $column->{bjcp_id} !~ /^[a-z]\d{4}$/i && !$column->{pro_brewer} ) {
+            push @error_messages, 'You must have a valid BJCP id or be a '
+                                  . 'professional brewer to judge';
+            @error_field{ qw/bjcp_id pro/ } = ( 1, 1 );
+        }
     }
 
     if ($column->{email1} ne $column->{email2}) {

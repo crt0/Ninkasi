@@ -866,3 +866,40 @@ $mech->content_like(
        <td>08:\ English\ Pale\ Ale\ \(pro\)</td>}msx,
     'judge appears in public roster view'
 );
+
+# letter O should be converted to numeral 0 in BJCP id
+$mech->get_ok($signup_url);
+$mech->submit_form_ok( {
+    with_fields => {
+        address             => '4996 Eighth',
+        bjcp_id             => 'Z999O', # letter O
+        category02          => 'prefer',
+        category08          => 'entry',
+        category10          => 'entry',
+        category14          => 'prefer',
+        category15          => 'entry',
+        category20          => 'prefer not',
+        category21          => 'prefer',
+        city                => 'Boise',
+        competitions_judged => 10,
+        email1              => 'ninkasi@ajk.name',
+        email2              => 'ninkasi@ajk.name',
+        first_name          => 'Leann',
+        session1            => 1,
+        session2            => 1,
+        last_name           => 'Underhill2',
+        phone_day           => '628-268-5498',
+        phone_evening       => '628-803-9648',
+        rank                => 50,
+        state               => 'ID',
+        zip                 => '83730',
+    }
+} );
+$mech->content_lacks( 'You must have a valid BJCP id or be a '
+                      . 'professional brewer to judge',
+                      'letter O should convert to numeral 0' );
+$mech->get_ok("$url_base/manage/judge/");
+$mech->follow_link_ok( { text_regex => qr/Underhill2/ } );
+$mech->content_like( qr{<th>BJCP\ ID:</th>\s+
+                        <td>Z9990</td>}msx # numeral 0
+);
