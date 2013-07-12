@@ -82,7 +82,7 @@ sub log_request {
     my $log_file = $config->log_file();
     untaint $log_file;
     if (open LOG, ">>$log_file") {
-        print LOG time2str( '%Y-%m-%d %T ', time() ), $ENV{REMOTE_ADDR}, ': ',
+        print LOG time2str( '%Y-%m-%d %T', time() ), $ENV{REMOTE_ADDR}, ': ',
                   join(':', map {
                                 my $value = $column->{$_};
                                 $value =~ s/:/%3a/g;
@@ -288,7 +288,7 @@ sub transform {
     my $config = Ninkasi::Config->new();
     my $disabled_value = $config->disabled();
     my @disabled_variables = ();
-    if ($disabled_value) {
+    if ( $disabled_value && !$argument->{-manage} ) {
         no strict 'refs';
         my $disabled_func = $disabled_value . '_disabled';
         if ( defined &$disabled_func ) {
@@ -310,7 +310,8 @@ sub transform {
         ( $argument->{role} = lc $argument->{submit} ) =~ s/register to //;
 
         # return error page if this role is disabled
-        if ( $disabled_value && $argument->{role} eq $disabled_value ) {
+        if ( $disabled_value && !$argument->{-manage}
+             && $argument->{role} eq $disabled_value ) {
             die closed_disabled $argument->{role};
         }
 

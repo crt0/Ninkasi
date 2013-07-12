@@ -53,7 +53,12 @@
 [% END -%]
 </div>
 [% END -%]
-[% IF disabled -%]
+[% SWITCH disabled -%]
+   [% CASE 'closed' -%]
+<div class="error">
+Volunteer registration is closed.
+</div>
+   [% CASE ['judge', 'steward'] -%]
 <div class="error">
 We're no longer in need of [% disabled %]s.  If you were signing up to
 [% disabled %], please try back next year!

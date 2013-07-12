@@ -29,11 +29,12 @@ sub get_arguments {
     } $self->param();
     $option{-number_of_options} = keys %option;
     $option{format} ||= 'html';
+    $option{-manage} = $manage;
 
     # redirect if no arguments and no trailing slash
     if (!@positional) {
         my $url = $self->url( -path_info => 1 );
-        if ( $url && $manage && $url !~ m{/$} ) {
+        if ( $url && $manage && $url !~ m{/$} && $url !~ /\/register$/ ) {
 
             # all requests go through /cgi; remove that from URL
             $url =~ s{/cgi/}{/};

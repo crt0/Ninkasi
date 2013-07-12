@@ -5,7 +5,7 @@ use warnings;
 
 use Fatal qw/open close/;
 
-use Test::More tests => 145;
+use Test::More tests => 146;
 
 use Apache::TestConfig;
 use Ninkasi::Config;
@@ -517,11 +517,13 @@ if (!$@) {
 }
 
 # disable registration entirely
+my $admin_url = "$url_base/manage/register";
 open $config_handle, '>>', $config_file;
 $config_handle->print( "disabled = closed\n" );
 $config_handle->close();
 $mech->get($form_url);
 is $mech->status(), 403;
+$mech->get_ok($admin_url);
 
 # disable just judge registration
 open $config_handle, '>', $config_file;
