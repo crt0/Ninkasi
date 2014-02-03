@@ -34,8 +34,8 @@ my $build = MyBuilder->new(
     create_readme      => 1,
     license            => 'perl',
     module_name        => 'Ninkasi',
-    ninkasi_date1      => 'Friday, July 12',
-    ninkasi_date2      => 'Saturday, July 13',
+    ninkasi_date1      => 'Friday, July 11',
+    ninkasi_date2      => 'Saturday, July 12',
 );
 
 $build->require_external_program('groff' );
