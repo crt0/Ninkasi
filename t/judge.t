@@ -16,11 +16,11 @@ use Test::WWW::Mechanize;
 
 Ninkasi::Table->initialize_database( { unlink => 1 } );
 
-my $test_config = Apache::TestConfig->new();
-my $url_base = join '', $test_config->{vars}{scheme}, '://',
-                        $test_config->hostport();
+our $test_config = Apache::TestConfig->new();
+our $url_base = join '', $test_config->{vars}{scheme}, '://',
+                         $test_config->hostport();
 
-my $mech = Test::WWW::Mechanize->new();
+our $mech = Test::WWW::Mechanize->new();
 our $test_object = Ninkasi::Test->new( mech => $mech );
 
 # with no flights configured yet, looking for one should cause a 404
