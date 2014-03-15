@@ -231,7 +231,8 @@ sub store {
         while (my ($name, $value) = each %$column) {
             my ($session) = $name =~ /^session(\d+)$/ or next;
             $assignment_table->add( {
-                flight    => $value ? 0 : -1,
+                assigned  => 0,
+                available => !!$value,
                 session   => $session,
                 volunteer => $volunteer_id,
             } );

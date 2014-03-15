@@ -16,6 +16,7 @@ __PACKAGE__->Table_Name('assignment');
 __PACKAGE__->Column_Names( [ qw/flight session volunteer/ ] );
 __PACKAGE__->Schema(<<'EOF');
 CREATE TABLE assignment (
+    assigned  INTEGER DEFAULT 0,
     flight    TEXT,
     session   INTEGER,
     volunteer INTEGER
@@ -32,16 +33,15 @@ sub fetch {
     my $assignment = Ninkasi::Assignment->new();
     my ($sth, $result) = $assignment->bind_hash( {
         bind_values => [$judge_id],
-        columns     => [qw/flight session/],
+        columns     => [qw/flight session assigned/],
         where       => 'volunteer = ?',
     } );
 
     # walk the rows, building a list ordered by flight
     my @assignment_list = ('N/A') x 4;
     while ( $sth->fetch() ) {
-        # treat category value 0 as unassigned
         $assignment_list[ $result->{session} ]
-            = $result->{flight} ? $result->{flight} : '';
+            = $result->{assigned} ? $result->{flight} : '';
     }
 
     return \@assignment_list;
@@ -101,7 +101,7 @@ volunteer.rowid = 'constraint'.volunteer
     AND flight.rowid = flight_category.flight
     AND 'constraint'.category = flight_category.category
     AND flight.number = ?
-    AND volunteer.rowid IN (SELECT volunteer FROM assignment WHERE flight = 0)
+    AND volunteer.rowid IN (SELECT volunteer FROM assignment WHERE assigned = 0)
     AND volunteer.rowid NOT IN (SELECT volunteer FROM assignment WHERE flight = ?)
     AND volunteer.role = 'judge'
 EOF
@@ -160,12 +160,15 @@ sub update_assignment {
 
     my $dbh = Ninkasi::Assignment->Database_Handle();
     my @columns = qw/volunteer session/;
+    my $assigned = defined $flight_number;
     foreach my $assignment (@$assignments) {
         my $constraint = deserialize $assignment;
         my $sql = <<EOF;
-UPDATE assignment SET flight = ? WHERE volunteer = ? AND session = ?
+UPDATE assignment SET flight = ?, assigned = ?
+                  WHERE volunteer = ? AND session = ?
 EOF
-        $dbh->do($sql, {}, $flight_number, @$constraint{@columns});
+        $dbh->do( $sql, {}, $flight_number, defined $flight_number ? 1 : 0,
+                  @$constraint{@columns} );
     }
 }
 
@@ -228,7 +231,7 @@ sub print_roster {
                 = $assignment_table->bind_hash( {
                 bind_values => [ $volunteer->{rowid} ],
                 columns     => ['session'],
-                where       => 'volunteer = ? AND flight = 0',
+                where       => 'volunteer = ? AND assigned = 0',
             } );
             while ( $assignment_handle->fetch() ) {
                 delete $assignments[ $result->{session} ];
@@ -380,7 +383,7 @@ sub transform {
         update_assignment \@assign  , $flight_number;
     }
     if (@unassign) {
-        update_assignment \@unassign, 0;
+        update_assignment \@unassign, undef;
     }
 
     # process the template, passing it a function to fetch judge data
