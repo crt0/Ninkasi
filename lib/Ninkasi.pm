@@ -8,6 +8,7 @@ use Carp;
 use Getopt::Long;
 use Ninkasi::CGI;
 use Ninkasi::CSV;
+use Ninkasi::Config;
 use Ninkasi::Template;
 use Readonly;
 use Taint::Util;
@@ -64,6 +65,13 @@ sub die_with_error_page {
 
 sub render {
     my ($class) = @_;
+
+    # turn on debug mode if requested
+    my $debug_level = Ninkasi::Config->new()->dlevel();
+    if ($debug_level) {
+        $ENV{Smart_Comments} = join ':', map { '#' x ( $_ + 2 ) }
+                                         ( 1 .. $debug_level );
+    }
 
     # determine whether we're a CGI or a command line utility
     my $environment_class = exists $ENV{REQUEST_METHOD} ? 'Ninkasi::CGI'
