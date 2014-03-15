@@ -16,7 +16,8 @@ Readonly our %USER_DEFAULT => (
     authentication_cgi  => 'authenticate',
     judge_coordinator   => 'ajk@ajk.name',
     maintainer_address  => 'ninkasi@ajk.name',
-    path                => $ENV{HOME} . '/bin:/opt/local/bin:/usr/local/bin:/usr/bin:/bin',
+    path                => exists $ENV{HOME} ? "$ENV{HOME}/bin:" : ''
+                           . '/opt/local/bin:/usr/local/bin:/usr/bin:/bin',
     steward_coordinator => 'ajk@ajk.name',
 );
 

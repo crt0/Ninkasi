@@ -114,7 +114,8 @@ sub validate {
     }
 
     # judges must have a valid BJCP id or be a pro
-    if ( $column->{submit} eq 'Register to Judge' ) {
+    if ( exists $column->{submit}
+         && $column->{submit} eq 'Register to Judge' ) {
         substr( $column->{bjcp_id}, 1 ) =~ tr/oO/0/; # fix user error
         if ( $column->{bjcp_id} !~ /^[a-z]\d{4}$/i && !$column->{pro_brewer} ) {
             push @error_messages, 'You must have a valid BJCP id or be a '
@@ -139,6 +140,7 @@ sub validate {
     } if @error_messages;
 
     foreach my $column_value (values %$column) {
+        next if !$column_value;
         $column_value =~ s/^\s+//;
         $column_value =~ s/\s+$//;
     }

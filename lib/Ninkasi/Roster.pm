@@ -42,7 +42,8 @@ EOF
     }
 
     # you have to have the random URL to get to this page
-    if ( $credential ne $argument->{-positional}[0] ) {
+    if ( !$argument->{-positional}[0]
+         || $credential ne $argument->{-positional}[0] ) {
         die {
             message => "You don't have access to this page",
             status  => 403,
