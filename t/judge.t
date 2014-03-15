@@ -11,6 +11,7 @@ use File::LibMagic qw/:easy/;
 use File::Spec;
 use Ninkasi::Config;
 use Ninkasi::Table;
+use Ninkasi::Test;
 use Test::WWW::Mechanize;
 
 Ninkasi::Table->initialize_database( { unlink => 1 } );
@@ -20,6 +21,7 @@ my $url_base = join '', $test_config->{vars}{scheme}, '://',
                         $test_config->hostport();
 
 my $mech = Test::WWW::Mechanize->new();
+our $test_object = Ninkasi::Test->new( mech => $mech );
 
 # with no flights configured yet, looking for one should cause a 404
 my $lookup_url = "$url_base/manage/assignment/08";
