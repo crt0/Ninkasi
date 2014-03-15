@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 87;
+use Test::More tests => 105;
 
 use Apache::TestConfig;
 use Data::UUID;
@@ -22,6 +22,207 @@ our $url_base = join '', $test_config->{vars}{scheme}, '://',
 
 our $mech = Test::WWW::Mechanize->new();
 our $test_object = Ninkasi::Test->new( mech => $mech );
+
+sub test_assignments {
+    my ($argument) = @_;
+
+    # unpack arguments
+    my $categories         = $argument->{categories        };
+    my $flight_description = $argument->{flight_description};
+    my $flight_name        = $argument->{flight_name       };
+    my $pro                = $argument->{pro               };
+    my $row                = $argument->{row               };
+    my $quoted_categories  = quotemeta $categories;
+    my $quoted_description = quotemeta $flight_description;
+
+    # test assignment view
+    my $lookup_url = "$url_base/manage/assignment/$flight_name";
+    $mech->get_ok($lookup_url);
+    $mech->content_like(
+        qr{<td><a\ href="/manage/judge/\d+">Mayers,\ Liam</a></td>\s+
+           <td>Novice</td>\s+
+           <td>\s+
+           <input\ name="assign"\s+
+           type="checkbox"\s+
+           value="volunteer-2_session-1"\ />\s+
+           </td>\s+
+           <td>\s+
+           <input\ name="assign"\s+
+           type="checkbox"\s+
+           value="volunteer-2_session-2"\ />\s+
+           </td>\s+
+           <td>\s+
+           <input\ name="assign"\s+
+           type="checkbox"\s+
+           value="volunteer-2_session-3"\ />\s+
+           </td>\s+
+           <td>2</td>\s+
+           <td>Y</td>\s+
+           <td>whatever</td>}msx,
+        "flight $flight_name assignment view",
+    );
+    my $pro_method = $pro ? 'content_lacks' : 'content_contains';
+    $mech->$pro_method( 'Reynoso, Greggory',
+                        'pro judge ', $pro ? 'in' : '',
+                        "eligible for flight $flight_name" );
+    $mech->content_contains(
+        join( '', "<title>Flight $flight_name, $flight_description (",
+                  $pro ? 'Pro' : 'Homebrew', ")</title>" ),
+        "flight $flight_name assignment view title" );
+
+    # test judge link
+    $mech->follow_link_ok( { text_regex => qr/Mayers, Liam/ } );
+    $mech->content_like( qr{<h2>Liam Mayers</h2>},
+                         'individual judge view heading' );
+    $mech->content_like( qr{<title>Liam Mayers</title>},
+                         'individual judge view title' );
+    $mech->back();
+
+    # test assignment
+    $mech->form_number(2);
+    $mech->tick( assign => 'volunteer-2_session-3', 1 );
+    $mech->tick( assign => 'volunteer-4_session-3', 1 );
+    $mech->submit_form_ok();
+    $mech->content_like(
+        qr{<td><a\ href="/manage/judge/\d+">Mayers,\ Liam</a></td>\s+
+           <td>Novice</td>\s+
+           <td>\s+
+           </td>\s+
+           <td>\s+
+           </td>\s+
+           <td>\s+
+           <input\ name="unassign"\s+
+           type="checkbox"\s+
+           value="volunteer-2_session-3"\ />\s+
+           </td>\s+
+           <td>2</td>\s+
+           <td>Y</td>\s+
+           <td>whatever</td>}msx,
+        'Liam moved to top',
+    );
+    $mech->content_like(
+        qr{<td><a\ href="/manage/judge/\d+">\|&lt;iefer,\ Angelina</a></td>\s+
+           <td>Certified</td>\s+
+           <td>\s+
+           </td>\s+
+           <td>\s+
+           N/A</td>\s+
+           <td>\s+
+           <input\ name="unassign"\s+
+           type="checkbox"\s+
+           value="volunteer-4_session-3"\ />\s+
+           </td>\s+
+           <td>10</td>\s+
+           <td>N</td>\s+
+           <td>whatever</td>}msx,
+        'Angelina moved to top',
+    );
+
+    $mech->content_unlike(
+        qr{<td><a\ href="\d+">Mayers,\ Liam</a></td>\s+
+           <td>Novice</td>\s+
+           <td>\s+
+           <input\ name="assign"\s+
+           type="checkbox"\s+
+           value="volunteer-2_session-1"\ />\s+
+           </td>\s+
+           <td>\s+
+           <input\ name="assign"\s+
+           type="checkbox"\s+
+           value="volunteer-2_session-2"\ />\s+
+           </td>\s+
+           <td>\s+
+           <input\ name="assign"\s+
+           type="checkbox"\s+
+           value="volunteer-2_session-3"\ />\s+
+           </td>\s+
+           <td>2</td>\s+
+           <td>Y</td>\s+
+           <td>whatever</td>}msx,
+        "assigned judge didn't stay on bottom",
+    );
+
+    # test assigned judges on flight page
+    $lookup_url = "$url_base/manage/flight/";
+    $mech->get_ok($lookup_url);
+    my $checkbox_state = $pro ? 'checked="checked"\s+' : '';
+    my $row_parity = $row % 2 ? 'odd' : 'even';
+    $mech->content_like(
+        qr{<tr\ class="$row_parity">\s+
+           <td>\s+
+           <input\ name="number_$row"\s+
+           size="10"\s+
+           value="$flight_name"\ />\s+
+           </td>\s+
+           <td>\s+
+           <input\ name="category_$row"\s+
+           size="10"\s+
+           value="$quoted_categories"\ />\s+
+           </td>\s+
+           <td>\s+
+           <input\ name="pro_$row"\s+
+           $checkbox_state type="checkbox"\s+
+           value="1"\ />\s+
+           </td>\s+
+           <td>\s+
+           <input\ name="description_$row"\s+
+           size="40"\s+
+           value="$quoted_description"\ />\s+
+           </td>\s+
+           <td>\s+
+           <em>Angelina\ \|&lt;iefer</em>,\ Liam\ Mayers\s+
+           <a\ href="/manage/assignment/$flight_name">edit</a>\s+
+           </td>\s+
+           </tr>}msx,
+        "assigned judges listed on flight page for flight $flight_name",
+    );
+
+    # test unassignment
+    $mech->follow_link_ok( { n => 2, text => 'edit' } );
+    $test_object->dump_page();
+    $mech->tick( unassign => 'volunteer-2_session-3', 1 );
+    $mech->tick( unassign => 'volunteer-4_session-3', 1 );
+    $mech->submit_form_ok();
+    $mech->content_like(
+        qr{<td><a\ href="/manage/judge/\d+">Mayers,\ Liam</a></td>\s+
+           <td>Novice</td>\s+
+           <td>\s+
+           <input\ name="assign"\s+
+           type="checkbox"\s+
+           value="volunteer-2_session-1"\ />\s+
+           </td>\s+
+           <td>\s+
+           <input\ name="assign"\s+
+           type="checkbox"\s+
+           value="volunteer-2_session-2"\ />\s+
+           </td>\s+
+           <td>\s+
+           <input\ name="assign"\s+
+           type="checkbox"\s+
+           value="volunteer-2_session-3"\ />\s+
+           </td>\s+
+           <td>2</td>\s+
+           <td>Y</td>\s+
+           <td>whatever</td>}msx,
+        'unassigned judge moved to bottom',
+    );
+    $mech->content_unlike(
+        qr{<td><a\ href="\d+">Mayers,\ Liam</a></td>\s+
+           <td>Novice</td>\s+
+           <td>\s+</td>\s+
+           <td>\s+</td>\s+
+           <td>\s+
+           <input\ name="unassign"\s+
+           type="checkbox"\s+
+           value="volunteer-2_session-3"\ />\s+
+           </td>\s+
+           <td>2</td>\s+
+           <td>Y</td>\s+
+           <td>whatever</td>}msx,
+        "unassigned judge didn't stay at top",
+    );
+    $mech->back();
+}
 
 # with no flights configured yet, looking for one should cause a 404
 my $lookup_url = "$url_base/manage/assignment/08";
@@ -225,6 +426,44 @@ $mech->content_like(
     'flight 21 got added',
 );
 
+# add a row for category 0
+$mech->submit_form_ok( {
+    button      => 'save',
+    with_fields => {
+        number_9      => 'IN',
+        category_9    => 0,
+        description_9 => 'Indiana Indigenous Beer',
+    }
+} );
+$mech->content_like(
+    qr{<tr\ class="odd">\s+
+       <td>\s+
+       <input\ name="number_9"\s+
+               size="10"\s+
+               value="IN"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="category_9"\s+
+               size="10"\s+
+               value="0"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="pro_9"\s+
+               type="checkbox"\s+
+               value="1"\ />\s+
+       </td>\s+
+       <td>\s+
+       <input\ name="description_9"\s+
+               size="40"\s+
+               value="Indiana\ Indigenous\ Beer"\ />\s+
+       </td>\s+
+       <td>\s+
+       <a\ href="/manage/assignment/IN">edit</a>\s+
+       </td>\s+
+       </tr>}msx,
+    'flight IN got added',
+);
+
 my $signup_url = "$url_base/register";
 $mech->get_ok($signup_url);
 
@@ -380,7 +619,8 @@ $mech->content_like(
        <td><a\ href="/manage/assignment/20">20</a></td>\s+
        <td><a\ href="/manage/assignment/08">08</a>,\s+
        <a\ href="/manage/assignment/14a">14a</a>,\s+
-       <a\ href="/manage/assignment/14b">14b</a></td>\s+
+       <a\ href="/manage/assignment/14b">14b</a>,\s+
+       <a\ href="/manage/assignment/IN">IN</a></td>\s+
        <td><a\ href="/manage/assignment/02">02</a></td>}msx,
     'judge view',
 );
@@ -392,11 +632,11 @@ $mech->follow_link_ok( { text_regex => qr/csv/ } );
 is $mech->ct(), 'text/plain';
 $mech->content_is( <<EOF, 'CSV judge view' );
 "Name","Rank","Fri. PM","Sat. AM","Sat. PM","Comps Judged","Pro Brewer?","Entries","Prefers Not","Whatever","Prefers"
-"Carrera, Lyndsey","Certified","","N/A","","10","N","10, 15, 21","14a, 14b, 20","08","02"
-"Mayers, Liam","Novice","","","","2","Y","","","02, 08, 10, 14a, 14b, 15, 20, 21",""
-"Reynoso, Greggory","Certified","","N/A","","10","Y","08","20","10, 14a, 14b, 15, 21","02"
-"Underhill, Leann","Certified","","","N/A","10","N","10, 15","20","08","02, 14a, 14b, 21"
-"|<iefer, Angelina","Certified","","N/A","","10","N","10, 15, 21","20","08, 14a, 14b","02"
+"Carrera, Lyndsey","Certified","","N/A","","10","N","10, 15, 21","14a, 14b, 20","08, IN","02"
+"Mayers, Liam","Novice","","","","2","Y","","","02, 08, 10, 14a, 14b, 15, 20, 21, IN",""
+"Reynoso, Greggory","Certified","","N/A","","10","Y","08","20","10, 14a, 14b, 15, 21, IN","02"
+"Underhill, Leann","Certified","","","N/A","10","N","10, 15","20","08, IN","02, 14a, 14b, 21"
+"|<iefer, Angelina","Certified","","N/A","","10","N","10, 15, 21","20","08, 14a, 14b, IN","02"
 EOF
 
 # test roster
@@ -656,9 +896,22 @@ $mech->content_unlike(
        <td>whatever</td>}msx,
     "unassigned judge didn't stay at top",
 );
+test_assignments {
+    flight_name        => '08',
+    categories         => '8',
+    flight_description => 'English Pale Ale',
+    pro                => 1,
+    row                => 2,
+};
+test_assignments {
+    flight_name        => 'IN',
+    categories         => '0',
+    flight_description => 'Indiana Indigenous Beer',
+    pro                => 0,
+    row                => 9,
+};
 
 # test table card (just make sure it's a PDF)
-$mech->back();
 $mech->follow_link_ok( { text_regex => qr/print/ } );
 is $mech->ct(), 'application/pdf';
 like MagicBuffer( $mech->content() ), qr/PDF/;
@@ -675,9 +928,9 @@ $mech->get_ok($lookup_url);
 $mech->submit_form_ok( {
     button => 'save',
     with_fields => {
-        category_9    => '20, 21',
-        number_9      => 26,
-        description_9 => 'Fruit Beer / SHV',
+        category_10    => '20, 21',
+        number_10      => 26,
+        description_10 => 'Fruit Beer / SHV',
     },
 } );
 $mech->content_like(
