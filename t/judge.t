@@ -310,7 +310,7 @@ $mech->content_like(
 
 # add flights
 my %data = (
-    category    => [ 2, 8, 10, 14,    14,    15, 20 ],
+    category    => [ 2, 8, 10, 14, 14, 15, 20 ],
     number      => [ qw/02 08 10 14b 14a 15 20/ ],
     pro         => [ undef, 1, (undef) x 5 ],
     description => [
