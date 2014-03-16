@@ -902,6 +902,13 @@ $lookup_url = "$url_base/manage/roster/$credential";
 $mech->get($lookup_url);
 is $mech->status(), 403;
 
+# assign a judge to test roster view
+$lookup_url = "$url_base/manage/assignment/08";
+$mech->get_ok($lookup_url);
+$mech->form_number(2);
+$mech->tick( assign => 'volunteer-4_session-3', 1 );
+$mech->submit_form_ok();
+
 open my $ninkasi_config, '>>', Ninkasi::Config->new()->get('config_file');
 $ninkasi_config->print( join '', 'roster = ', $credential, "\n" );
 $ninkasi_config->close();
