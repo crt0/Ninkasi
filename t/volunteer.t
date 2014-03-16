@@ -10,7 +10,7 @@ use Ninkasi::Test;
 
 our $test_object = Ninkasi::Test->new();
 our $mech = $test_object->mech();
-our $url_base = $test_object->url-base();
+our $url_base = $test_object->url_base();
 
 my $signup_url = "$url_base/register";
 sub register {
