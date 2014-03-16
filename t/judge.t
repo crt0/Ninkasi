@@ -30,7 +30,6 @@ sub test_assignments {
     my $categories         = $argument->{categories        };
     my $flight_description = $argument->{flight_description};
     my $flight_name        = $argument->{flight_name       };
-    my $pro                = $argument->{pro               };
     my $row                = $argument->{row               };
     my $quoted_categories  = quotemeta $categories;
     my $quoted_description = quotemeta $flight_description;
@@ -61,13 +60,10 @@ sub test_assignments {
            <td>whatever</td>}msx,
         "flight $flight_name assignment view",
     );
-    my $pro_method = $pro ? 'content_lacks' : 'content_contains';
-    $mech->$pro_method( 'Reynoso, Greggory',
-                        'pro judge ', $pro ? 'in' : '',
-                        "eligible for flight $flight_name" );
+    $mech->content_lacks( 'Reynoso, Greggory',
+                          'pro judge ineligible for flight $flight_name' );
     $mech->content_contains(
-        join( '', "<title>Flight $flight_name, $flight_description (",
-                  $pro ? 'Pro' : 'Homebrew', ")</title>" ),
+        "<title>Flight $flight_name, $flight_description (Pro)</title>",
         "flight $flight_name assignment view title" );
 
     # test judge link
@@ -145,7 +141,6 @@ sub test_assignments {
     # test assigned judges on flight page
     $lookup_url = "$url_base/manage/flight/";
     $mech->get_ok($lookup_url);
-    my $checkbox_state = $pro ? 'checked="checked"\s+' : '';
     my $row_parity = $row % 2 ? 'odd' : 'even';
     $mech->content_like(
         qr{<tr\ class="$row_parity">\s+
@@ -161,7 +156,8 @@ sub test_assignments {
            </td>\s+
            <td>\s+
            <input\ name="pro_$row"\s+
-           $checkbox_state type="checkbox"\s+
+           checked="checked"\s+
+           type="checkbox"\s+
            value="1"\ />\s+
            </td>\s+
            <td>\s+
@@ -178,8 +174,7 @@ sub test_assignments {
     );
 
     # test unassignment
-    $mech->follow_link_ok( { n => 2, text => 'edit' } );
-    $test_object->dump_page();
+    $mech->follow_link_ok( { url_regex => qr{assignment/$flight_name} } );
     $mech->tick( unassign => 'volunteer-2_session-3', 1 );
     $mech->tick( unassign => 'volunteer-4_session-3', 1 );
     $mech->submit_form_ok();
@@ -426,13 +421,14 @@ $mech->content_like(
     'flight 21 got added',
 );
 
-# add a row for category 0
+# add a row for category 99
 $mech->submit_form_ok( {
     button      => 'save',
     with_fields => {
         number_9      => 'IN',
-        category_9    => 0,
+        category_9    => 99,
         description_9 => 'Indiana Indigenous Beer',
+        pro_9         => 1,
     }
 } );
 $mech->content_like(
@@ -445,10 +441,11 @@ $mech->content_like(
        <td>\s+
        <input\ name="category_9"\s+
                size="10"\s+
-               value="0"\ />\s+
+               value="99"\ />\s+
        </td>\s+
        <td>\s+
        <input\ name="pro_9"\s+
+               checked="checked"\s+
                type="checkbox"\s+
                value="1"\ />\s+
        </td>\s+
@@ -478,6 +475,7 @@ $mech->submit_form_ok( {
         category15          => 'entry',
         category20          => 'prefer not',
         category21          => 'prefer',
+        category99          => 'entry',
         city                => 'Boise',
         competitions_judged => 10,
         email1              => 'ninkasi@ajk.name',
@@ -528,6 +526,7 @@ $mech->submit_form_ok( {
         category15          => 'entry',
         category20          => 'prefer not',
         category21          => 'entry',
+        category99          => 'entry',
         city                => 'Laredo',
         competitions_judged => 10,
         email1              => 'ninkasi@ajk.name',
@@ -557,6 +556,7 @@ $mech->submit_form_ok( {
         category15          => 'entry',
         category20          => 'prefer not',
         category21          => 'entry',
+        category99          => 'entry',
         city                => 'Daytona Beach',
         competitions_judged => 10,
         email1              => 'ninkasi@ajk.name',
@@ -585,6 +585,7 @@ $mech->submit_form_ok( {
         category15          => 'entry',
         category20          => 'prefer not',
         category21          => 'entry',
+        category99          => 'entry',
         city                => 'Simms',
         competitions_judged => 10,
         email1              => 'ninkasi@ajk.name',
@@ -634,7 +635,7 @@ $mech->content_is( <<EOF, 'CSV judge view' );
 "Name","Rank","Fri. PM","Sat. AM","Sat. PM","Comps Judged","Pro Brewer?","Entries","Prefers Not","Whatever","Prefers"
 "Carrera, Lyndsey","Certified","","N/A","","10","N","10, 15, 21","14a, 14b, 20","08, IN","02"
 "Mayers, Liam","Novice","","","","2","Y","","","02, 08, 10, 14a, 14b, 15, 20, 21, IN",""
-"Reynoso, Greggory","Certified","","N/A","","10","Y","08","20","10, 14a, 14b, 15, 21, IN","02"
+"Reynoso, Greggory","Certified","","N/A","","10","Y","08, IN","20","10, 14a, 14b, 15, 21","02"
 "Underhill, Leann","Certified","","","N/A","10","N","10, 15","20","08, IN","02, 14a, 14b, 21"
 "|<iefer, Angelina","Certified","","N/A","","10","N","10, 15, 21","20","08, 14a, 14b, IN","02"
 EOF
@@ -704,14 +705,12 @@ test_assignments {
     flight_name        => '08',
     categories         => '8',
     flight_description => 'English Pale Ale',
-    pro                => 1,
     row                => 2,
 };
 test_assignments {
     flight_name        => 'IN',
-    categories         => '0',
+    categories         => '99',
     flight_description => 'Indiana Indigenous Beer',
-    pro                => 0,
     row                => 9,
 };
 

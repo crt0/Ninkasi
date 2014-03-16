@@ -89,6 +89,7 @@ $mech->set_fields(
         category21          => 'entry',
         category22          => 'whatever',
         category23          => 'whatever',
+        category99          => 'whatever',
         city                => 'Springfield',
         competitions_judged => 10,
         email1              => 'ninkasi@ajk.name',
@@ -204,6 +205,7 @@ like $last_line, qr/
                      category21          = entry              :
                      category22          = whatever           :
                      category23          = whatever           :
+                     category99          = whatever           :
                      city                = Springfield        :
                      competitions_judged = 10                 :
                      email1              = ninkasi\@ajk\.name :
@@ -252,6 +254,7 @@ $mech->submit_form_ok( {
         category21          => 'entry',
         category22          => 'whatever',
         category23          => 'whatever',
+        category99          => 'whatever',
         city                => 'Springfield',
         competitions_judged => 10,
         email1              => 'ninkasi@ajk.name',
@@ -440,6 +443,7 @@ my %expected_constraint = (
     21 => $entry      ,
     22 => $whatever   ,
     23 => $whatever   ,
+    99 => $whatever   ,
 );
 
 my $rows_fetched = 0;

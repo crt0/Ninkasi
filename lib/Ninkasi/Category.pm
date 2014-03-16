@@ -39,6 +39,12 @@ foreach my $number (0..$#category_names) {
     };
 }
 
+push @CATEGORIES, {
+    field_name => 'category99',
+    name       => 'Indiana Indigenous Beer',
+    number     => 99,
+};
+
 1;
 
 __END__
