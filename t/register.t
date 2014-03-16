@@ -385,18 +385,20 @@ is $result->{ zip                 }, 12345              ;
 
 ($sth, $result) = $assignment->bind_hash( {
     bind_values => [$judge_id],
-    columns     => [qw/flight session/],
+    columns     => [ qw/assigned session/ ],
     order       => 'session',
     where       => 'volunteer = ?',
 } );
 
 ok $sth->fetch();
-is $result->{session}, 1;
-is $result->{flight }, 0;
+is $result->{ session  }, 1, '1st available session is 1';
+is $result->{ assigned }, 0,
+   'judge is not yet assigned for 1st available session';
 
 ok $sth->fetch();
-is $result->{session}, 3;
-is $result->{flight }, 0;
+is $result->{ session  }, 3, '2nd available session is 3';
+is $result->{ assigned }, 0,
+   'judge is not yet assigned for 2nd available session';
 
 ok !$sth->fetch();
 
