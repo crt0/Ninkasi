@@ -446,9 +446,11 @@ my %expected_constraint = (
 
 my $rows_fetched = 0;
 while ( $sth->fetch() ) {
-    is $result->{type}, $expected_constraint{ $result->{category} };
-    is $result->{volunteer}, $judge_id;
-    ok $result->{rowid} > 0;
+    is $result->{type}, $expected_constraint{ $result->{category} },
+       'constraint type in database matches what was submitted';
+    is $result->{volunteer}, $judge_id,
+       'judge in database matches what was submitted';
+    ok $result->{rowid} > 0, 'constraint has a positive rowid';
     ++$rows_fetched;
 }
 
