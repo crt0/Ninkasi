@@ -25,6 +25,7 @@ sub pre_configure {
     Apache::TestConfig::autoconfig_skip_module_add('mod_authz_svn.c');
     Apache::TestConfig::autoconfig_skip_module_add('mod_dav_svn.c');
     Apache::TestConfig::autoconfig_skip_module_add('mod_fcgid.c');
+    Apache::TestConfig::autoconfig_skip_module_add('mod_hfs_apple2.c');
     Apache::TestConfig::autoconfig_skip_module_add('mod_php5.c');
 
     $self->SUPER::pre_configure($@);
