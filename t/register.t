@@ -5,20 +5,17 @@ use warnings;
 
 use Fatal qw/open close/;
 
-use Test::More tests => 146;
+use Test::More tests => 149;
 
-use Apache::TestConfig;
 use Ninkasi::Config;
 use Ninkasi::Constraint;
 use Ninkasi::Judge;
 use Ninkasi::Register;
-use Ninkasi::Table;
-use Test::WWW::Mechanize;
+use Ninkasi::Test;
 
-Ninkasi::Table->initialize_database( { unlink => 1 } );
-
-my $config = Apache::TestConfig->new();
-my $url_base = join '', $config->{vars}{scheme}, '://', $config->hostport();
+our $test_object = Ninkasi::Test->new();
+our $mech = $test_object->mech();
+our $url_base = $test_object->url_base();
 my $form_url = "$url_base/register";
 
 my $judge = Ninkasi::Judge->new();
@@ -50,7 +47,6 @@ ok $assignment;
 ok $assignment->add( {flight => 0, session => 1, judge => 1} );
 ok $assignment->add( {flight => 0, session => 3, judge => 1} );
 
-my $mech = Test::WWW::Mechanize->new();
 $mech->get_ok($form_url);
 $mech->content_contains( 'Experienced but not in the BJCP',
                          'BJCP rank description' );

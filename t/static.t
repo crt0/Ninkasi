@@ -5,8 +5,7 @@ use warnings;
 
 use Test::More tests => 39;
 
-use Apache::TestConfig;
-use Test::WWW::Mechanize;
+use Ninkasi::Test;
 
 sub header_ok {
     my ($mech, $title) = @_;
@@ -87,11 +86,9 @@ $navbar
 EOF
 }
 
-my $test_config = Apache::TestConfig->new();
-my $url_base = join '', $test_config->{vars}{scheme}, '://',
-                        $test_config->hostport();
-
-my $mech = Test::WWW::Mechanize->new();
+our $test_object = Ninkasi::Test->new();
+our $mech = $test_object->mech();
+our $url_base = $test_object->url_base();
 
 # suppress warnings from HTML::Form caused by broken HTML on external sites
 my $html_form_warning

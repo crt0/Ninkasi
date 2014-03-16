@@ -5,18 +5,12 @@ use warnings;
 
 use Test::More tests => 18;
 
-use Apache::TestConfig;
 use File::LibMagic qw/:easy/;
-use Ninkasi::Table;
-use Test::WWW::Mechanize;
+use Ninkasi::Test;
 
-Ninkasi::Table->initialize_database( { unlink => 1 } );
-
-my $test_config = Apache::TestConfig->new();
-my $url_base = join '', $test_config->{vars}{scheme}, '://',
-                        $test_config->hostport();
-
-my $mech = Test::WWW::Mechanize->new();
+our $test_object = Ninkasi::Test->new();
+our $mech = $test_object->mech();
+our $url_base = $test_object->url-base();
 
 my $signup_url = "$url_base/register";
 sub register {

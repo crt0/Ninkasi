@@ -3,25 +3,17 @@
 use strict;
 use warnings;
 
-use Test::More tests => 105;
+use Test::More tests => 107;
 
-use Apache::TestConfig;
 use Data::UUID;
 use File::LibMagic qw/:easy/;
 use File::Spec;
 use Ninkasi::Config;
-use Ninkasi::Table;
 use Ninkasi::Test;
-use Test::WWW::Mechanize;
 
-Ninkasi::Table->initialize_database( { unlink => 1 } );
-
-our $test_config = Apache::TestConfig->new();
-our $url_base = join '', $test_config->{vars}{scheme}, '://',
-                         $test_config->hostport();
-
-our $mech = Test::WWW::Mechanize->new();
-our $test_object = Ninkasi::Test->new( mech => $mech );
+our $test_object = Ninkasi::Test->new();
+our $mech = $test_object->mech();
+our $url_base = $test_object->url_base();
 
 sub test_assignments {
     my ($argument) = @_;
