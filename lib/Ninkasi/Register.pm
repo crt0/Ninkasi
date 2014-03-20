@@ -255,47 +255,67 @@ sub store {
     return;
 }
 
-sub closed_disabled {
-    my $role = ucfirst shift || 'Volunteer';
-    my ( $month, $year ) = (localtime)[4 .. 5];
-    $year += 1900;
-    my ( $status, $when ) = $month < 6
-                            ? ( 'not yet opened', 'soon' )
-                            : ( 'closed'        , 'next year' )
-                            ;
-    return {
-        message => <<EOF,
+our %DISABLED_FUNCTION = (
+    closed => sub {
+        my $role = ucfirst shift || 'Volunteer';
+        my ( $month, $year ) = (localtime)[4 .. 5];
+        $year += 1900;
+        my ( $status, $when ) = $month < 6
+            ? ( 'not yet opened', 'soon' )
+                : ( 'closed'        , 'next year' )
+                    ;
+        die {
+            message => <<EOF,
 $role registration has $status for $year.  Please check back $when
 to register!
 EOF
-        status  => 403,
-        title   => 'Brewers&#8217; Cup Registration Closed',
-    };
-}
+                status  => 403,
+                    title   => 'Brewers&#8217; Cup Registration Closed',
+                };
+    },
 
-sub down_disabled {
-    return {
-        message => <<EOF,
+    down => sub {
+        die {
+            message => <<EOF,
 The volunteer registration system is temporarily unavailable.  Please
 try back in a few minutes.
 EOF
-        status  => 503,
-        title   => 'Brewers&#8217; Cup Registration Down',
-    };
+                status  => 503,
+                    title   => 'Brewers&#8217; Cup Registration Down',
+                };
+    },
+);
+
+foreach my $disabled_role ( qw/judge steward/ ) {
+    $DISABLED_FUNCTION{$disabled_role} = sub {
+        my ( $requested_role ) = @_;
+
+        return if $disabled_role ne $requested_role;
+
+        die {
+            message => <<EOF,
+We're no longer in need of ${disabled_role}s.  If you were signing
+up to $disabled_role, please try back next year!
+EOF
+            status  => 403,
+            title   => join( ' ', 'Brewers&#8217; Cup', ucfirst $disabled_role,
+                                  'Registration Closed' ),
+        };
+    }
 }
 
 sub transform {
     my ( $class, $argument ) = @_;
+
+    $argument->{role} ||= 'judge';
 
     # if app is disabled, display error card and exit
     my $config = Ninkasi::Config->new();
     my $disabled_value = $config->disabled();
     my @disabled_variables = ();
     if ( $disabled_value && !$argument->{-manage} ) {
-        no strict 'refs';
-        my $disabled_func = $disabled_value . '_disabled';
-        if ( defined &$disabled_func ) {
-            die $disabled_func->();
+        if ( exists $DISABLED_FUNCTION{$disabled_value} ) {
+            $DISABLED_FUNCTION{$disabled_value}( $argument->{role} );
         } else {
             @disabled_variables = ( disabled => $disabled_value );
         }
@@ -307,7 +327,7 @@ sub transform {
         @disabled_variables
     );
 
-    if ( $argument->{-number_of_options} ) {
+    if ( $argument->{first_name} ) {
 
         # determine role
         ( $argument->{role} = lc $argument->{submit} ) =~ s/register to //;
