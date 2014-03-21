@@ -10,12 +10,12 @@ use Ninkasi::Template;
 use Ninkasi::Volunteer;
 
 __PACKAGE__->Table_Name('flight');
-__PACKAGE__->Column_Names( [ qw/description pro number/ ] );
+__PACKAGE__->Column_Names( [ qw/description pro name/ ] );
 __PACKAGE__->Schema(<<'EOF');
 CREATE TABLE flight (
     description        TEXT,
     pro                INTEGER DEFAULT 0,
-    number             TEXT UNIQUE
+    name               TEXT UNIQUE
 )
 EOF
 
@@ -26,8 +26,7 @@ sub fetch {
     my $flight_table = __PACKAGE__->new();
     my $not_found
         = $flight_table->Database_Handle()
-                       ->selectall_hashref( 'SELECT number FROM flight',
-                                            'number' );
+                       ->selectall_hashref( 'SELECT name FROM flight', 'name' );
 
     # fetch flights of each constraint type
     my $where_clause = <<EOF;
@@ -38,14 +37,14 @@ volunteer.rowid = 'constraint'.volunteer
 EOF
     my ( $flight_handle, $flight ) = $flight_table->bind_hash( {
         bind_values => [ $judge_id, $Ninkasi::Constraint::NUMBER{entry} ],
-        columns     => [ qw/ number MAX(type) pro_brewer pro / ],
+        columns     => [ qw/ name MAX(type) pro_brewer pro / ],
         join        => [ qw/ Ninkasi::Constraint Ninkasi::FlightCategory
                              Ninkasi::Volunteer / ],
         where       => $where_clause,
-        group_by    => 'volunteer.rowid, flight_category.flight, number, '
+        group_by    => 'volunteer.rowid, flight_category.flight, name, '
                        . 'pro_brewer, pro',
         having      => 'MAX(type) != ? OR volunteer.pro_brewer != flight.pro',
-        order_by    => 'number',
+        order_by    => 'name',
     } );
     $flight_handle->bind_col( 2, \$flight->{type} );
 
@@ -64,10 +63,10 @@ EOF
 
         # add this flight to the appropriate constraint list
         push @{ $constraint{ $Ninkasi::Constraint::NAME{ $type } } },
-             $flight->{number};
+             $flight->{name};
 
         # we found a constraint for this flight, so delete it from %$not_found
-        delete $not_found->{ $flight->{number} };
+        delete $not_found->{ $flight->{name} };
     }
 
     # add any missing rows to the 'whatever' list
@@ -120,20 +119,20 @@ EOF
         # update tables row by row
         while ( my ( $row_number, $flight ) = each %input_table ) {
 
-            # sanity check flight name (still called "number" in database)
-            next if !defined $flight->{number} || $flight->{number} eq '';
+            # sanity check flight name
+            next if !defined $flight->{name} || $flight->{name} eq '';
 
             # check for uniqueness of flight names
-            if ( exists $names_seen{ $flight->{number} } ) {
+            if ( exists $names_seen{ $flight->{name} } ) {
                 die {
                     message => 'Flight names must be unique.',
-                    row     => $flight->{number},
+                    row     => $flight->{name},
                 };
             }
 
             # else remember this one
             else {
-                $names_seen{ $flight->{number} } = 1;
+                $names_seen{ $flight->{name} } = 1;
             }
 
             # default to homebrew
@@ -175,8 +174,8 @@ sub fake_flight {
     my $iteration = 1;
 
     return sub {
-        my $flight_number = $argument->{"number_$iteration"};
-        return if !defined $flight_number || $flight_number eq '';
+        my $flight_name = $argument->{"name_$iteration"};
+        return if !defined $flight_name || $flight_name eq '';
 
         my $names = __PACKAGE__->Column_Names();
 
@@ -200,7 +199,7 @@ sub get_assigned_judges {
         where       => 'volunteer.rowid = assignment.volunteer'
             . ' AND assignment.flight = ?'
         } );
-    $sth->execute( $flight->{number} );
+    $sth->execute( $flight->{name} );
 
     # append first and last names
     return [ map { join q{ }, @$_ } @{ $sth->fetchall_arrayref() } ];
@@ -219,13 +218,13 @@ sub transform {
         } if $error;
     }
 
-    # select whole table & order by category, then number
+    # select whole table & order by category, then name
     my $column_list = join ', ', @{ $class->Column_Names() };
     my ( $handle, $result ) = $class->new()->bind_hash( {
         columns  => [ 'group_concat("category", " ")',
                       @{ $class->Column_Names() } ],
         join     => 'Ninkasi::FlightCategory',
-        order_by => 'number',
+        order_by => 'name',
         where    => 'flight.rowid = flight_category.flight',
         group_by => $column_list,
     } );
@@ -294,7 +293,7 @@ subroutines/methods are defined in addition to those inherited:
 Fetch all flights a volunteer is eligible to judge, organized by
 constraint type.  C<$constraint_hashref> maps each constraint type
 (see L<Ninkasi::Constraint(3)>) to a reference to an array of flight
-numbers.
+names.
 
 =item $judges_arrayref = get_assigned_judges $flight
 
@@ -319,9 +318,9 @@ Description of the flight.
 
 Which division the flight is in -- professional (1) or homebrew (0).
 
-=item number (TEXT)
+=item name (TEXT)
 
-Name of the flight (will be renamed to C<name> in the future).
+Short name of the flight.
 
 =back
 

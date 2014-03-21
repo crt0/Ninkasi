@@ -209,7 +209,7 @@ $lookup_url = "$url_base/manage/flight/";
 $mech->get_ok($lookup_url);
 my %data = (
     category    => [ 2, 8, 10, 14, 14 ],
-    number      => [ qw/02 08 10 14b 14a/ ],
+    name        => [ qw/02 08 10 14b 14a/ ],
     pro         => [ undef, 1, (undef) x 3 ],
     description => [
         'Pilsner',

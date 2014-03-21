@@ -38,12 +38,12 @@
 
 [% BLOCK F_flight_row -%]
    [% WRAPPER F_column %]
-      [% IF error && error.row == flight.number ~%]
+      [% IF error && error.row == flight.name ~%]
          <span class="error">*</span>
       [% END ~%]
-      <input name="number_[% row %]"
+      <input name="name_[% row %]"
              size="10"
-             value="[% flight.number | html %]" />
+             value="[% flight.name | html %]" />
    [% END -%]
    [% WRAPPER F_column %]
       <input name="category_[% row %]"
@@ -64,14 +64,14 @@
              value="[% flight.description | html %]" />
    [% END -%]
    [% WRAPPER F_column %]
-      [% IF flight.number ~%]
+      [% IF flight.name ~%]
          [% IF flight.judges.0 -%]
             <em>[% flight.judges.shift | html -%]</em>
             [%- IF flight.judges.0 ~%]
                 , [% flight.judges.join(', ') | html ~%]
             [% END %]
          [% END -%]
-         <a href="/manage/assignment/[% flight.number | html %]">edit</a>
+         <a href="/manage/assignment/[% flight.name | html %]">edit</a>
       [% END -%]
    [% END -%]
 [% END ~%]
