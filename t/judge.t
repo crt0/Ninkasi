@@ -117,12 +117,12 @@ sub test_assignments {
         'judges unavailable for this session no longer displayed',
     );
     $mech->content_like(
-        qr{<td><a\ href="\d+">Carrera,\ Lyndsey</a></td>\s+
-           <td>Novice</td>\s+
+        qr{<td><a\ href="/manage/judge/\d+">Carrera,\ Lyndsey</a></td>\s+
+           <td>Certified</td>\s+
            <td>\s+
            </td>\s+
            <td>\s+
-           </td>\s+
+           N/A</td>\s+
            <td>\s+
            <input\ name="assign"\s+
            type="checkbox"\s+

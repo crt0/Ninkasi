@@ -93,6 +93,15 @@ EOF
 sub select_unassigned_judges {
     my ($flight) = @_;
 
+    # get de-facto session of flight, if any
+    my ($session) = __PACKAGE__->new()->get_one_row( {
+        bind_values => [ $flight->{number} ],
+        columns     => ['session'],
+        where       => 'flight = ? AND assigned = 1',
+    } );
+    my $session_clause = $session ? ' AND session = ?' : '';
+
+    # get judges available for this flight/session
     my @columns = qw/volunteer.rowid first_name last_name rank
                      competitions_judged pro_brewer role/;
     my $column_list = join ', ', @columns;
@@ -102,8 +111,8 @@ volunteer.rowid = 'constraint'.volunteer
     AND flight.rowid = flight_category.flight
     AND 'constraint'.category = flight_category.category
     AND flight.number = ?
-    AND volunteer.rowid IN (SELECT volunteer FROM assignment WHERE assigned = 0)
-    AND volunteer.rowid NOT IN (SELECT volunteer FROM assignment WHERE flight = ?)
+    AND volunteer.rowid IN (SELECT volunteer FROM assignment
+                            WHERE assigned = 0 $session_clause)
     AND volunteer.role = 'judge'
 EOF
     my $having_clause = <<EOF;
@@ -111,8 +120,12 @@ MAX(type) != $Ninkasi::Constraint::NUMBER{entry}
     OR volunteer.pro_brewer != flight.pro
 EOF
     my $flight_table = Ninkasi::Flight->new();
+    my @bind_values = $flight->{number};
+    if ($session) {
+        push @bind_values, $session;
+    }
     my ( $handle, $result ) = $flight_table->bind_hash( {
-        bind_values => [ ( $flight->{number} ) x 2 ],
+        bind_values => \@bind_values,
         columns     => [ @columns, 'MAX(type)' ],
         join        => [ qw/Ninkasi::Constraint Ninkasi::FlightCategory
                             Ninkasi::Volunteer/ ],
@@ -135,6 +148,7 @@ EOF
         return {
             %$result,
             fetch_assignments => sub { fetch $result->{rowid} },
+            session           => $session,
         };
     };
 }

@@ -94,7 +94,7 @@
                   [% view.rank_column ~%]
                   [% assignments = volunteer_row.fetch_assignments() ~%]
                   [% FOREACH session IN [ 1 .. 3 ] ~%]
-                     [% view.assignment_column ~%]
+                     [% view.assignment_column(chosen_session = volunteer_row.session) ~%]
                   [% END ~%]
                   [% view.additional_columns ~%]
                [% END ~%]
