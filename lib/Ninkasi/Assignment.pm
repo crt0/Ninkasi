@@ -175,7 +175,6 @@ sub update_assignment {
 
     my $dbh = Ninkasi::Assignment->Database_Handle();
     my @columns = qw/volunteer session/;
-    my $assigned = defined $flight_number;
     foreach my $assignment (@$assignments) {
         my $constraint = deserialize $assignment;
         my $sql = <<EOF;
