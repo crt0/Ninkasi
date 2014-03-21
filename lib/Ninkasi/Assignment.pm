@@ -60,7 +60,8 @@ volunteer.rowid = 'constraint'.volunteer
     AND 'constraint'.category = flight_category.category
     AND flight.rowid = flight_category.flight
     AND flight.number = ?
-    AND volunteer.rowid IN (SELECT volunteer FROM assignment WHERE flight = ?)
+    AND volunteer.rowid IN (SELECT volunteer FROM assignment WHERE flight = ?
+                                                             AND assigned = 1)
 EOF
     my ($sth, $result) = $judge->bind_hash( {
         bind_values => [ ( $flight->{number} ) x 2 ],
