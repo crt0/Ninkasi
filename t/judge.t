@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 107;
+use Test::More tests => 111;
 
 use Data::UUID;
 use File::LibMagic qw/:easy/;
@@ -107,27 +107,31 @@ sub test_assignments {
     );
 
     $mech->content_unlike(
-        qr{<td><a\ href="\d+">Mayers,\ Liam</a></td>\s+
-           <td>Novice</td>\s+
-           <td>\s+
-           <input\ name="assign"\s+
+        qr{<input\ name="assign"\s+
            type="checkbox"\s+
-           value="volunteer-2_session-1"\ />\s+
-           </td>\s+
-           <td>\s+
-           <input\ name="assign"\s+
-           type="checkbox"\s+
-           value="volunteer-2_session-2"\ />\s+
-           </td>\s+
-           <td>\s+
-           <input\ name="assign"\s+
-           type="checkbox"\s+
-           value="volunteer-2_session-3"\ />\s+
-           </td>\s+
-           <td>2</td>\s+
-           <td>Y</td>\s+
-           <td>whatever</td>}msx,
+           value="volunteer-2_session-3"\ />}msx,
         "assigned judge didn't stay on bottom",
+    );
+    $mech->content_lacks(
+        'Underhill',
+        'judges unavailable for this session no longer displayed',
+    );
+    $mech->content_like(
+        qr{<td><a\ href="/manage/judge/\d+">Carrera,\ Lyndsey</a></td>\s+
+           <td>Certified</td>\s+
+           <td>\s+
+           </td>\s+
+           <td>\s+
+           N/A</td>\s+
+           <td>\s+
+           <input\ name="assign"\s+
+           type="checkbox"\s+
+           value="volunteer-5_session-3"\ />\s+
+           </td>\s+
+           <td>10</td>\s+
+           <td>N</td>\s+
+           <td>whatever</td>}msx,
+         'available judges only have checkboxes for appropriate session',
     );
 
     # test assigned judges on flight page
