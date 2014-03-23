@@ -340,12 +340,12 @@ No L<Ninkasi::Config(3)> variables are used by this module.
 This class doesn't use L<Ninkasi::Judge(3)> properly as a subclass of
 L<Ninkasi::Volunteer(3)> but instead reaches into the latter.
 
-Please report problems to Andrew Korty <andrew@korty.name>.  Patches
+Please report problems to Andrew Korty <andrew.korty@icloud.com>.  Patches
 are welcome.
 
 =head1 AUTHOR
 
-Andrew Korty <andrew@korty.name>
+Andrew Korty <andrew.korty@icloud.com>
 
 =head1 LICENSE AND COPYRIGHT
 

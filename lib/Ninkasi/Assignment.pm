@@ -436,7 +436,7 @@ Ninkasi::Assignment - mapping of judges to their assigned flights and sessions
       bind_values => [ $judge_id ],
       columns     => [ qw/flight session/ ],
       order_by    => 'session',
-      where       => 'volunteer = ?',
+      where       => 'volunteer = ? AND assigned = 1',
   } );
   print "Judge: $judge_id\n";
   while ( $assignment_handle->fetch() ) {
@@ -538,9 +538,17 @@ table:
 
 =over 4
 
+=item assigned (INTEGER)
+
+Truth value indicating whether the Judge is assigned for a given
+session (1 if assigned, 0 if not).
+
 =item flight (TEXT)
 
-Name of the flight (see L<Ninkasi::Flight(3)>).
+Name of the flight (see L<Ninkasi::Flight(3)>).  In previous versions,
+I<undef> for this attribute indicated the judge was unassigned for the
+given session -- now the I<assigned> attribute is used for this
+purpose.
 
 =item session (INTEGER)
 
@@ -572,12 +580,12 @@ No L<Ninkasi::Config(3)> variables are used by this module.
 This class doesn't use L<Ninkasi::Judge(3)> properly as a subclass of
 L<Ninkasi::Volunteer(3)> but instead reaches into the latter.
 
-Please report problems to Andrew Korty <andrew@korty.name>.  Patches
+Please report problems to Andrew Korty <andrew.korty@icloud.com>.  Patches
 are welcome.
 
 =head1 AUTHOR
 
-Andrew Korty <andrew@korty.name>
+Andrew Korty <andrew.korty@icloud.com>
 
 =head1 LICENSE AND COPYRIGHT
 

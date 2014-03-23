@@ -201,12 +201,12 @@ While L<Ninkasi::Judge(3)> and L<Ninkasi::Steward(3)> inherit from
 this module, they doesn't act as subclasses in any useful way except
 to inherit C<transform()>.
 
-Please report problems to Andrew Korty <andrew@korty.name>.  Patches
+Please report problems to Andrew Korty <andrew.korty@icloud.com>.  Patches
 are welcome.
 
 =head1 AUTHOR
 
-Andrew Korty <andrew@korty.name>
+Andrew Korty <andrew.korty@icloud.com>
 
 =head1 LICENSE AND COPYRIGHT
 
