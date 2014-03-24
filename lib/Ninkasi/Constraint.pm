@@ -108,12 +108,12 @@ No L<Ninkasi::Config(3)> variables are used by this module.
 Because C<constraint> is a reserved word in SQLite, it must be quoted
 when used as a table name in any SQL statements.
 
-Please report problems to Andrew Korty <andrew@korty.name>.  Patches
+Please report problems to Andrew Korty <andrew.korty@icloud.com>.  Patches
 are welcome.
 
 =head1 AUTHOR
 
-Andrew Korty <andrew@korty.name>
+Andrew Korty <andrew.korty@icloud.com>
 
 =head1 LICENSE AND COPYRIGHT
 

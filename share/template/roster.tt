@@ -39,7 +39,7 @@
                      [%~ ELSE ~%]
                         [% flight = volunteer_row.fetch_flight(assignments
                                                                .$session) ~%]
-                        [% flight.number ~%]: [% flight.description %] (
+                        [% flight.name ~%]: [% flight.description %] (
                         [%~ IF flight.pro %]pro[% ELSE %]hb[% END %])
                      [%~ END ~%]
                   [%~ END ~%]

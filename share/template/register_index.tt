@@ -27,11 +27,12 @@
        value="[% form.$name | html %]">
 [% END ~%]
 
+[% caprole = form.role FILTER ucfirst -%]
 [% PROCESS header.html,
-   title => "Brewers$apostrophe Cup Volunteer Registration Form" -%]
+   title => "Brewers$apostrophe Cup $caprole Registration Form" -%]
 [% PROCESS navbar.html -%]
 <div id="body_text">
-  <h2>Volunteer Registration Form</h2>
+  <h2>[% caprole %] Registration Form</h2>
 [% IF error -%]
 <div class="error">
 [% IF error.length -%]
@@ -56,7 +57,7 @@
 [% SWITCH disabled -%]
    [% CASE 'closed' -%]
 <div class="error">
-Volunteer registration is closed.
+[% caprole %] registration is closed.
 </div>
    [% CASE ['judge', 'steward'] -%]
 <div class="error">
@@ -65,7 +66,7 @@ We're no longer in need of [% disabled %]s.  If you were signing up to
 </div>
 [% END -%]
 <div class="form_instructions">All fields are required.</div>
-<h3>Judge and Steward Information</h3>
+<h3>[% caprole %] Information</h3>
 <form action="register" method="post">
   <table border="0">
     <tr>
@@ -177,33 +178,24 @@ We're no longer in need of [% disabled %]s.  If you were signing up to
       </td>
     </tr>
   </table>
-  <p>Those registering as stewards need not submit any additional information.</p>
+  [% IF form.role == 'steward' -%]
   <center>
     <table border="0" width="95%">
       <tr>
 	<td>
           <input name="submit" type="submit"
-                 [% IF disabled == 'steward' -%]
-                    disabled="disabled"
-                 [% END -%]
                  value="Register to Steward"
                  style="font-size: 18pt; font-weight: bold">
         </td>
 	<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
 	<td>
-          [% IF disabled == 'steward' -%]
-            We're no longer in need of stewards.  If you were signing
-            up to steward, please try back next year!
-          [% ELSE -%]
-            After submitting you must see the <strong>Thank you</strong>
-            page to be sure we received your information.
-          [% END -%]
+          After submitting you must see the <strong>Thank you</strong>
+          page to be sure we received your information.
         </td>
       </tr>
     </table>
   </center>
-  <hr size=4 width="90%">
-  <h3>Additional Judge Information</h3>
+  [% ELSE -%]
   <div class="form_instructions">
     Each judge must have a valid BJCP id or be a professional brewer.
   </div>
@@ -321,25 +313,18 @@ We're no longer in need of [% disabled %]s.  If you were signing up to
       <tr>
 	<td>
           <input name="submit" type="submit"
-                 [% IF disabled == 'judge' -%]
-                    disabled="disabled"
-                 [% END -%]
                  value="Register to Judge"
                  style="font-size: 18pt; font-weight: bold">
         </td>
 	<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
 	<td>
-          [% IF disabled == 'judge' -%]
-             We're no longer in need of judges.  If you were signing
-             up to judge, please try back next year!
-          [% ELSE -%]
-             After submitting you must see the <strong>Thank you</strong>
-  	     page to be sure we received your information.
-          [% END -%]
+          After submitting you must see the <strong>Thank you</strong>
+  	  page to be sure we received your information.
         </td>
       </tr>
     </table>
   </center>
+[% END -%]
 </form>
 <hr size=4 width="90%">
 <p>

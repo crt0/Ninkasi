@@ -41,12 +41,12 @@ No L<Ninkasi::Config(3)> variables are used by this module.
 While this module inherits from L<Ninkasi::Volunteer(3)>, it doesn't
 act as a subclass in any useful way except to inherit C<transform()>.
 
-Please report problems to Andrew Korty <andrew@korty.name>.  Patches
+Please report problems to Andrew Korty <andrew.korty@icloud.com>.  Patches
 are welcome.
 
 =head1 AUTHOR
 
-Andrew Korty <andrew@korty.name>
+Andrew Korty <andrew.korty@icloud.com>
 
 =head1 LICENSE AND COPYRIGHT
 

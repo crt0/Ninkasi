@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 107;
+use Test::More tests => 111;
 
 use Data::UUID;
 use File::LibMagic qw/:easy/;
@@ -107,27 +107,31 @@ sub test_assignments {
     );
 
     $mech->content_unlike(
-        qr{<td><a\ href="\d+">Mayers,\ Liam</a></td>\s+
-           <td>Novice</td>\s+
-           <td>\s+
-           <input\ name="assign"\s+
+        qr{<input\ name="assign"\s+
            type="checkbox"\s+
-           value="volunteer-2_session-1"\ />\s+
-           </td>\s+
-           <td>\s+
-           <input\ name="assign"\s+
-           type="checkbox"\s+
-           value="volunteer-2_session-2"\ />\s+
-           </td>\s+
-           <td>\s+
-           <input\ name="assign"\s+
-           type="checkbox"\s+
-           value="volunteer-2_session-3"\ />\s+
-           </td>\s+
-           <td>2</td>\s+
-           <td>Y</td>\s+
-           <td>whatever</td>}msx,
+           value="volunteer-2_session-3"\ />}msx,
         "assigned judge didn't stay on bottom",
+    );
+    $mech->content_lacks(
+        'Underhill',
+        'judges unavailable for this session no longer displayed',
+    );
+    $mech->content_like(
+        qr{<td><a\ href="/manage/judge/\d+">Carrera,\ Lyndsey</a></td>\s+
+           <td>Certified</td>\s+
+           <td>\s+
+           </td>\s+
+           <td>\s+
+           N/A</td>\s+
+           <td>\s+
+           <input\ name="assign"\s+
+           type="checkbox"\s+
+           value="volunteer-5_session-3"\ />\s+
+           </td>\s+
+           <td>10</td>\s+
+           <td>N</td>\s+
+           <td>whatever</td>}msx,
+         'available judges only have checkboxes for appropriate session',
     );
 
     # test assigned judges on flight page
@@ -137,7 +141,7 @@ sub test_assignments {
     $mech->content_like(
         qr{<tr\ class="$row_parity">\s+
            <td>\s+
-           <input\ name="number_$row"\s+
+           <input\ name="name_$row"\s+
            size="10"\s+
            value="$flight_name"\ />\s+
            </td>\s+
@@ -225,7 +229,7 @@ $mech->get_ok($lookup_url);
 $mech->content_like(
     qr{<tr\ class="odd">\s+
        <td>\s+
-       <input\ name="number_1"\s+
+       <input\ name="name_1"\s+
                size="10"\s+
                value=""\ />\s+
        </td>\s+
@@ -250,14 +254,14 @@ $mech->content_like(
     'empty flight table',
 );
 
-# adding flights with duplicate numbers should fail
+# adding flights with duplicate names should fail
 $mech->submit_form_ok( {
     button => 'save',
     with_fields => {
-        number_1      => 1,
+        name_1        => 1,
         category_1    => 1,
         description_1 => 'Light Lager',
-        number_2      => 1,
+        name_2        => 1,
         category_2    => 1,
         description_2 => 'Light Lager Duplicate',
     }
@@ -269,7 +273,7 @@ $mech->content_like(
     qr{<tr\ class="odd">\s+
        <td>\s+
        <span\ class="error">\*</span>\s+
-       <input\ name="number_1"\s+
+       <input\ name="name_1"\s+
                size="10"\s+
                value="1"\ />\s+
        </td>\s+
@@ -298,7 +302,7 @@ $mech->content_like(
 # add flights
 my %data = (
     category    => [ 2, 8, 10, 14, 14, 15, 20 ],
-    number      => [ qw/02 08 10 14b 14a 15 20/ ],
+    name        => [ qw/02 08 10 14b 14a 15 20/ ],
     pro         => [ undef, 1, (undef) x 5 ],
     description => [
         'Pilsner',
@@ -320,7 +324,7 @@ $mech->submit_form_ok( { button => 'save', with_fields => \%input } );
 $mech->content_like(
     qr{<tr\ class="odd">\s+
        <td>\s+
-       <input\ name="number_5"\s+
+       <input\ name="name_5"\s+
                size="10"\s+
                value="14b"\ />\s+
        </td>\s+
@@ -348,7 +352,7 @@ $mech->content_like(
 $mech->content_like(
     qr{<tr\ class="even">\s+
        <td>\s+
-       <input\ name="number_2"\s+
+       <input\ name="name_2"\s+
                size="10"\s+
                value="08"\ />\s+
        </td>\s+
@@ -379,7 +383,7 @@ $mech->content_like(
 $mech->submit_form_ok( {
     button      => 'save',
     with_fields => {
-        number_8      => 21,
+        name_8        => 21,
         category_8    => 21,
         description_8 => 'Spice/Herb/Vegetable Beer',
     }
@@ -387,7 +391,7 @@ $mech->submit_form_ok( {
 $mech->content_like(
     qr{<tr\ class="even">\s+
        <td>\s+
-       <input\ name="number_8"\s+
+       <input\ name="name_8"\s+
                size="10"\s+
                value="21"\ />\s+
        </td>\s+
@@ -417,7 +421,7 @@ $mech->content_like(
 $mech->submit_form_ok( {
     button      => 'save',
     with_fields => {
-        number_9      => 'IN',
+        name_9        => 'IN',
         category_9    => 99,
         description_9 => 'Indiana Indigenous Beer',
         pro_9         => 1,
@@ -426,7 +430,7 @@ $mech->submit_form_ok( {
 $mech->content_like(
     qr{<tr\ class="odd">\s+
        <td>\s+
-       <input\ name="number_9"\s+
+       <input\ name="name_9"\s+
                size="10"\s+
                value="IN"\ />\s+
        </td>\s+
@@ -724,14 +728,14 @@ $mech->submit_form_ok( {
     button => 'save',
     with_fields => {
         category_10    => '20, 21',
-        number_10      => 26,
+        name_10        => 26,
         description_10 => 'Fruit Beer / SHV',
     },
 } );
 $mech->content_like(
     qr{<tr\ class="odd">\s+
        <td>\s+
-       <input\ name="number_9"\s+
+       <input\ name="name_9"\s+
                size="10"\s+
                value="26"\ />\s+
        </td>\s+

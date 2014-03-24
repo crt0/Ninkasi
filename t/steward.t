@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 39;
+use Test::More tests => 41;
 
 use File::LibMagic qw/:easy/;
 use Ninkasi::Test;
@@ -12,11 +12,15 @@ our $test_object = Ninkasi::Test->new();
 our $mech = $test_object->mech();
 our $url_base = $test_object->url_base();
 
-my $signup_url = "$url_base/register";
+our $judge_signup_url  = "$url_base/register";
+our $steward_signup_url = "$judge_signup_url?role=steward";
+$mech->get_ok($steward_signup_url);
+$mech->content_lacks('Register to Judge');
+
 sub register_steward {
     my ($fields) = @_;
 
-    $mech->get_ok($signup_url);
+    $mech->get_ok($steward_signup_url);
     $mech->form_number(2);
     $mech->set_fields(@$fields);
     $mech->click_button( value => 'Register to Steward' );
@@ -163,7 +167,7 @@ is $mech->ct(), 'application/pdf';
 like MagicBuffer( $mech->content() ), qr/PDF/;
 
 # add a judge to make sure she doesn't show up as a steward
-$mech->get_ok($signup_url);
+$mech->get_ok($judge_signup_url);
 $mech->submit_form_ok( {
     with_fields => {
         address             => '4996 Eighth',
@@ -205,7 +209,7 @@ $lookup_url = "$url_base/manage/flight/";
 $mech->get_ok($lookup_url);
 my %data = (
     category    => [ 2, 8, 10, 14, 14 ],
-    number      => [ qw/02 08 10 14b 14a/ ],
+    name        => [ qw/02 08 10 14b 14a/ ],
     pro         => [ undef, 1, (undef) x 3 ],
     description => [
         'Pilsner',

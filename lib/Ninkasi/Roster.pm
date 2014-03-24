@@ -9,18 +9,18 @@ use Ninkasi::Template;
 use Ninkasi::Volunteer;
 
 sub fetch_flight {
-    my ($flight_number) = @_;
+    my ($flight_name) = @_;
 
     my $flight = Ninkasi::Flight->new();
-    my ( $description, $number, $pro ) = $flight->get_one_row( {
-        bind_values => [$flight_number],
-        columns     => [qw/description number pro/],
-        where       => 'number = ?',
+    my ( $description, $name, $pro ) = $flight->get_one_row( {
+        bind_values => [$flight_name],
+        columns     => [qw/description name pro/],
+        where       => 'name = ?',
     } );
 
     return {
         description => $description,
-        number      => $number,
+        name        => $name,
         pro         => $pro,
     };
 }
@@ -84,7 +84,7 @@ Ninkasi::Roster - provide a semi-public view of judge assignments
   use Ninkasi::Roster;
   
   my $flight = Ninkasi::Roster->fetch_flight($flight_name);
-  print "$flight->{number}: $flight->{description} (",
+  print "$flight->{name}: $flight->{description} (",
         ( $flight->{pro} ? 'pro' : 'hb' ),
         ")\n";
 
@@ -124,11 +124,11 @@ to derive the URL to the roster view
 =head1 BUGS AND LIMITATIONS
 
 There are no known bugs in this module.  Please report problems to
-Andrew Korty <andrew@korty.name>.  Patches are welcome.
+Andrew Korty <andrew.korty@icloud.com>.  Patches are welcome.
 
 =head1 AUTHOR
 
-Andrew Korty <andrew@korty.name>
+Andrew Korty <andrew.korty@icloud.com>
 
 =head1 LICENSE AND COPYRIGHT
 

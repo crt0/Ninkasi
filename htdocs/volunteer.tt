@@ -43,7 +43,10 @@ carry-out growler sales).</li>
 <div id="invite_body">
 <p>
 <em>
-  <a href="register">Sign up to judge/steward on the web!</a>
+  <ul>
+    <li><a href="register">Sign up to judge!</a></li>
+    <li><a href="register?role=steward">Sign up to steward!</a></li>
+  </ul>
 </em>
 </p>
 <p>

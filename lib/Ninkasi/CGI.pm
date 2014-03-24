@@ -122,11 +122,11 @@ No L<Ninkasi::Config(3)> variables are used by this module.
 =head1 BUGS AND LIMITATIONS
 
 There are no known bugs in this module.  Please report problems to
-Andrew Korty <andrew@korty.name>.  Patches are welcome.
+Andrew Korty <andrew.korty@icloud.com>.  Patches are welcome.
 
 =head1 AUTHOR
 
-Andrew Korty <andrew@korty.name>
+Andrew Korty <andrew.korty@icloud.com>
 
 =head1 LICENSE AND COPYRIGHT
 

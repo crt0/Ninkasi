@@ -14,7 +14,7 @@
    
    [% BLOCK assignment_column ~%]
       <td>
-      [% IF assignments.$session == flight.number ~%]
+      [% IF assignments.$session == flight.name ~%]
          [% view.assignment_checkbox ~%]
       [% ELSIF assignments.$session ~%]
          [% PROCESS F_assignment_link ~%]
@@ -46,13 +46,14 @@
 
 [% VIEW unassignment
         base = assignment
-        action = 'assign' ~%]
+        action = 'assign'
+        chosen_session = undef ~%]
 
    [% BLOCK assignment_column ~%]
       <td>
       [% IF assignments.$session ~%]
          [% PROCESS F_assignment_link ~%]
-      [% ELSE ~%]
+      [% ELSIF !chosen_session || session == chosen_session ~%]
          [% view.assignment_checkbox ~%]
       [% END ~%]
       </td>

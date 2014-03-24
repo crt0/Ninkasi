@@ -59,11 +59,12 @@ sub select_assigned_judges {
 volunteer.rowid = 'constraint'.volunteer
     AND 'constraint'.category = flight_category.category
     AND flight.rowid = flight_category.flight
-    AND flight.number = ?
-    AND volunteer.rowid IN (SELECT volunteer FROM assignment WHERE flight = ?)
+    AND flight.name = ?
+    AND volunteer.rowid IN (SELECT volunteer FROM assignment WHERE flight = ?
+                                                             AND assigned = 1)
 EOF
     my ($sth, $result) = $judge->bind_hash( {
-        bind_values => [ ( $flight->{number} ) x 2 ],
+        bind_values => [ ( $flight->{name} ) x 2 ],
         columns     => [ 'MAX(type)', @columns ],
         join        => [ qw/Ninkasi::Constraint Ninkasi::Flight
                             Ninkasi::FlightCategory/ ],
@@ -92,6 +93,15 @@ EOF
 sub select_unassigned_judges {
     my ($flight) = @_;
 
+    # get de-facto session of flight, if any
+    my ($session) = __PACKAGE__->new()->get_one_row( {
+        bind_values => [ $flight->{name} ],
+        columns     => ['session'],
+        where       => 'flight = ? AND assigned = 1',
+    } );
+    my $session_clause = $session ? ' AND session = ?' : '';
+
+    # get judges available for this flight/session
     my @columns = qw/volunteer.rowid first_name last_name rank
                      competitions_judged pro_brewer role/;
     my $column_list = join ', ', @columns;
@@ -100,9 +110,9 @@ sub select_unassigned_judges {
 volunteer.rowid = 'constraint'.volunteer
     AND flight.rowid = flight_category.flight
     AND 'constraint'.category = flight_category.category
-    AND flight.number = ?
-    AND volunteer.rowid IN (SELECT volunteer FROM assignment WHERE assigned = 0)
-    AND volunteer.rowid NOT IN (SELECT volunteer FROM assignment WHERE flight = ?)
+    AND flight.name = ?
+    AND volunteer.rowid IN (SELECT volunteer FROM assignment
+                            WHERE assigned = 0 $session_clause)
     AND volunteer.role = 'judge'
 EOF
     my $having_clause = <<EOF;
@@ -110,8 +120,12 @@ MAX(type) != $Ninkasi::Constraint::NUMBER{entry}
     OR volunteer.pro_brewer != flight.pro
 EOF
     my $flight_table = Ninkasi::Flight->new();
+    my @bind_values = $flight->{name};
+    if ($session) {
+        push @bind_values, $session;
+    }
     my ( $handle, $result ) = $flight_table->bind_hash( {
-        bind_values => [ ( $flight->{number} ) x 2 ],
+        bind_values => \@bind_values,
         columns     => [ @columns, 'MAX(type)' ],
         join        => [ qw/Ninkasi::Constraint Ninkasi::FlightCategory
                             Ninkasi::Volunteer/ ],
@@ -134,6 +148,7 @@ EOF
         return {
             %$result,
             fetch_assignments => sub { fetch $result->{rowid} },
+            session           => $session,
         };
     };
 }
@@ -156,18 +171,17 @@ sub deserialize {
 }
 
 sub update_assignment {
-    my ($assignments, $flight_number) = @_;
+    my ( $assignments, $flight_name ) = @_;
 
     my $dbh = Ninkasi::Assignment->Database_Handle();
     my @columns = qw/volunteer session/;
-    my $assigned = defined $flight_number;
     foreach my $assignment (@$assignments) {
         my $constraint = deserialize $assignment;
         my $sql = <<EOF;
 UPDATE assignment SET flight = ?, assigned = ?
                   WHERE volunteer = ? AND session = ?
 EOF
-        $dbh->do( $sql, {}, $flight_number, defined $flight_number ? 1 : 0,
+        $dbh->do( $sql, {}, $flight_name, defined $flight_name ? 1 : 0,
                   @$constraint{@columns} );
     }
 }
@@ -237,19 +251,19 @@ sub print_roster {
                 delete $assignments[ $result->{session} ];
             }
 
-            my @columns = qw/flight session description number pro/;
+            my @columns = qw/flight session description name pro/;
             ( $assignment_handle, $result )
                 = $assignment_table->bind_hash( {
                     bind_values => [ $volunteer->{rowid} ],
                     columns     => \@columns,
                     join        => 'Ninkasi::Flight',
-                    where       => 'assignment.flight = flight.number' .
+                    where       => 'assignment.flight = flight.name' .
                                    ' AND volunteer = ?',
                 } );
             while ( $assignment_handle->fetch() ) {
                 my $division = $result->{pro} ? 'pro' : 'hb';
                 $assignments[ $result->{session} ] =
-                    "$result->{number}: $result->{description} ($division)";
+                    "$result->{name}: $result->{description} ($division)";
             }
             push @rows,
                 join ';', "$volunteer->{last_name}, $volunteer->{first_name}",
@@ -292,7 +306,7 @@ sub print_table_card {
 
     my $judge_table = Ninkasi::Volunteer->new();
     my ( $sth, $result ) = $judge_table->bind_hash( {
-        bind_values => [ $flight->{number} ],
+        bind_values => [ $flight->{name} ],
         columns     => [ qw/first_name last_name session/ ],
         join        => 'Ninkasi::Assignment',
         order_by    => 'rank DESC, competitions_judged DESC',
@@ -324,7 +338,7 @@ $session
 .sp
 .ps 96
 .vs 115
-Table $flight->{number}
+Table $flight->{name}
 .ps 48
 .vs 58
 .sp
@@ -352,25 +366,25 @@ sub flatten {
 sub transform {
     my ( $self, $argument ) = @_;
 
-    my $flight_number = $argument->{-positional}[0];
-    my $format        = $argument->{format     }   ;
-    my @assign        = flatten $argument->{assign  };
-    my @unassign      = flatten $argument->{unassign};
+    my $flight_name = $argument->{-positional}[0];
+    my $format      = $argument->{format     }   ;
+    my @assign      = flatten $argument->{assign  };
+    my @unassign    = flatten $argument->{unassign};
 
-    # parse path_info to get flight number and then flight info from db
+    # parse path_info to get flight name and then flight info from db
     my $flight_table = Ninkasi::Flight->new();
     my ($sth, $flight) = $flight_table->bind_hash( {
-        bind_values => [$flight_number],
-        columns     => [qw/description pro number/],
+        bind_values => [$flight_name],
+        columns     => [qw/description pro name/],
         limit       => 1,
-        where       => 'number = ?',
+        where       => 'name = ?',
     } );
 
     die {
         add_flights => 1,
-        message     => "Flight $flight_number not found.",
+        message     => "Flight $flight_name not found.",
         status      => 404,
-        title       => "Flight $flight_number Not Found",
+        title       => "Flight $flight_name Not Found",
     } if !$sth->fetch();
 
     $sth->finish();
@@ -380,7 +394,7 @@ sub transform {
 
     # process input
     if (@assign) {
-        update_assignment \@assign  , $flight_number;
+        update_assignment \@assign  , $flight_name;
     }
     if (@unassign) {
         update_assignment \@unassign, undef;
@@ -422,7 +436,7 @@ Ninkasi::Assignment - mapping of judges to their assigned flights and sessions
       bind_values => [ $judge_id ],
       columns     => [ qw/flight session/ ],
       order_by    => 'session',
-      where       => 'volunteer = ?',
+      where       => 'volunteer = ? AND assigned = 1',
   } );
   print "Judge: $judge_id\n";
   while ( $assignment_handle->fetch() ) {
@@ -464,7 +478,7 @@ returned as a reference to a hash containing the following entries:
  pro_brewer                 "
  type                 Constraint attribute
  fetch_assignments    reference to subroutine that returns list of
-                      flight numbers (or the string 'N/A' if not
+                      flight names (or the string 'N/A' if not
                       assigned) to which this judge is assigned, in
                       session order
 
@@ -487,7 +501,7 @@ containing the following entries:
  constraint           Constraint attribute
  type                       "
  fetch_assignments    reference to subroutine that returns list of
-                      flight numbers (or the string 'N/A' if not
+                      flight names (or the string 'N/A' if not
                       assigned) to which this judge is assigned, in
                       session order
 
@@ -501,9 +515,9 @@ HTTP query parameters.
 
 Reverse of C<serialize()>, above.
 
-=item update_assignment($assignments, $flight_number)
+=item update_assignment($assignments, $flight_name)
 
-Update stored list of assignments for C<$flight_number> according to
+Update stored list of assignments for C<$flight_name> according to
 the serialized list of assignments in C<$assignments> (see
 L</serialize>).
 
@@ -524,9 +538,17 @@ table:
 
 =over 4
 
+=item assigned (INTEGER)
+
+Truth value indicating whether the Judge is assigned for a given
+session (1 if assigned, 0 if not).
+
 =item flight (TEXT)
 
-Name of the flight (see L<Ninkasi::Flight(3)>).
+Name of the flight (see L<Ninkasi::Flight(3)>).  In previous versions,
+I<undef> for this attribute indicated the judge was unassigned for the
+given session -- now the I<assigned> attribute is used for this
+purpose.
 
 =item session (INTEGER)
 
@@ -558,12 +580,12 @@ No L<Ninkasi::Config(3)> variables are used by this module.
 This class doesn't use L<Ninkasi::Judge(3)> properly as a subclass of
 L<Ninkasi::Volunteer(3)> but instead reaches into the latter.
 
-Please report problems to Andrew Korty <andrew@korty.name>.  Patches
+Please report problems to Andrew Korty <andrew.korty@icloud.com>.  Patches
 are welcome.
 
 =head1 AUTHOR
 
-Andrew Korty <andrew@korty.name>
+Andrew Korty <andrew.korty@icloud.com>
 
 =head1 LICENSE AND COPYRIGHT
 

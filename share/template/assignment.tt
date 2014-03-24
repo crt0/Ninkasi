@@ -2,14 +2,14 @@
 [% PROCESS view_assignment.tt ~%]
 
 [% pro = flight.pro ? "Pro" : "Homebrew" -%]
-[% flight_string = "Flight $flight.number, $flight.description ($pro)" | html %]
+[% flight_string = "Flight $flight.name, $flight.description ($pro)" | html %]
 [% PROCESS F_header title = flight_string -%]
 [% PROCESS F_manage_navbar -%]
 [% WRAPPER F_body_text ~%]
    [% fetch_volunteer = assigned_judges_func() ~%]
    <p>
    Judges assigned to [% flight_string %]
-   [<a href="/manage/assignment/[% flight.number | html %]?format=print">
+   [<a href="/manage/assignment/[% flight.name | html %]?format=print">
        print</a>]:
    </p>
    [% assignment.table ~%]
