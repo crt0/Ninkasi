@@ -107,7 +107,6 @@ header_ok $mech, 'The Brewers&#8217; Cup Competition';
 $mech->content_contains(<<EOF, 'navigation bar');
 <div id="navigation_bar_vertical">
   <div><a accesskey="r" href="rules.pdf">Official Rules</a></div>
-  <div><a accesskey="l" href="labels-interactive.pdf">Printable Labels</a></div>
   <div><a accesskey="e" href="enter">Submit Entries</a></div>
   <div><a accesskey="j" href="judge">Register to Judge/Steward</a></div>
   <div><a accesskey="m" href="maps">Find the Fairgrounds</a></div>

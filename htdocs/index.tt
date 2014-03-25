@@ -2,7 +2,6 @@
 [% PROCESS header.html, title => "The Brewers&#8217; Cup Competition" -%]
 <div id="navigation_bar_vertical">
   <div><a accesskey="r" href="rules.pdf">Official Rules</a></div>
-  <div><a accesskey="l" href="labels-interactive.pdf">Printable Labels</a></div>
   <div><a accesskey="e" href="enter">Submit Entries</a></div>
   <div><a accesskey="j" href="judge">Register to Judge/Steward</a></div>
   <div><a accesskey="m" href="maps">Find the Fairgrounds</a></div>
