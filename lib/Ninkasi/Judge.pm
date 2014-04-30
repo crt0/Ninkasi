@@ -17,6 +17,11 @@ our @RANKS = (
         number      => 20,
     },
     {
+        description => 'Provisional Judge',
+        name        => 'Provisional',
+        number      => 25,
+    },
+    {
         description => 'BCJP Apprentice',
         name        => 'Apprentice',
         number      => 30,
