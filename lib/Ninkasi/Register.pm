@@ -323,6 +323,7 @@ sub transform {
     my @template_defaults = (
         categories => \@Ninkasi::Category::CATEGORIES,
         form       => $argument,
+        manage     => $argument->{-manage},
         ranks      => \@Ninkasi::Judge::RANKS,
         @disabled_variables
     );

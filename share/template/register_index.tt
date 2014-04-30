@@ -30,7 +30,11 @@
 [% caprole = form.role FILTER ucfirst -%]
 [% PROCESS header.html,
    title => "Brewers$apostrophe Cup $caprole Registration Form" -%]
-[% PROCESS navbar.html -%]
+[% IF manage -%]
+   [% PROCESS manage_navbar.html -%]
+[% ELSE %]
+   [% PROCESS navbar.html -%]
+[% END %]
 <div id="body_text">
   <h2>[% caprole %] Registration Form</h2>
 [% IF error -%]
