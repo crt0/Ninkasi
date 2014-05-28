@@ -305,8 +305,10 @@ table.view tbody tr.ruled td {
 .sponsors {
     background-color: white;
     border: 1px dashed black;
-    text-align:    center;
+    margin-left: auto;
+    margin-right: auto;
     padding:       5px;
+    text-align:    center;
     verical-align: middle;
 }
 
