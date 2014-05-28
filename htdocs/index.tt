@@ -36,20 +36,34 @@
     <h2>2014 Competition Information</h2>
     <table>
       <tr>
-        <th>Entries Accepted:</th>
+        <th>Entry Registration Online:</th>
+        <td>
+          <strong>June 2</strong> through <strong>June 26</strong> at
+          5 pm EDT (until 1300-entry cap is reached)
+        </td>
+      </tr>
+      <tr><th>Entry Requirements:</th><td>three (3) bottles per entry</td></tr>
+      <tr>
+        <th>Registered Entry Deliveries Accepted:</th>
         <td>
           <strong>Friday, June 13,</strong> through
           <strong>Saturday, June 28</strong>
         </td>
       </tr>
       <tr>
-        <th>Entry Registration Online:</th>
-        <td><em>TBA</em></td>
+        <th>Registered Entry Drop-off Location:</th>
+        <td>
+          <strong>Sun King Brewery</strong> (135 N. College Avenue,
+          Indianapolis, IN 46202)
+        </td>
       </tr>
-      <tr><th>Entry Requirements:</th><td>three (3) bottles</td></tr>
       <tr>
-        <th>Entry Drop-off Location:</th>
-        <td><em>TBA</em></td>
+        <th>Judge Registration:</th>
+        <td><a href="/register">now available!</a></td>
+      </tr>
+      <tr>
+        <th>Steward Registration:</th>
+        <td><a href="/register?role=steward">now available!</a></td>
       </tr>
       <tr>
         <th>Judging:</th>
@@ -59,16 +73,14 @@
         </td>
       </tr>
       <tr>
-        <th>Judge/Steward Registration:</th>
-        <td>
-          <a href="/register">now available!</a>
-        </td>
-      </tr>
-      <tr>
-        <th>Judging Location:</th>
+        <th>Location:</th>
         <td>
           <strong>Marsh Blue Ribbon Pavilion</strong>
         </td>
+      </tr>
+      <tr>
+        <th>Awards Reception:</th>
+        <td><strong>Saturday, July 12</strong></td>
       </tr>
       <tr>
         <th>Competition Results:</th>
