@@ -61,12 +61,11 @@ sub navbar_ok {
                                            : substr( $_, 0, 1 ),
                                        qq{" href="/},
                                        $_ eq 'rules'  ? 'rules.pdf'
-                                     : $_ eq 'labels' ? 'labels-interactive.pdf'
                                                       : $_,
                                        qq{">} ),
                        $_ eq 'volunteer' ? 'Judge/Steward' : ucfirst,
                        $_ eq $page ? '' : '</a>' }
-            qw/rules labels enter volunteer maps results contacts/;
+            qw/rules enter volunteer maps results contacts/;
     $mech->content_contains(<<EOF, 'navbar');
 <div id="navigation_bar_horizontal">
 <a accesskey="h" href="/">Home</a>

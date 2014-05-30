@@ -133,7 +133,6 @@ $mech->content_is( <<"EOF", 'header' );
 <div id="navigation_bar_horizontal">
 <a accesskey="h" href="/">Home</a>
 | <a accesskey="r" href="/rules.pdf">Rules</a>
-| <a accesskey="l" href="/labels-interactive.pdf">Labels</a>
 | <a accesskey="e" href="/enter">Enter</a>
 | <a accesskey="v" href="/volunteer">Judge/Steward</a>
 | <a accesskey="m" href="/maps">Maps</a>
