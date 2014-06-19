@@ -439,8 +439,28 @@ the date of the second judging session
 
 =item disabled
 
-when defined, disable registration, the value being the name of the
-template to display instead of the registration form
+when defined, disable registration, depending on the value:
+
+=over 4
+
+=item closed
+
+disable both judge & steward registration
+
+=item down
+
+temporarily disable both judge & steward registration due to site
+maintenance
+
+=item judge
+
+disable judge registration only
+
+=item steward
+
+disable steward registration only
+
+=back
 
 =item log_file
 
