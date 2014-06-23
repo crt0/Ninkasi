@@ -17,8 +17,8 @@
 
 [% MACRO mark_field(name) BLOCK -%]
 [% IF field.$name -%]
-<span class="field_marker">* </span>
-[% END -%]
+<span class="field_marker">*&nbsp;</span>
+[%- END -%]
 [% END ~%]
 
 [% MACRO text_field(name, size) BLOCK -%]
@@ -69,7 +69,6 @@ We're no longer in need of [% disabled %]s.  If you were signing up to
 [% disabled %], please try back next year!
 </div>
 [% END -%]
-<div class="form_instructions">All fields are required.</div>
 <h3>[% caprole %] Information</h3>
 <form action="register" method="post">
   <table border="0">

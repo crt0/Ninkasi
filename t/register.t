@@ -310,13 +310,13 @@ $mech->content_like(qr{name="city"\s+
 $mech->content_like(qr{name="competitions_judged"\s+
                        size="\d+"\s+
                        value="10"}msx, 'competitions judged');
-$mech->content_like(qr{<span\ class="field_marker">\*\ </span>\s+
+$mech->content_like(qr{<span\ class="field_marker">\*&nbsp;</span>
                        <input\s+
                        type="text"\s+
                        name="email1"\s+
                        size="\d+"\s+
                        value="ninkasi\@ajk\.name"}msx, 'e-mail');
-$mech->content_like(qr{<span\ class="field_marker">\*\ </span>\s+
+$mech->content_like(qr{<span\ class="field_marker">\*&nbsp;</span>
                        <input\s+
                        type="text"\s+
                        name="email2"\s+
