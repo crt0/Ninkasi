@@ -6,6 +6,7 @@ use warnings;
 
 use Carp;
 use Getopt::Long;
+use Locale::Country;
 use Ninkasi::CGI;
 use Ninkasi::CSV;
 use Ninkasi::Config;
@@ -118,6 +119,7 @@ sub render {
         # pass page names to appear in navbar & access level to template
         %template_input = (
             constraint_name       => \%Ninkasi::Constraint::NAME,
+            countries             => [ sort ( all_country_names() ) ],
             escape_quotes         => sub { \&Ninkasi::CSV::escape_quotes },
             format                => $option->{format},
             page                  => $program_name,

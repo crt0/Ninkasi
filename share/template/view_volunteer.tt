@@ -7,10 +7,15 @@
       <tr>
       <th>Address:</th>
       <td>
-      [% volunteer_row.address | html %]
+      [% volunteer_row.address1 | html %]
+      [% IF volunteer_row.address2 ~%]
+         <br>
+         [% volunteer_row.address2 | html %]
+      [% END ~%]
       <br>
       [% volunteer_row.city | html %],
       [% volunteer_row.state | html %]
+      [% volunteer_row.country | html %]
       [% volunteer_row.zip | html %]
       </td>
       </tr>
@@ -46,8 +51,10 @@
 
    [% BLOCK additional_columns ~%]
       [% WRAPPER F_column ~%]
-         [% volunteer_row.address | html %], [% volunteer_row.city | html
-         %], [% volunteer_row.state | html %] [% volunteer_row.zip | html ~%]
+         [% volunteer_row.address1 | html %],
+         [% volunteer_row.address2 | html %], [% volunteer_row.city | html %],
+         [% volunteer_row.state | html %] [% volunteer_row.country | html %]
+         [% volunteer_row.zip | html ~%]
       [% END ~%]
       [% WRAPPER F_column; volunteer_row.phone_day | html; END ~%]
       [% WRAPPER F_column; volunteer_row.phone_evening | html; END ~%]

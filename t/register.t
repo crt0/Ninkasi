@@ -5,7 +5,7 @@ use warnings;
 
 use Fatal qw/open close/;
 
-use Test::More tests => 148;
+use Test::More tests => 149;
 
 use Ninkasi::Config;
 use Ninkasi::Constraint;
@@ -22,7 +22,7 @@ my $judge = Ninkasi::Judge->new();
 ok $judge;
 
 my $rowid = $judge->add( {
-        address             => '123 Fake Street',
+        address1            => '123 Fake Street',
         bjcp_id             => 'Z9988',
         city                => 'Springfield',
         competitions_judged => 10,
@@ -63,7 +63,7 @@ $mech->content_contains( 'Looks like you left', 'blank field error message' );
 
 $mech->form_number(2);
 $mech->set_fields(
-        address             => '123 Fake Street',
+        address1            => '123 Fake Street',
         bjcp_id             => 'Z9999',
         category01          => 'whatever',
         category02          => 'prefer',
@@ -178,7 +178,8 @@ while (my $line = <$log_handle>) {
     $last_line = $line;
 }
 like $last_line, qr/
-                     address             = 123\ Fake\ Street  :
+                     address1            = 123\ Fake\ Street  :
+                     address2            =                    :
                      bjcp_id             = Z9999              :
                      category01          = whatever           :
                      category02          = prefer             :
@@ -206,6 +207,7 @@ like $last_line, qr/
                      category99          = whatever           :
                      city                = Springfield        :
                      competitions_judged = 10                 :
+                     country             = United\ States     :
                      email1              = ninkasi\@ajk\.name :
                      email2              = ninkasi\@ajk\.name :
                      first_name          = Andrew             :
@@ -227,7 +229,7 @@ $mech->back();
 # submit form that is complete but with differing e-mail addresses
 $mech->submit_form_ok( {
     with_fields => {
-        address             => '123 Fake Street',
+        address1            => '123 Fake Street',
         bjcp_id             => 'Z9999',
         category01          => 'whatever',
         category02          => 'prefer',
@@ -264,15 +266,15 @@ $mech->submit_form_ok( {
         phone_day           => '123-456-7890',
         phone_evening       => '123-456-7890',
         rank                => 50,
-        state               => '--',
+        state               => '',
         zip                 => '12345',
     },
 } );
 
 # test the filled in fields
-$mech->content_like(qr{name="address"\s+
+$mech->content_like(qr{name="address1"\s+
                        size="\d+"\s+
-                       value="123\ Fake\ Street"}msx, 'address');
+                       value="123\ Fake\ Street"}msx, 'address1');
 $mech->content_like(qr{name="bjcp_id"\s+
                        size="\d+"\s+
                        value="Z9999"}msx, 'BJCP id');
@@ -347,8 +349,8 @@ $mech->content_like(qr{name="phone_evening"\s+
                        value="123-456-7890"}msx, 'evening phone');
 $mech->content_like(qr{selected="selected"\s+
                        value="50"}msx, '50 competitions judged');
-$mech->content_like(qr{selected="selected"\s+
-                       value="--"}msx, 'no state specified');
+$mech->content_like(qr{name="state"\ size="20"\s+
+                       value=""}msx, 'no state specified');
 $mech->content_like(qr{name="zip"\s+
                        size="\d+"\s+
                        value="12345"}msx, 'zip code');
@@ -359,9 +361,9 @@ is( Ninkasi::Volunteer ->Table_Name(), 'volunteer'  );
 
 my ($sth, $result) = $judge->bind_hash(
     {
-        columns     => [ qw/address bjcp_id city competitions_judged email
-                            first_name rowid last_name phone_day phone_evening
-                            rank state zip/ ],
+        columns     => [ qw/address1 bjcp_id city competitions_judged
+                            country email first_name rowid last_name
+                            phone_day phone_evening rank state zip/ ],
         where       => 'email = ?',
         bind_values => [ qw/ninkasi@ajk.name/ ],
     }
@@ -372,10 +374,11 @@ ok $sth->fetch();
 my $judge_id = $result->{rowid};
 ok $judge_id;
 
-is $result->{ address             }, '123 Fake Street'  ;
+is $result->{ address1            }, '123 Fake Street'  ;
 is $result->{ bjcp_id             }, 'Z9999'            ;
 is $result->{ city                }, 'Springfield'      ;
 is $result->{ competitions_judged }, 10                 ;
+is $result->{ country             }, 'United States'    ;
 is $result->{ email               }, 'ninkasi@ajk.name' ;
 is $result->{ first_name          }, 'Andrew'           ;
 is $result->{ last_name           }, 'Korty'            ;
@@ -462,7 +465,7 @@ is $rows_fetched, scalar keys %expected_constraint, 'number of constraints';
 $mech->get_ok($form_url);
 $mech->form_number(2);
 $mech->set_fields(
-    address             => '123 Fake Street',
+    address1            => '123 Fake Street',
     bjcp_id             => 'none',
     city                => 'Springfield',
     competitions_judged => 10,
@@ -488,7 +491,7 @@ $mech->content_contains( 'You must have a valid BJCP id or be a '
 $mech->get_ok($form_url);
 $mech->form_number(2);
 $mech->set_fields(
-    address             => '123 Fake Street',
+    address1            => '123 Fake Street',
     bjcp_id             => 'none',
     city                => 'Springfield',
     competitions_judged => 10,

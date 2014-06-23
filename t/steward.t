@@ -30,8 +30,9 @@ sub register_steward {
 }
 
 register_steward [
-    address             => '2239 Hale Cove',
-    city                => 'Ventura',
+    address1            => '2239 Hale Cove',
+    city                => 'Millarville',
+    country             => 'Canada',
     email1              => 'ninkasi@ajk.name',
     email2              => 'ninkasi@ajk.name',
     first_name          => 'Liam',
@@ -41,12 +42,12 @@ register_steward [
     last_name           => 'Mayers',
     phone_day           => '964-722-0584',
     phone_evening       => '964-710-1677',
-    state               => 'CA',
-    zip                 => '93007',
+    state               => 'AB',
+    zip                 => 'T0L 1K0',
 ];
 
 register_steward [
-    address             => '7829 Drexel',
+    address1            => '7829 Drexel',
     city                => 'Laredo',
     email1              => 'ninkasi@ajk.name',
     email2              => 'ninkasi@ajk.name',
@@ -61,7 +62,7 @@ register_steward [
 ];
 
 register_steward [
-    address             => '7046 Lahser',
+    address1            => '7046 Lahser',
     city                => 'Daytona Beach',
     email1              => 'ninkasi@ajk.name',
     email2              => 'ninkasi@ajk.name',
@@ -76,7 +77,7 @@ register_steward [
 ];
 
 register_steward [
-    address             => '5096 Kevin Lane',
+    address1            => '5096 Kevin Lane',
     city                => 'Simms',
     email1              => 'ninkasi@ajk.name',
     email2              => 'ninkasi@ajk.name',
@@ -131,9 +132,10 @@ $mech->content_like(qr{<h2>Liam\ Mayers</h2>\s+
                        <td>\s+
                        2239\ Hale\ Cove\s+
                        <br>\s+
-                       Ventura,\s+
-                       CA\s+
-                       93007\s+
+                       Millarville,\s+
+                       AB\s+
+                       Canada\s+
+                       T0L\ 1K0\s+
                        </td>\s+
                        </tr>\s+
                        <tr>\s+
@@ -170,7 +172,7 @@ like MagicBuffer( $mech->content() ), qr/PDF/;
 $mech->get_ok($judge_signup_url);
 $mech->submit_form_ok( {
     with_fields => {
-        address             => '4996 Eighth',
+        address1            => '4996 Eighth',
         bjcp_id             => 'Z9990',
         category02          => 'prefer',
         category08          => 'entry',

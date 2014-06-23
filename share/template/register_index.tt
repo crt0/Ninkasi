@@ -85,9 +85,15 @@ We're no longer in need of [% disabled %]s.  If you were signing up to
       </td>
     </tr>
     <tr>
-      <td align="right">Address:</td>
+      <td align="right">Address Line 1:</td>
       <td colspan="2">
-        [% text_field('address', 52) %]
+        [% text_field('address1', 52) %]
+      </td>
+    </tr>
+    <tr>
+      <td align="right">Address Line 2:</td>
+      <td colspan="2">
+        [% text_field('address2', 52) %]
       </td>
     </tr>
     <tr>
@@ -97,31 +103,30 @@ We're no longer in need of [% disabled %]s.  If you were signing up to
       </td>
     </tr>
     <tr>
-      <td align="right">State:</td>
-      <td>
-        [% mark_field('state') %]
-        <select name="state" size="1">
-	  <option value=""></option>
-          [% FOREACH state IN [ 'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE',
-                                'DC', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA',
-                                'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN',
-                                'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM',
-                                'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI',
-                                'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA',
-                                'WV', 'WI', 'WY', '--' ] -%]
-            <option
-[% IF state == form.state -%]
-               selected="selected"
-[% END -%]
-               value="[% state %]">
-  [% state %]
-            </option>
-[% END -%]
-	  </select>
+      <td align="right">State/Province/Region:</td>
+      <td colspan="2"> 
+        [% text_field('state', 20) %]
       </td>
     </tr>
     <tr>
-      <td align="right">Zip:</td>
+      <td align="right">Country:</td>
+      <td colspan="2">
+        [% mark_field('country') %]
+        <select name="country" size="1">
+          [% FOREACH country IN countries -%]
+            <option
+[% IF country == form.country || !form.country && country == 'United States' -%]
+               selected="selected"
+[% END -%]
+               value="[% country %]">
+              [% country %]
+            </option>
+          [% END -%]
+	  </select>
+      </td>
+
+    <tr>
+      <td align="right">Zip / Postal Code:</td>
       <td>
         [% text_field('zip', 10) %]
       </td>
