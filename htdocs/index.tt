@@ -252,5 +252,15 @@
       </a>
     </td>
   </tr>
+  <tr>
+    <td>
+      <a href="http://www.sugarcreekhops.com/">
+        <img alt="Sugar Creek Hops"
+             height="298"
+             src="/image/sugar-creek-hops.png"
+             width="320" />
+      </a>
+    </td>
+  </tr>
 </table>
 [% PROCESS footer.html -%]
