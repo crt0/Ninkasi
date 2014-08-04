@@ -77,7 +77,8 @@ register steward => [
 
 register steward => [
     address             => '5096 Kevin Lane',
-    city                => 'Simms',
+    city                => 'Millarville',
+    country             => 'Canada',
     email1              => 'ninkasi@ajk.name',
     email2              => 'ninkasi@ajk.name',
     first_name          => 'Lyndsey',
@@ -86,8 +87,8 @@ register steward => [
     last_name           => 'Carrera',
     phone_day           => '238-874-1701',
     phone_evening       => '238-293-9215',
-    state               => 'MT',
-    zip                 => '59477',
+    state               => 'AB',
+    zip                 => 'T0L 1K0',
 ];
 
 # test view of all volunteers
@@ -112,7 +113,7 @@ $mech->follow_link_ok( { text_regex => qr/csv/ } );
 is $mech->ct(), 'text/plain';
 $mech->content_is( <<'EOF', 'CSV steward view' );
 "Name","Rank","Address","Phone (day)","Phone (eve)","E-mail","BJCP id"
-"Carrera, Lyndsey","","5096 Kevin Lane, Simms, MT 59477","238-874-1701","238-293-9215","ninkasi@ajk.name",""
+"Carrera, Lyndsey","","5096 Kevin Lane, Millarville, AB T0L 1K0","238-874-1701","238-293-9215","ninkasi@ajk.name",""
 "Mayers, Liam","Novice","2239 Hale Cove, Ventura, CA 93007","964-722-0584","964-710-1677","ninkasi@ajk.name","Z9991"
 "Reynoso, Greggory","","7829 Drexel, Laredo, TX 78043","512-700-9946","512-521-2449","ninkasi@ajk.name",""
 "|<iefer, Angelina","","7046 Lahser, Daytona Beach, FL 32122","948-691-4519","948-643-3621","ninkasi@ajk.name",""

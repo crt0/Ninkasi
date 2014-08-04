@@ -17,8 +17,9 @@ use Ninkasi::Table;
 use Ninkasi::Volunteer;
 use Taint::Util;
 
-our @REQUIRED_FIELDS = qw/first_name last_name address city state zip
-                          phone_evening phone_day email1 email2/;
+our @REQUIRED_FIELDS = qw/first_name last_name address1 city country
+                          state phone_evening phone_day email1
+                          email2/;
 
 sub create_rfc2822_address {
     my ($column) = @_;

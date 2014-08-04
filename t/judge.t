@@ -462,7 +462,7 @@ $mech->get_ok($signup_url);
 
 $mech->submit_form_ok( {
     with_fields => {
-        address             => '4996 Eighth',
+        address1            => '4996 Eighth',
         bjcp_id             => 'Z9990',
         category02          => 'prefer',
         category08          => 'entry',
@@ -491,7 +491,7 @@ $mech->submit_form_ok( {
 $mech->get_ok($signup_url);
 $mech->submit_form_ok( {
     with_fields => {
-        address             => '2239 Hale Cove',
+        address1            => '2239 Hale Cove',
         bjcp_id             => 'Z9991',
         city                => 'Ventura',
         competitions_judged => 2,
@@ -514,7 +514,7 @@ $mech->submit_form_ok( {
 $mech->get_ok($signup_url);
 $mech->submit_form_ok( {
     with_fields => {
-        address             => '7829 Drexel',
+        address1            => '7829 Drexel',
         bjcp_id             => 'Z9998',
         category02          => 'prefer',
         category08          => 'entry',
@@ -544,7 +544,7 @@ $mech->submit_form_ok( {
 $mech->get_ok($signup_url);
 $mech->submit_form_ok( {
     with_fields => {
-        address             => '7046 Lahser',
+        address1            => '7046 Lahser',
         bjcp_id             => 'Z9998',
         category02          => 'prefer',
         category08          => 'entry',
@@ -572,7 +572,7 @@ $mech->submit_form_ok( {
 $mech->get_ok($signup_url);
 $mech->submit_form_ok( {
     with_fields => {
-        address             => '5096 Kevin Lane',
+        address1            => '5096 Kevin Lane',
         bjcp_id             => 'Z9998',
         category02          => 'prefer',
         category08          => 'entry',
@@ -654,6 +654,7 @@ $mech->content_like(qr{<h2>Liam\ Mayers</h2>\s+
                        <br>\s+
                        Ventura,\s+
                        CA\s+
+                       United\ States\s+
                        93007\s+
                        </td>\s+
                        </tr>\s+
@@ -932,7 +933,7 @@ $mech->content_like(
 $mech->get_ok($signup_url);
 $mech->form_number(2);
 $mech->set_fields(
-    address             => '4996 Eighth',
+    address1            => '4996 Eighth',
     bjcp_id             => 'Z999O', # letter O
     category02          => 'prefer',
     category08          => 'entry',

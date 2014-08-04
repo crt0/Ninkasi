@@ -11,16 +11,19 @@ use Ninkasi::Category;
 use Ninkasi::Template;
 
 __PACKAGE__->Table_Name('volunteer');
-__PACKAGE__->Column_Names( [ qw/first_name last_name address city state zip
-                                phone_evening phone_day email rank bjcp_id
+__PACKAGE__->Column_Names( [ qw/first_name last_name address1 address2
+                                city country state zip phone_evening
+                                phone_day email rank bjcp_id
                                 competitions_judged pro_brewer
                                 when_created role/ ] );
 __PACKAGE__->Schema(<<'EOF');
 CREATE TABLE volunteer (
     first_name          TEXT,
     last_name           TEXT,
-    address             TEXT,
+    address1            TEXT,
+    address2            TEXT,
     city                TEXT,
+    country             TEXT,
     state               TEXT,
     zip                 TEXT,
     phone_evening       TEXT,
@@ -58,9 +61,10 @@ sub get_all {
         $where_clause = "role = $quoted_role";
     }
     my ( $volunteer_handle, $volunteer_row ) = $volunteer_table->bind_hash( {
-        columns  => [ qw/rowid first_name last_name rank competitions_judged
-                         pro_brewer address city state zip phone_day
-                         phone_evening email bjcp_id role/ ],
+        columns => [ qw/rowid first_name last_name rank
+                        competitions_judged pro_brewer address1
+                        address2 city country state zip phone_day
+                        phone_evening email bjcp_id role/ ],
         order_by => 'last_name',
         where    => $where_clause,
     } );
@@ -110,9 +114,10 @@ sub transform {
     # fetch the row for this volunteer from the database
     my ( $volunteer_handle, $volunteer_row ) = $volunteer_table->bind_hash( {
         bind_values => [$volunteer_id],
-        columns     => [ qw/rowid first_name last_name address city state zip
-                            phone_evening phone_day email rank bjcp_id
-                            competitions_judged pro_brewer when_created/ ],
+        columns => [ qw/rowid first_name last_name address1 address2
+                        city country state zip phone_evening phone_day
+                        email rank bjcp_id competitions_judged
+                        pro_brewer when_created/ ],
         limit       => 1,
         where       => $where_clause,
     } );
@@ -148,15 +153,16 @@ Ninkasi::Volunteer - Ninkasi class representing judges and stewards
   my $volunteer_table = Ninkasi::Volunteer->new();
   my ( $volunteer_handle, $volunteer_row ) = $volunteer_table->bind_hash( {
       bind_values => [$volunteer_id],
-      columns     => [ qw/rowid first_name last_name address city state zip
-                          phone_evening phone_day email rank bjcp_id
-                          competitions_judged pro_brewer when_created/ ],
+      columns => [ qw/rowid first_name last_name address1 address2
+                      city country state zip phone_evening phone_day
+                      email rank bjcp_id competitions_judged
+                      pro_brewer when_created/ ],
       limit       => 1,
       where       => $where_clause,
   } );
   print <<EOF;
 Volunteer: $first_name $last_name
-  Address: $address, $city, $state $zip
+  Address: $address1, $address2, $city, $state, $country $zip
     Phone: $phone_day
    E-Mail: $email
 EOF
