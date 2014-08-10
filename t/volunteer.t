@@ -26,7 +26,7 @@ sub register {
 }
 
 register judge => [
-        address             => '2239 Hale Cove',
+        address1            => '2239 Hale Cove',
         bjcp_id             => 'Z9991',
         city                => 'Ventura',
         competitions_judged => 2,
@@ -46,7 +46,7 @@ register judge => [
 ];
 
 register steward => [
-    address             => '7829 Drexel',
+    address1            => '7829 Drexel',
     city                => 'Laredo',
     email1              => 'ninkasi@ajk.name',
     email2              => 'ninkasi@ajk.name',
@@ -61,7 +61,7 @@ register steward => [
 ];
 
 register steward => [
-    address             => '7046 Lahser',
+    address1            => '7046 Lahser',
     city                => 'Daytona Beach',
     email1              => 'ninkasi@ajk.name',
     email2              => 'ninkasi@ajk.name',
@@ -76,7 +76,7 @@ register steward => [
 ];
 
 register steward => [
-    address             => '5096 Kevin Lane',
+    address1            => '5096 Kevin Lane',
     city                => 'Millarville',
     country             => 'Canada',
     email1              => 'ninkasi@ajk.name',
@@ -97,7 +97,7 @@ $mech->get_ok($lookup_url);
 $mech->content_like(
     qr{<td><a\ href="/manage/steward/\d+">\|&lt;iefer,\ Angelina</a></td>\s+
        <td></td>\s+
-       <td>7046\ Lahser,\ Daytona\ Beach,\ FL\ 32122</td>\s+
+       <td>7046\ Lahser,\ Daytona\ Beach,\ FL\ 32122\ United\ States</td>\s+
        <td>948-691-4519</td>\s+
        <td>948-643-3621</td>\s+
        <td>ninkasi\@ajk\.name</td>\s+
@@ -113,10 +113,10 @@ $mech->follow_link_ok( { text_regex => qr/csv/ } );
 is $mech->ct(), 'text/plain';
 $mech->content_is( <<'EOF', 'CSV steward view' );
 "Name","Rank","Address","Phone (day)","Phone (eve)","E-mail","BJCP id"
-"Carrera, Lyndsey","","5096 Kevin Lane, Millarville, AB T0L 1K0","238-874-1701","238-293-9215","ninkasi@ajk.name",""
-"Mayers, Liam","Novice","2239 Hale Cove, Ventura, CA 93007","964-722-0584","964-710-1677","ninkasi@ajk.name","Z9991"
-"Reynoso, Greggory","","7829 Drexel, Laredo, TX 78043","512-700-9946","512-521-2449","ninkasi@ajk.name",""
-"|<iefer, Angelina","","7046 Lahser, Daytona Beach, FL 32122","948-691-4519","948-643-3621","ninkasi@ajk.name",""
+"Carrera, Lyndsey","","5096 Kevin Lane, Millarville, AB T0L 1K0 Canada","238-874-1701","238-293-9215","ninkasi@ajk.name",""
+"Mayers, Liam","Novice","2239 Hale Cove, Ventura, CA 93007 United States","964-722-0584","964-710-1677","ninkasi@ajk.name","Z9991"
+"Reynoso, Greggory","","7829 Drexel, Laredo, TX 78043 United States","512-700-9946","512-521-2449","ninkasi@ajk.name",""
+"|<iefer, Angelina","","7046 Lahser, Daytona Beach, FL 32122 United States","948-691-4519","948-643-3621","ninkasi@ajk.name",""
 EOF
 
 # test roster

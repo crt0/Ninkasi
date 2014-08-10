@@ -52,10 +52,13 @@
    [% BLOCK additional_columns ~%]
       [% WRAPPER F_column ~%]
          [% volunteer_row.address1 | html %],
-         [% volunteer_row.address2 | html %], [% volunteer_row.city | html %],
-         [% volunteer_row.state | html %] [% volunteer_row.country | html %]
-         [% volunteer_row.zip | html ~%]
-      [% END ~%]
+         [%= IF volunteer_row.address2 ~%]
+             [% volunteer_row.address2 | html %],
+         [%= END ~%]
+         [% volunteer_row.city | html %],
+         [%= volunteer_row.state | html %] [% volunteer_row.zip | html %]
+         [%= volunteer_row.country | html %]
+      [%~ END ~%]
       [% WRAPPER F_column; volunteer_row.phone_day | html; END ~%]
       [% WRAPPER F_column; volunteer_row.phone_evening | html; END ~%]
       [% WRAPPER F_column; volunteer_row.email | html; END ~%]
